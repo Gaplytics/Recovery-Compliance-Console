@@ -1282,6 +1282,206 @@ tr.rowlink:hover .btn-detail{
   text-transform: uppercase;
   letter-spacing: .05em;
 }
+
+/* ================= Modern Rulebook Layout ================= */
+.rb-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.rb-global-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.rb-global-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.rb-global-item {
+  background: var(--bg-sub, #f8fafc);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rb-global-item label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.rb-global-item input {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 10px;
+  background: var(--surface);
+}
+.rb-global-help {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.rb-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(340px, 1.15fr);
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .rb-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+.rb-rules-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+details.rb-rule-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+details.rb-rule-card:hover {
+  border-color: var(--line-strong, #cbd5e1);
+}
+details.rb-rule-card[open] {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow);
+}
+details.rb-rule-card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--surface);
+  user-select: none;
+}
+details.rb-rule-card[open] summary {
+  border-bottom: 1px solid var(--line);
+  background: #f8fafc;
+}
+details.rb-rule-card summary::-webkit-details-marker {
+  display: none;
+}
+.rb-rule-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.rb-rule-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.rb-rule-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--surface);
+}
+.rb-sticky-sidebar {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  padding-right: 2px;
+}
+@media (max-width: 960px) {
+  .rb-sticky-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+.rb-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+.rb-chip {
+  background: #f1f5f9;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+.rb-chip:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: var(--accent);
+}
+.rb-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rb-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.rb-nav-item:hover {
+  background: #f1f5f9;
+  border-color: var(--line);
+}
+.rb-nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.rb-nav-dot.on {
+  background: var(--ok);
+  box-shadow: 0 0 0 2px var(--ok-bg);
+}
+.rb-nav-dot.off {
+  background: #cbd5e1;
+}
+.rb-chevron {
+  transition: transform 0.2s ease;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+details[open] .rb-chevron {
+  transform: rotate(180deg);
+}
 </style>
 
 <div class="app" id="app">
@@ -1634,6 +1834,7 @@ const ST = {mode:"loading", ready:false, needsSetup:false, calls:{}, cases:{}, c
 let db=null, user=null, sample=null, downloads=null;
 const NAMES = {}, asked = new Set();
 const F = {range:14, calls:{q:"",vendor:"",result:"",days:"all"}, callsLimit:50, cases:{status:"active",priority:"",team:"",assignee:"",overdue:false,q:""}, audit:{q:"",type:""}, vendors:{days:30, sel:null}, reports:{days:30}};
+window.F = F;
 const AI = {callId:null, ctl:null, msg:null, msgFor:null};
 const revealed = {};
 let IMPMSG = "";
@@ -2021,6 +2222,8 @@ function page(r){
   return `<div class="empty">That page does not exist. <a href="#overview">Go to Overview</a></div>`;
 }
 const head = (title, sub, right, crumb) => `<div class="ph"><div>${crumb?`<div class="crumb">${crumb}</div>`:""}<h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div>${right?`<div class="actions">${right}</div>`:""}</div>`;
+let prevHash = "", currentHash = "";
+const btnBack = (fb = "overview") => `<button class="btn" data-act="go-back" data-fallback="${esc(fb)}" title="Go back to previous page" style="display:inline-flex;align-items:center;gap:6px;font-weight:600"><span style="font-size:15px;line-height:1">←</span> Back</button>`;
 const rangeChips = (key, val, opts) => `<div class="chips">${(opts||[7,14,30,"all"]).map(o=>`<button class="chip ${String(val)===String(o)?"on":""}" data-act="set" data-k="${key}" data-v="${o}">${o==="all"?"All time":"Last "+o+" days"}</button>`).join("")}</div>`;
 const sbxNote = () => "";
 
@@ -2082,7 +2285,7 @@ function pOverview(){
             </div>
           </td>
           <td class="num mono">${v.confirmed}</td>
-          <td style="text-align:right"><a class="btn-detail" href="#vendors" onclick="F.vendors.sel='${esc(v.v)}'">See details →</a></td>
+          <td style="text-align:right"><a class="btn-detail" href="#vendors" data-act="sel-vendor" data-v="${esc(v.v)}">See details →</a></td>
         </tr>`).join("")}
       </tbody>
     </table></div>` : `<div class="empty">No calls in this period.</div>`}
@@ -2151,7 +2354,7 @@ function pCalls(){
   const vendors = [...new Set(calls().map(c=>c.vendor))].sort();
   const shown = list.slice(0, F.callsLimit);
   return `${head("Calls","Every recorded recovery call reviewed against the rulebook. Open a call to see evidence, run AI review or mark flags.",
-    `<a class="btn primary" href="#add">+ Add or import calls</a><button class="btn" data-act="reanalyse">Re-analyse all (rulebook v${RB().version})</button>`)}
+    `${btnBack("overview")}<a class="btn primary" href="#add">+ Add or import calls</a><button class="btn" data-act="reanalyse">Re-analyse all (rulebook v${RB().version})</button>`)}
   ${sbxNote()}
   <div class="card">
     <div class="filters">
@@ -2194,7 +2397,7 @@ function pCall(id){
      ${running?`<button class="btn" data-act="ai-stop">Stop AI review</button>`:`<button class="btn primary" data-act="ai-run" data-id="${esc(id)}" ${aiOk?"":"disabled"} title="${aiOk?"Reads the call for meaning and context":"AI review is not available in this view"}">Run AI review</button>`}
      <button class="btn" data-act="rerun" data-id="${esc(id)}">Re-run rules</button>
      ${c.caseId?`<a class="btn" href="#case-${esc(c.caseId)}">Open ${esc(c.caseId)} →</a>`:`<button class="btn" data-act="case-manual" data-id="${esc(id)}">Open a case</button>`}`,
-    `<a href="#calls" data-act="go-back" data-fallback="calls" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back to Calls</a> <span style="opacity:0.4;margin:0 2px">/</span> <span class="mono">${esc(c.id)}</span>`)}
+    `<a href="#${prevHash||'calls'}" data-act="go-back" data-fallback="calls" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back</a> <span style="opacity:0.4;margin:0 2px">/</span> <span class="mono">${esc(c.id)}</span>`)}
   ${running?`<div class="banner info"><span class="spin"></span> AI review is reading the call for meaning and context. This can take up to a minute.</div>`:""}
   ${AI.msg && AI.msgFor===id && !running?`<div class="banner info">${esc(AI.msg)}</div>`:""}
   <div class="g23">
@@ -2226,7 +2429,7 @@ function pCall(id){
 }
 
 function pAdd(){
-  return `${head("Add or import calls","Calls are analysed against the current rulebook as soon as they arrive. Flagged calls open a case automatically.","",`<a href="#calls">Calls</a> / Add`)}
+  return `${head("Add or import calls","Calls are analysed against the current rulebook as soon as they arrive. Flagged calls open a case automatically.", btnBack("calls"), `<a href="#${prevHash||'calls'}" data-act="go-back" data-fallback="calls" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back</a> <span style="opacity:0.4;margin:0 2px">/</span> Add`)}
   ${sbxNote()}
   <div class="g2">
     <form class="card" data-form="add-call">
@@ -2270,7 +2473,7 @@ function pCases(){
   if(f.overdue) list = list.filter(isOverdue);
   if(q) list = list.filter(k=>(k.id+" "+k.title+" "+(k.callId||"")+" "+(k.complaintId||"")+" "+k.vendor+" "+k.agent).toLowerCase().includes(q));
   list.sort((a,b)=>((a.status==="Closed")-(b.status==="Closed")) || (PRIO_RANK[b.priority]-PRIO_RANK[a.priority]) || (new Date(a.dueAt)-new Date(b.dueAt)));
-  return `${head("Cases","Every flagged call and every complaint becomes a case with an owner team, a due date and a recorded human decision.")}
+  return `${head("Cases","Every flagged call and every complaint becomes a case with an owner team, a due date and a recorded human decision.", btnBack("overview"))}
   ${sbxNote()}
   <div class="card">
     <div class="filters">
@@ -2304,7 +2507,7 @@ function pCase(id){
   return `${head(`<span style="font-family:var(--f-mono)">${esc(k.id)}</span>`, esc(k.title),
     `<button class="btn" data-act="go-back" data-fallback="cases" title="Go back to previous page" style="display:inline-flex;align-items:center;gap:6px;font-weight:600"><span style="font-size:15px;line-height:1">←</span> Back</button>
      ${pillP(k.priority)} ${pillS(k.status)} ${isOverdue(k)?`<span class="pill p-critical">Overdue</span>`:""}`,
-    `<a href="#cases" data-act="go-back" data-fallback="cases" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back to Cases</a> <span style="opacity:0.4;margin:0 2px">/</span> <span class="mono">${esc(k.id)}</span>`)}
+    `<a href="#${prevHash||'cases'}" data-act="go-back" data-fallback="cases" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back</a> <span style="opacity:0.4;margin:0 2px">/</span> <span class="mono">${esc(k.id)}</span>`)}
   ${ST.mode==="sandbox"?sbxNote():""}
   <div class="g23">
     <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
@@ -2349,7 +2552,7 @@ function pCase(id){
 
 function pComplaints(){
   const list = complaints().sort((a,b)=>b.receivedAt.localeCompare(a.receivedAt));
-  return `${head("Complaints","Customer reports of agent misconduct, matched to recorded calls where possible.", `<a class="btn primary" href="#log">Log a complaint for a customer</a><a class="btn" href="#intake">Open customer form ↗</a>`)}
+  return `${head("Complaints","Customer reports of agent misconduct, matched to recorded calls where possible.", `${btnBack("overview")}<a class="btn primary" href="#log">Log a complaint for a customer</a><a class="btn" href="#intake">Open customer form ↗</a>`)}
   ${sbxNote()}
   <div class="card">
     ${list.length?`<div class="tw"><table><thead><tr><th>Reference</th><th>Received</th><th>Contact</th><th>Incident</th><th>Linked call</th><th>Case</th><th>Priority</th><th>Status</th><th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${
@@ -2375,7 +2578,7 @@ function pIntake(staff){
       <p class="sub">${staff?"Share this reference with the customer.":"Keep this reference."} Updates will come by ${esc(done.channel)}. No recording or agent name is needed for us to investigate.</p>
       ${staff?`<div class="actions"><a class="btn primary" href="#case-${esc(done.caseId)}">Open ${esc(done.caseId)} →</a></div>`:""}
       <div class="actions"><button class="btn" data-act="cmp-new">${staff?"Log another":"Report another problem"}</button></div></div>` : "";
-  if(staff) return `${head("Log a complaint","Record a complaint received by phone, email or in a branch.","",`<a href="#complaints">Complaints</a> / Log`)}${sbxNote()}<div class="g2">${done?conf:form}<div class="card"><h2>What happens next</h2><ol class="sub" style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px"><li>A reference number is issued immediately.</li><li>Recorded calls on that date within three hours are matched and attached.</li><li>Safety reports go straight to Investigation &amp; Safety.</li><li>A reviewer investigates and records the decision.</li></ol></div></div>`;
+  if(staff) return `${head("Log a complaint","Record a complaint received by phone, email or in a branch.", btnBack("complaints"), `<a href="#${prevHash||'complaints'}" data-act="go-back" data-fallback="complaints" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back</a> <span style="opacity:0.4;margin:0 2px">/</span> Log`)}${sbxNote()}<div class="g2">${done?conf:form}<div class="card"><h2>What happens next</h2><ol class="sub" style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px"><li>A reference number is issued immediately.</li><li>Recorded calls on that date within three hours are matched and attached.</li><li>Safety reports go straight to Investigation &amp; Safety.</li><li>A reviewer investigates and records the decision.</li></ol></div></div>`;
   return `<div class="intake">
     <div class="intake-head"><span class="eyebrow">Customer support</span><h1>Report a problem with a recovery agent</h1><p>Tell us what happened during a call, message or visit about your loan. We take every report seriously and investigate it, even without a recording.</p></div>
     ${done?conf:form}
@@ -2388,53 +2591,221 @@ function pVendors(){
   const sel = vs.find(v=>v.v===F.vendors.sel) || null;
   const row = (x, name) => `<td class="num">${x.calls}</td><td class="num">${x.flagged}</td><td class="num"><b>${pct(x.flagged,x.calls)}%</b></td><td class="num">${x.crit}</td><td class="num">${x.late}</td><td class="num">${x.open}</td><td class="num">${x.confirmed}</td><td class="num">${x.unsub}</td>`;
   const th = `<th class="num">Calls</th><th class="num">Flagged</th><th class="num">Flag rate</th><th class="num">Critical</th><th class="num">Off-hours</th><th class="num">Open cases</th><th class="num">Confirmed</th><th class="num">Not substantiated</th>`;
-  return `${head("Vendors & agents","Conduct by collection vendor and agent. Allegations (open cases) are kept apart from confirmed findings.", rangeChips("vendors.days", F.vendors.days))}
+  return `${head("Vendors & agents","Conduct by collection vendor and agent. Allegations (open cases) are kept apart from confirmed findings.", `${btnBack("overview")}${rangeChips("vendors.days", F.vendors.days)}`)}
   <div class="card">
     ${vs.length?`<div class="tw"><table><thead><tr><th>Vendor</th>${th}<th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${vs.map(v=>`<tr class="rowlink" data-act="vendor-sel" data-v="${esc(v.v)}" tabindex="0" ${sel&&sel.v===v.v?'style="background:var(--accent-soft)"':""}><td><b>${esc(v.v)}</b> <span class="note">${Object.keys(v.agents).length} agents</span></td>${row(v)}<td style="text-align:right"><button class="btn-detail" data-act="vendor-sel" data-v="${esc(v.v)}">See details →</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No calls in this period.</div>`}
     <p class="note">Select a vendor to see its agents.</p>
   </div>
-  ${sel?`<div class="card"><h2>${esc(sel.v)} · agents</h2><div class="tw"><table><thead><tr><th>Agent</th>${th}<th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${Object.values(sel.agents).sort((a,b)=>pct(b.flagged,b.calls)-pct(a.flagged,a.calls)).map(a=>`<tr><td class="mono">${esc(a.a)} ${a.confirmed>=2||a.crit>=2?`<span class="pill p-critical">Repeat concern</span>`:""}</td>${row(a)}<td style="text-align:right"><button class="btn-detail" onclick="F.calls.vendor='${esc(sel.v)}';F.calls.q='${esc(a.a)}';location.hash='calls'">See calls →</button></td></tr>`).join("")}</tbody></table></div>
+  ${sel?`<div class="card"><h2>${esc(sel.v)} · agents</h2><div class="tw"><table><thead><tr><th>Agent</th>${th}<th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${Object.values(sel.agents).sort((a,b)=>pct(b.flagged,b.calls)-pct(a.flagged,a.calls)).map(a=>`<tr class="rowlink" data-act="agent-calls" data-v="${esc(sel.v)}" data-agent="${esc(a.a)}" tabindex="0"><td class="mono">${esc(a.a)} ${a.confirmed>=2||a.crit>=2?`<span class="pill p-critical">Repeat concern</span>`:""}</td>${row(a)}<td style="text-align:right"><button class="btn-detail" data-act="agent-calls" data-v="${esc(sel.v)}" data-agent="${esc(a.a)}">See calls →</button></td></tr>`).join("")}</tbody></table></div>
     <div class="actions"><button class="btn sm" data-act="vendor-calls" data-v="${esc(sel.v)}">View this vendor’s calls →</button></div></div>`:""}`;
 }
 
 function pRulebook(){
   const rb = RB(), ro = !canAdmin();
   const dis = ro ? "disabled" : "";
+  const totalRules = rb.rules.length;
+  const activeCount = rb.rules.filter(r => r.enabled).length;
+
   return `${head("Rulebook", `Version ${rb.version} · updated ${esc(fmtDT(rb.updatedAt))}. Every flag cites a rule from this book. Changes create a new version; past results keep the version they were analysed with.`,
-    `<button class="btn" data-act="reanalyse">Re-analyse all calls with v${rb.version}</button>`)}
+    `${btnBack("overview")}<button class="btn" data-act="reanalyse">Re-analyse all calls with v${rb.version}</button>`)}
   ${ro?`<div class="banner info">Only editors can change the rulebook. You can read it and test sentences.</div>`:""}
-  ${sbxNote()}
-  <div class="g32">
-    <form class="card" data-form="rulebook" style="gap:14px">
-      <h2>Global rules</h2>
-      <div class="fr"><label>Calls allowed from<input type="time" id="rbStart" value="${esc(rb.callWindow.start)}" ${dis}></label><label>Calls allowed until<input type="time" id="rbEnd" value="${esc(rb.callWindow.end)}" ${dis}></label><label>Max calls per customer per day<input type="number" id="rbRepeat" min="1" max="20" value="${esc(rb.repeatLimit)}" ${dis}></label></div>
-      <h2>Conduct rules</h2>
-      ${rb.rules.map((r,i)=>`<fieldset style="border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:0">
-        <div class="actions" style="justify-content:space-between"><label style="flex-direction:row;align-items:center;gap:6px;color:var(--ink)"><input type="checkbox" id="rbEn${i}" ${r.enabled?"checked":""} ${dis}> <b>${esc(r.cat)}</b></label><span class="note">${r.scope==="agent"?"Checks agent lines":"Checks customer lines"} · id <span class="mono">${esc(r.id)}</span></span></div>
-        <div class="fr"><label>Category name<input id="rbCat${i}" value="${esc(r.cat)}" ${dis}></label><label>Severity<select id="rbSev${i}" ${dis}>${["critical","high","medium"].map(s=>`<option value="${s}" ${s===r.sev?"selected":""}>${PRIO_OF(s)}</option>`).join("")}</select></label><label>Owner team<select id="rbTeam${i}" ${dis}>${TEAMS.map(t=>`<option ${t===r.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label></div>
-        <label>Rule or policy reference<input id="rbRef${i}" value="${esc(r.ref)}" ${dis}></label>
-        <label>Patterns, one per line (regular expressions, case-insensitive)<textarea id="rbPats${i}" class="mono" rows="4" ${dis}>${esc((r.pats||[]).join("\n"))}</textarea></label>
-        <div class="fr"><label>Why flagged<input id="rbWhy${i}" value="${esc(r.why)}" ${dis}></label><label>Next step<input id="rbNext${i}" value="${esc(r.next)}" ${dis}></label></div>
-        <label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="rbRes${i}" ${r.restricted?"checked":""} ${dis}> Restrict access to cases with this flag</label>
-      </fieldset>`).join("")}
-      ${ro?"":`<label>Change summary (required)<input id="rbSummary" placeholder="e.g. Added Marathi threat phrases after reviewer feedback"></label>
-      <div class="actions"><button class="btn primary" type="submit">Save as v${rb.version+1}</button><button class="btn" type="button" data-act="rb-add">Add a rule</button><button class="btn" type="button" data-act="rb-reset">Restore defaults</button></div>`}
-    </form>
-    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
-      <div class="card"><h2>Test a sentence</h2><p class="sub">Check what the current version would flag. Nothing is saved.</p>
-        <label>Speaker<select id="tSpk" data-onchange="test"><option value="AGENT">Agent</option><option value="CUSTOMER">Customer</option></select></label>
-        <label>Sentence<input id="tTxt" data-live-test="1" placeholder="e.g. Kal ghar aaunga, phir dekh lena"></label>
-        <div id="tOut">${testOut()}</div>
+
+  <form data-form="rulebook" class="rb-container">
+    <!-- Top Global Operational Calling Policies -->
+    <div class="rb-global-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <h2 style="margin:0;font-size:16px;">Global Operational Rules &amp; Dialler Limits</h2>
+            <span class="badge" style="background:var(--accent-light);color:var(--accent);font-weight:600;font-size:11px;border:1px solid var(--accent-soft);">RBI Fair Practice Code</span>
+          </div>
+          <p class="sub" style="margin:4px 0 0;font-size:13px;">Regulatory thresholds enforced across all dialler feeds and manual calls before keyword conduct evaluation.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:12px;color:var(--muted);">Monitored window:</span>
+          <span class="mono" style="font-size:13px;font-weight:700;color:var(--ink);background:var(--surface-2,#f1f5f9);padding:4px 10px;border-radius:6px;border:1px solid var(--line);">${esc(rb.callWindow.start)} – ${esc(rb.callWindow.end)} IST</span>
+        </div>
       </div>
-      <div class="card"><h2>Version history</h2><ul class="hist">${(rb.history||[]).slice().reverse().map(h=>`<li><span class="t">v${esc(h.version)} · ${esc(fmtDT(h.at))}</span><span><b>${esc(whoLabel(h.by))}:</b> ${esc(h.summary)}</span></li>`).join("")}</ul></div>
+
+      <div class="rb-global-grid">
+        <div class="rb-global-item">
+          <label for="rbStart">Calls Allowed From</label>
+          <input type="time" id="rbStart" value="${esc(rb.callWindow.start)}" ${dis}>
+          <span class="rb-global-help">Mandated earliest contact time (08:00 AM IST)</span>
+        </div>
+        <div class="rb-global-item">
+          <label for="rbEnd">Calls Allowed Until</label>
+          <input type="time" id="rbEnd" value="${esc(rb.callWindow.end)}" ${dis}>
+          <span class="rb-global-help">Mandated cutoff time (07:00 PM IST)</span>
+        </div>
+        <div class="rb-global-item">
+          <label for="rbRepeat">Max Contacts Per Day</label>
+          <input type="number" id="rbRepeat" min="1" max="20" value="${esc(rb.repeatLimit)}" ${dis}>
+          <span class="rb-global-help">Maximum contact attempts allowed in 24 hours</span>
+        </div>
+      </div>
     </div>
-  </div>`;
+
+    <!-- Main 2-Column Responsive Workspace -->
+    <div class="rb-workspace">
+      <!-- Left Column: Conduct Rules -->
+      <div class="rb-rules-col">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:2px 4px;">
+          <div>
+            <h2 style="margin:0;font-size:16px;">Conduct Detection Rules (${totalRules})</h2>
+            <span class="note">${activeCount} active · ${totalRules - activeCount} disabled · Deterministic regex patterns</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn sm" data-act="rb-expand-all" style="font-size:12px;padding:4px 9px;">Expand all</button>
+            <button type="button" class="btn sm" data-act="rb-collapse-all" style="font-size:12px;padding:4px 9px;">Collapse all</button>
+          </div>
+        </div>
+
+        ${rb.rules.map((r,i)=>`
+        <details class="rb-rule-card" id="rb-rule-${i}" open>
+          <summary>
+            <div class="rb-rule-header-left">
+              <input type="checkbox" id="rbEn${i}" ${r.enabled?"checked":""} ${dis} title="Toggle active status" onclick="event.stopPropagation()">
+              <span class="mono" style="font-size:11px;font-weight:700;color:var(--muted);background:var(--surface-2,#f1f5f9);padding:2px 7px;border-radius:5px;border:1px solid var(--line);">#R-${String(i+1).padStart(2,'0')}</span>
+              <strong style="color:var(--ink);font-size:14px;">${esc(r.cat)}</strong>
+            </div>
+            <div class="rb-rule-header-right">
+              ${pillP(PRIO_OF(r.sev))}
+              <span class="badge" style="font-size:11px;background:var(--surface-2,#f1f5f9);color:var(--ink);border:1px solid var(--line);">${r.scope==="agent"?"Agent":"Customer"}</span>
+              <span class="badge" style="font-size:11px;background:var(--surface-2,#f1f5f9);color:var(--muted);border:1px solid var(--line);">${(r.pats||[]).length} pattern${(r.pats||[]).length===1?"":"s"}</span>
+              <svg class="rb-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </summary>
+          <div class="rb-rule-body">
+            <div class="fr">
+              <label>Category Name<input id="rbCat${i}" value="${esc(r.cat)}" ${dis}></label>
+              <label>Severity Level<select id="rbSev${i}" ${dis}>${["critical","high","medium"].map(s=>`<option value="${s}" ${s===r.sev?"selected":""}>${PRIO_OF(s)}</option>`).join("")}</select></label>
+              <label>Owner Team<select id="rbTeam${i}" ${dis}>${TEAMS.map(t=>`<option ${t===r.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label>
+            </div>
+            <label>Rule or Regulatory Policy Reference<input id="rbRef${i}" value="${esc(r.ref)}" ${dis}></label>
+            <label>Detection Patterns (regular expressions, one per line, case-insensitive)<textarea id="rbPats${i}" class="mono" rows="3" style="font-size:12px;line-height:1.4;" ${dis}>${esc((r.pats||[]).join("\n"))}</textarea></label>
+            <div class="fr">
+              <label>Why Flagged (Compliance Rationale)<input id="rbWhy${i}" value="${esc(r.why)}" ${dis}></label>
+              <label>Next Step (Remediation Workflow)<input id="rbNext${i}" value="${esc(r.next)}" ${dis}></label>
+            </div>
+            <label style="flex-direction:row;align-items:center;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;">
+              <input type="checkbox" id="rbRes${i}" ${r.restricted?"checked":""} ${dis}>
+              <span><b>Restrict access</b> to cases flagged with this violation (Limits visibility to authorized lead compliance officers)</span>
+            </label>
+          </div>
+        </details>`).join("")}
+
+        <!-- Publish / Save Card -->
+        <div class="card" style="margin-top:4px;">
+          <h3 style="margin:0 0 4px;font-size:15px;">Publish Rulebook Version</h3>
+          <p class="sub" style="margin:0 0 12px;font-size:13px;">Saving changes generates <b>Version ${rb.version+1}</b> in the audit history. Historical call reviews preserve the version they were analysed with.</p>
+          ${ro ? `<div class="note">Only administrators can publish rulebook revisions.</div>` : `
+          <label>Change Summary (required)<input id="rbSummary" placeholder="e.g. Added Hindi/Marathi threat variations for field recovery calls"></label>
+          <div class="actions" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;">
+            <button class="btn primary" type="submit">Save as v${rb.version+1}</button>
+            <button class="btn" type="button" data-act="rb-add">+ Add a new rule</button>
+            <button class="btn" type="button" data-act="rb-reset">Restore defaults</button>
+          </div>`}
+        </div>
+      </div>
+
+      <!-- Right Column: Sticky Sandbox & Navigator -->
+      <div class="rb-sticky-sidebar">
+        <!-- Live Rule Tester Card -->
+        <div class="card" style="box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:15px;">Interactive Rule Tester</h3>
+            <span class="badge" style="background:var(--ok-bg);color:var(--ok);font-size:11px;font-weight:600;border:1px solid var(--ok-border);">● Live Match</span>
+          </div>
+          <p class="sub" style="margin:4px 0 10px;font-size:12.5px;">Test dialogue in real time against active regex patterns. Nothing is stored.</p>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <label style="font-size:12px;">Speaker
+              <select id="tSpk" data-onchange="test" style="font-size:13px;">
+                <option value="AGENT">Agent (Recovery Agent)</option>
+                <option value="CUSTOMER">Customer (Borrower)</option>
+              </select>
+            </label>
+            <label style="font-size:12px;">Sentence to evaluate
+              <input id="tTxt" data-live-test="1" placeholder="Type or click a sample below..." style="font-size:13px;">
+            </label>
+          </div>
+
+          <div style="margin-top:10px;">
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Click sample to test:</div>
+            <div class="rb-chip-group">
+              <button type="button" class="rb-chip" data-act="rb-sample" data-text="Kal tere ghar aaunga phir dekh lena" data-spk="AGENT">⚠️ Threat phrase</button>
+              <button type="button" class="rb-chip" data-act="rb-sample" data-text="Tere office aur padosi ko call karunga" data-spk="AGENT">🛑 3rd-Party pressure</button>
+              <button type="button" class="rb-chip" data-act="rb-sample" data-text="Police aayegi aur arrest karegi" data-spk="AGENT">⚖️ Misleading claim</button>
+              <button type="button" class="rb-chip" data-act="rb-sample" data-text="Mujhe bahut dar lag raha hai" data-spk="CUSTOMER">🆘 Distress signal</button>
+              <button type="button" class="rb-chip" data-act="rb-sample" data-text="Namaste sir, aapki EMI reminder call hai" data-spk="AGENT">✅ Compliant call</button>
+            </div>
+          </div>
+
+          <div id="tOut" style="margin-top:8px;">${testOut()}</div>
+        </div>
+
+        <!-- Quick Jump Rule Navigator -->
+        <div class="card" style="box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:15px;">Rule Index &amp; Navigator</h3>
+            <span style="font-size:12px;font-weight:600;color:var(--muted);">${activeCount}/${totalRules} Active</span>
+          </div>
+          <p class="sub" style="margin:4px 0 10px;font-size:12.5px;">Click any rule to immediately jump to its configuration.</p>
+          <div class="rb-nav-list">
+            ${rb.rules.map((r,i)=>`
+            <div class="rb-nav-item" data-act="rb-jump" data-target="rb-rule-${i}" title="Jump to ${esc(r.cat)}">
+              <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                <span class="rb-nav-dot ${r.enabled?'on':'off'}"></span>
+                <span class="mono" style="font-size:11px;color:var(--muted);">R-${String(i+1).padStart(2,'0')}</span>
+                <span style="font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(r.cat)}</span>
+              </div>
+              <div style="flex-shrink:0;">
+                ${pillP(PRIO_OF(r.sev))}
+              </div>
+            </div>`).join("")}
+          </div>
+        </div>
+
+        <!-- Version History -->
+        <div class="card" style="box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:15px;">Version History</h3>
+            <span class="mono" style="font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-light);padding:2px 8px;border-radius:4px;border:1px solid var(--accent-soft);">v${rb.version}</span>
+          </div>
+          <p class="sub" style="margin:4px 0 10px;font-size:12.5px;">Audit log of published rulebook iterations.</p>
+          <ul class="hist">
+            ${(rb.history||[]).slice().reverse().map(h=>`
+            <li>
+              <span class="t">v${esc(h.version)} · ${esc(fmtDT(h.at))}</span>
+              <span><b>${esc(whoLabel(h.by))}:</b> ${esc(h.summary)}</span>
+            </li>`).join("")}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>`;
 }
+
 function testOut(){
   const t = ($("tTxt") && $("tTxt").value) || "", spk = ($("tSpk") && $("tSpk").value) || "AGENT";
-  if(!t.trim()) return `<p class="note">Type a sentence to test it.</p>`;
+  if(!t.trim()) return `<div style="font-size:12px;color:var(--muted);padding:8px;background:var(--surface-2,#f8fafc);border-radius:6px;border:1px dashed var(--line);text-align:center;">Type a phrase above or click a sample to test detection.</div>`;
   const fl = runRules({transcript:"[00:00] "+spk+": "+t, time:"12:00", prior:0}, RB());
-  return fl.length ? fl.map(f=>`<div class="fh" style="margin-top:6px"><strong>${esc(f.category)}</strong>${pillP(PRIO_OF(f.severity))}</div>`).join("") : `<div class="banner ok" style="margin-top:6px">No rule matches.</div>`;
+  return fl.length ?
+    `<div style="display:flex;flex-direction:column;gap:6px;">
+       <div style="font-size:11.5px;font-weight:600;color:var(--crit);display:flex;align-items:center;gap:4px;">
+         <span>⚠️ Flagged by ${fl.length} rule${fl.length>1?'s':''}:</span>
+       </div>
+       ${fl.map(f=>`
+       <div style="padding:8px 10px;background:var(--crit-bg);border:1px solid var(--crit-border);border-radius:6px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+         <div style="min-width:0;">
+           <div style="font-weight:600;font-size:13px;color:var(--ink);">${esc(f.category)}</div>
+           <div style="font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.3;">${esc(f.why)}</div>
+         </div>
+         <div style="flex-shrink:0;">${pillP(PRIO_OF(f.severity))}</div>
+       </div>`).join("")}
+     </div>`
+    : `<div class="banner ok" style="margin:0;padding:8px 10px;border-radius:6px;font-size:12.5px;display:flex;align-items:center;gap:6px;"><span>✓ No rule matched. Sentence is clean under active rules.</span></div>`;
 }
 
 function pReports(){
@@ -2450,7 +2821,7 @@ function pReports(){
   const agents = {}; for(const c of cl){ if(isFlagged(c)){ const key = c.vendor+" · "+c.agent; agents[key]=(agents[key]||0)+1; } }
   const repeat = Object.entries(agents).filter(([,n])=>n>=2).sort((a,b)=>b[1]-a[1]);
   const cats = catCounts(cl);
-  return `${head("Reports","Management view for Compliance, Collections and vendor governance. Export any table as CSV.", rangeChips("reports.days", d))}
+  return `${head("Reports","Management view for Compliance, Collections and vendor governance. Export any table as CSV.", `${btnBack("overview")}${rangeChips("reports.days", d)}`)}
   <div class="kpis">
     <div class="kpi"><b>${cl.length}</b><span>Calls reviewed</span></div>
     <div class="kpi"><b>${m.flagged.length}</b><span>Calls flagged (${pct(m.flagged.length,cl.length)}%)</span></div>
@@ -2490,18 +2861,18 @@ function pAudit(){
   if(f.type) ev = ev.filter(e=>e.type===f.type);
   if(q) ev = ev.filter(e=>(e.ref+" "+e.text+" "+whoLabel(e.by)).toLowerCase().includes(q));
   const shown = ev.slice(0, 300);
-  return `${head("Audit trail","Who did what, and when: ingestion, routing, evidence access, decisions and rulebook changes.")}
+  return `${head("Audit trail","Who did what, and when: ingestion, routing, evidence access, decisions and rulebook changes.", btnBack("overview"))}
   <div class="card">
     <div class="filters"><label>Search<input id="fAudQ" data-live="audit.q" value="${esc(f.q)}" placeholder="Case, call, person or text"></label>
     <label>Type<select id="fAudT" data-filter="audit.type"><option value="">All events</option>${["Case","Access","Call","Rulebook"].map(t=>`<option ${f.type===t?"selected":""}>${t}</option>`).join("")}</select></label></div>
     <p class="note">${ev.length} event${ev.length===1?"":"s"}${ev.length>300?" · showing latest 300":""}</p>
-    ${shown.length?`<div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>Type</th><th>Ref</th><th>Event</th><th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${shown.map(e=>`<tr><td class="mono">${esc(fmtDT(e.at))}</td><td>${esc(whoLabel(e.by))}</td><td>${e.type==="Access"?`<span class="src man">Access</span>`:esc(e.type)}</td><td><a class="mono" href="#${esc(e.href)}">${esc(e.ref)}</a></td><td>${esc(e.text)}</td><td style="text-align:right">${e.href?`<a class="btn-detail" href="#${esc(e.href)}">See details →</a>`:"—"}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No events match.</div>`}
+    ${shown.length?`<div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>Type</th><th>Ref</th><th>Event</th><th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${shown.map(e=>`<tr class="rowlink" data-href="${esc(e.href)}" tabindex="0"><td class="mono">${esc(fmtDT(e.at))}</td><td>${esc(whoLabel(e.by))}</td><td>${e.type==="Access"?`<span class="src man">Access</span>`:esc(e.type)}</td><td><a class="mono" href="#${esc(e.href)}">${esc(e.ref)}</a></td><td>${esc(e.text)}</td><td style="text-align:right">${e.href?`<a class="btn-detail" href="#${esc(e.href)}">See details →</a>`:"—"}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No events match.</div>`}
   </div>`;
 }
 
 function pSettings(){
   const s = ST.settings, ad = canAdmin();
-  return `${head("Settings","Service levels, AI review and data management.")}
+  return `${head("Settings","Service levels, AI review and data management.", btnBack("overview"))}
   ${sbxNote()}
   <div class="g2">
     <form class="card" data-form="settings">
@@ -2529,12 +2900,60 @@ function pSettings(){
 /* ================= actions ================= */
 const ACT = {
   "go-back": (el) => {
-    const fb = (el && el.dataset && el.dataset.fallback) || "calls";
-    if (window.history.length > 1) {
+    const fb = (el && el.dataset && el.dataset.fallback) || "overview";
+    if (prevHash && prevHash !== currentHash) {
+      location.hash = prevHash;
+    } else if (window.history.length > 1) {
       window.history.back();
     } else {
       location.hash = fb;
     }
+  },
+  "agent-calls": el => {
+    F.calls.vendor = el.dataset.v || "";
+    F.calls.q = el.dataset.agent || "";
+    F.calls.days = "all";
+    F.calls.result = "";
+    location.hash = "calls";
+    schedule();
+  },
+  "vendor-calls": el => {
+    F.calls.vendor = el.dataset.v || "";
+    F.calls.q = "";
+    F.calls.days = "all";
+    F.calls.result = "";
+    location.hash = "calls";
+    schedule();
+  },
+  "sel-vendor": el => {
+    F.vendors.sel = el.dataset.v;
+    location.hash = "vendors";
+    schedule();
+  },
+  "rb-sample": el => {
+    const txt = el.dataset.text || "";
+    const spk = el.dataset.spk || "AGENT";
+    const iTxt = $("tTxt"), iSpk = $("tSpk");
+    if(iTxt) iTxt.value = txt;
+    if(iSpk) iSpk.value = spk;
+    CHG.test();
+  },
+  "rb-jump": el => {
+    const target = $(el.dataset.target);
+    if(target){
+      if(target.tagName.toLowerCase() === "details") target.open = true;
+      target.scrollIntoView({behavior: "smooth", block: "center"});
+      target.style.transition = "outline 0.25s ease, box-shadow 0.25s ease";
+      target.style.outline = "2px solid var(--accent)";
+      target.style.boxShadow = "0 0 0 4px var(--accent-soft)";
+      setTimeout(() => { target.style.outline = ""; target.style.boxShadow = ""; }, 1800);
+    }
+  },
+  "rb-expand-all": () => {
+    document.querySelectorAll(".rb-rule-card").forEach(d => { d.open = true; });
+  },
+  "rb-collapse-all": () => {
+    document.querySelectorAll(".rb-rule-card").forEach(d => { d.open = false; });
   },
   "toggle-nav": () => {
     const isCol = document.body.classList.toggle("nav-collapsed");
@@ -2773,7 +3192,16 @@ document.addEventListener("input", e=>{
   if(el.dataset && el.dataset.live){ const [a,b] = el.dataset.live.split("."); F[a][b] = el.value; clearTimeout(liveT); liveT = setTimeout(schedule, 220); }
   if(el.dataset && el.dataset.liveTest){ CHG.test(); }
 });
-window.addEventListener("hashchange", ()=>{ if(route()!=="intake" && route()!=="log") ST._lastCmp = null; if(route()!=="add") IMPMSG = ""; schedule(); });
+window.addEventListener("hashchange", ()=>{
+  const nextR = route();
+  if(nextR !== currentHash) {
+    prevHash = currentHash;
+    currentHash = nextR;
+  }
+  if(route()!=="intake" && route()!=="log") ST._lastCmp = null;
+  if(route()!=="add") IMPMSG = "";
+  schedule();
+});
 
 init().catch(e=>{ console.error(e); startSandbox(sbxLoad()); });
 })();
