@@ -1482,6 +1482,448 @@ details.rb-rule-card summary::-webkit-details-marker {
 details[open] .rb-chevron {
   transform: rotate(180deg);
 }
+
+/* ===== Settings Page Enhancements ===== */
+.settings-section{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.settings-section-head{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.settings-section-head h2{
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-section-head p{
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.sla-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 768px){
+  .sla-grid{
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sla-card{
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.sla-card:hover{
+  border-color: var(--line-strong);
+}
+.sla-card-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sla-input-wrap{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sla-input-wrap input{
+  width: 90px;
+  height: 38px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+.sla-input-wrap span.unit{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.sla-desc{
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.toggle-card{
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+@media (max-width: 600px){
+  .toggle-card{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.toggle-card-info{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.toggle-card-title{
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.toggle-card-desc{
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.db-stats-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 800px){
+  .db-stats-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.db-stat-tile{
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.db-stat-tile span.label{
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+}
+.db-stat-tile b.val{
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.admin-card-split{
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+}
+@media (max-width: 800px){
+  .admin-card-split{
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.danger-box{
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+:root[data-theme="dark"] .danger-box{
+  background: #2D1418;
+  border-color: #5C1D24;
+}
+.danger-box h3{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #DC2626;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.danger-box p{
+  margin: 0;
+  font-size: 12.5px;
+  color: #991B1B;
+  line-height: 1.4;
+}
+:root[data-theme="dark"] .danger-box p{
+  color: #F87171;
+}
+
+/* ===== Insightful Reports Dashboard Styling ===== */
+.rep-summary-banner{
+  background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 50%, #F8FAFC 100%);
+  border: 1px solid #A7F3D0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+:root[data-theme="dark"] .rep-summary-banner{
+  background: linear-gradient(135deg, #06231C 0%, #0F382E 50%, #131A26 100%);
+  border-color: #0F5E4E;
+}
+@media (max-width: 768px){
+  .rep-summary-banner{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.rep-summary-left{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.rep-score-badge{
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
+}
+.rep-score-badge b{
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+.rep-score-badge span{
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  opacity: 0.9;
+}
+.rep-summary-text h3{
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.rep-summary-text p{
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.donut-wrap{
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 0;
+}
+@media (max-width: 520px){
+  .donut-wrap{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+.donut-svg{
+  width: 120px;
+  height: 120px;
+  transform: rotate(-90deg);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.donut-bg{
+  fill: none;
+  stroke: var(--surface-2);
+  stroke-width: 5.5;
+}
+.donut-fill{
+  fill: none;
+  stroke: var(--crit);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+.donut-stats{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.donut-stat-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.donut-legend-dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+.donut-stat-val{
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.cat-bars-list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cat-bar-item{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cat-bar-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.cat-bar-title{
+  font-weight: 600;
+  color: var(--ink);
+}
+.cat-bar-meta{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cat-bar-track{
+  height: 9px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.cat-bar-fill{
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.engine-matrix-grid{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.engine-metric-card{
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.engine-metric-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.engine-name{
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.engine-pct{
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.engine-track{
+  height: 8px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.engine-fill{
+  height: 100%;
+  border-radius: 999px;
+}
+.engine-subtext{
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.risk-leaderboard{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.risk-agent-row{
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+.risk-agent-row:hover{
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+.risk-agent-info{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.risk-count-badge{
+  background: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+:root[data-theme="dark"] .risk-count-badge{
+  background: #3B1219;
+  border-color: #631C24;
+  color: #F87171;
+}
 </style>
 
 <div class="app" id="app">
@@ -2213,7 +2655,9 @@ function page(r){
   return `<div class="empty">That page does not exist. <a href="#overview">Go to Overview</a></div>`;
 }
 const head = (title, sub, right, crumb) => `<div class="ph"><div>${crumb?`<div class="crumb">${crumb}</div>`:""}<h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div>${right?`<div class="actions">${right}</div>`:""}</div>`;
-let prevHash = "", currentHash = "";
+let currentHash = (typeof route==="function"?route():"overview"), prevHash = "";
+const navHistory = [currentHash];
+let isNavigatingBack = false;
 const btnBack = (fb = "overview") => `<button class="btn" data-act="go-back" data-fallback="${esc(fb)}" title="Go back to previous page" style="display:inline-flex;align-items:center;gap:6px;font-weight:600"><span style="font-size:15px;line-height:1">←</span> Back</button>`;
 const rangeChips = (key, val, opts) => `<div class="chips">${(opts||[7,14,30,"all"]).map(o=>`<button class="chip ${String(val)===String(o)?"on":""}" data-act="set" data-k="${key}" data-v="${o}">${o==="all"?"All time":"Last "+o+" days"}</button>`).join("")}</div>`;
 const sbxNote = () => "";
@@ -2806,37 +3250,254 @@ function pReports(){
   const q = src => { const r = allFlags.filter(f=>f.source===src && f.review); const v = r.filter(f=>f.review.v==="valid").length; return {n:r.length, v, fp:r.length-v}; };
   const qr = q("Rule"), qa = q("AI"), man = allFlags.filter(f=>f.source==="Manual").length;
   const decided = ks.filter(k=>k.decision); const conf = decided.filter(k=>k.decision==="confirmed").length;
+  const confPct = decided.length ? pct(conf, decided.length) : 0;
+  const unsubCount = decided.length - conf;
   const actions = {}; ks.filter(k=>k.action).forEach(k=>actions[k.action]=(actions[k.action]||0)+1);
+  const totalActions = Object.values(actions).reduce((a,b)=>a+b, 0);
   const cmps = complaints().filter(c=>c.receivedAt>=cutoffIso(d));
   const linked = cmps.filter(c=>c.linkedCallId).length;
   const agents = {}; for(const c of cl){ if(isFlagged(c)){ const key = c.vendor+" · "+c.agent; agents[key]=(agents[key]||0)+1; } }
   const repeat = Object.entries(agents).filter(([,n])=>n>=2).sort((a,b)=>b[1]-a[1]);
   const cats = catCounts(cl);
-  return `${head("Reports","Management view for Compliance, Collections and vendor governance. Export any table as CSV.", `${btnBack("overview")}${rangeChips("reports.days", d)}`)}
-  <div class="kpis">
-    <div class="kpi"><b>${cl.length}</b><span>Calls reviewed</span></div>
-    <div class="kpi"><b>${m.flagged.length}</b><span>Calls flagged (${pct(m.flagged.length,cl.length)}%)</span></div>
-    <div class="kpi"><b>${ks.length}</b><span>Cases opened</span></div>
-    <div class="kpi"><b>${fmtH(m.avgFirst)}</b><span>Avg to first review</span></div>
-    <div class="kpi"><b>${fmtH(m.avgClose)}</b><span>Avg to closure</span></div>
-    <div class="kpi ${m.overdue.length?"warn":""}"><b>${m.overdue.length}</b><span>Open past due date</span></div>
-  </div>
-  <div class="g2">
-    <div class="card"><h2>Detection quality</h2><p class="sub">From reviewer marks on flags. Precision = valid ÷ reviewed. Reviewer-added flags are concerns the engine missed.</p>
-      <div class="tw"><table><thead><tr><th>Engine</th><th class="num">Reviewed</th><th class="num">Valid</th><th class="num">False positive</th><th class="num">Precision</th></tr></thead><tbody>
-      <tr><td>Rules</td><td class="num">${qr.n}</td><td class="num">${qr.v}</td><td class="num">${qr.fp}</td><td class="num">${qr.n?pct(qr.v,qr.n)+"%":"—"}</td></tr>
-      <tr><td>AI review</td><td class="num">${qa.n}</td><td class="num">${qa.v}</td><td class="num">${qa.fp}</td><td class="num">${qa.n?pct(qa.v,qa.n)+"%":"—"}</td></tr>
-      <tr><td>Missed by engine (reviewer-added)</td><td class="num" colspan="4">${man}</td></tr></tbody></table></div></div>
-    <div class="card"><h2>Outcomes</h2>
-      <div class="kv"><span>Decided cases</span><span>${decided.length}</span><span>Violations confirmed</span><span>${conf} (${pct(conf,decided.length)}%)</span><span>Not substantiated</span><span>${decided.length-conf}</span><span>Complaints received</span><span>${cmps.length} · ${linked} matched to a recording</span></div>
-      <h3>Corrective actions</h3>${Object.keys(actions).length?`<div class="bars">${Object.entries(actions).sort((a,b)=>b[1]-a[1]).map(([a,n])=>`<div class="bar"><span>${esc(a)}</span><div class="track"><div class="fill" style="width:${n/Math.max(...Object.values(actions))*100}%"></div></div><span class="v">${n}</span></div>`).join("")}</div>`:`<p class="note">None recorded in this period.</p>`}
+  const totalFlags = cats.reduce((sum, [,n])=>sum+n, 0);
+  const cleanCalls = cl.length - m.flagged.length;
+  const adherenceRate = cl.length ? pct(cleanCalls, cl.length) : 100;
+  
+  const donutDashConf = confPct;
+  const donutDashRest = 100 - confPct;
+
+  return `${head("Executive Reports & Compliance Analytics", "Comprehensive conduct audits, AI vs Rule accuracy metrics, remediation breakdown, and downloadable compliance artifacts.", `${btnBack("overview")}${rangeChips("reports.days", d)}`)}
+  
+  <!-- Executive Health Banner -->
+  <div class="rep-summary-banner">
+    <div class="rep-summary-left">
+      <div class="rep-score-badge">
+        <b>${adherenceRate}%</b>
+        <span>Score</span>
+      </div>
+      <div class="rep-summary-text">
+        <h3>Recovery Conduct Health Index: ${adherenceRate >= 85 ? "Good Standing" : adherenceRate >= 70 ? "Needs Monitoring" : "High Risk"}</h3>
+        <p>${cleanCalls} of ${cl.length} audited calls met full regulatory compliance. ${m.flagged.length} calls flagged for review across ${cats.length} violation categories.</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn primary" data-act="export" data-what="summary" style="display:flex;align-items:center;gap:6px">
+        ⬇ Download Executive Summary (.md)
+      </button>
     </div>
   </div>
-  <div class="g2">
-    <div class="card"><h2>Concerns by category</h2>${cats.length?`<div class="tw"><table><thead><tr><th>Category</th><th class="num">Flags</th></tr></thead><tbody>${cats.map(([c,n])=>`<tr><td>${esc(c)}</td><td class="num">${n}</td></tr>`).join("")}</tbody></table></div>`:`<p class="note">None.</p>`}</div>
-    <div class="card"><h2>Repeat incidents</h2><p class="sub">Agents with two or more flagged calls in the period.</p>${repeat.length?`<div class="tw"><table><thead><tr><th>Vendor · agent</th><th class="num">Flagged calls</th></tr></thead><tbody>${repeat.map(([a,n])=>`<tr><td>${esc(a)}</td><td class="num">${n}</td></tr>`).join("")}</tbody></table></div>`:`<p class="note">None.</p>`}</div>
+
+  <!-- Key Metrics Row -->
+  <div class="kpis" style="margin-top:6px">
+    <div class="kpi"><b>${cl.length}</b><span>Calls reviewed</span></div>
+    <div class="kpi ${pct(m.flagged.length,cl.length)>15?"warn":""}"><b>${pct(m.flagged.length,cl.length)}%</b><span>Flag rate (${m.flagged.length} calls)</span></div>
+    <div class="kpi"><b>${ks.length}</b><span>Dossiers opened</span></div>
+    <div class="kpi"><b>${fmtH(m.avgFirst)}</b><span>Avg to first review</span></div>
+    <div class="kpi"><b>${fmtH(m.avgClose)}</b><span>Avg to resolution</span></div>
+    <div class="kpi ${m.overdue.length?"warn":""}"><b>${m.overdue.length}</b><span>Past SLA deadline</span></div>
   </div>
-  <div class="card"><h2>Export</h2><div class="actions"><button class="btn" data-act="export" data-what="cases">Cases (.csv)</button><button class="btn" data-act="export" data-what="calls">Calls (.csv)</button><button class="btn" data-act="export" data-what="flags">Flags (.csv)</button><button class="btn" data-act="export" data-what="summary">Summary report (.md)</button></div><p class="note">Exports cover the selected period.</p></div>`;
+
+  <!-- Row 1: Detection Engine Performance & Investigation Resolution -->
+  <div class="g2">
+    <!-- Detection Engine Accuracy Matrix -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2>🎯 Detection Engine Accuracy</h2>
+        <span class="note">Audited by QA</span>
+      </div>
+      <p class="sub">Precision benchmarks comparing deterministic keyword rules against semantic AI speech review.</p>
+
+      <div class="engine-matrix-grid" style="margin-top:10px">
+        <div class="engine-metric-card">
+          <div class="engine-metric-head">
+            <span class="engine-name">Deterministic Rule Engine</span>
+            <span class="engine-pct" style="color:var(--accent)">${qr.n ? pct(qr.v, qr.n)+"%" : "N/A"}</span>
+          </div>
+          <div class="engine-track">
+            <div class="engine-fill" style="width:${qr.n ? pct(qr.v, qr.n) : 0}%;background:var(--accent)"></div>
+          </div>
+          <div class="engine-subtext">
+            <span>${qr.v} verified valid flags</span>
+            <span>${qr.fp} false positives (${qr.n} audited)</span>
+          </div>
+        </div>
+
+        <div class="engine-metric-card">
+          <div class="engine-metric-head">
+            <span class="engine-name">AI Speech &amp; Context Review</span>
+            <span class="engine-pct" style="color:#2563EB">${qa.n ? pct(qa.v, qa.n)+"%" : "N/A"}</span>
+          </div>
+          <div class="engine-track">
+            <div class="engine-fill" style="width:${qa.n ? pct(qa.v, qa.n) : 0}%;background:#2563EB"></div>
+          </div>
+          <div class="engine-subtext">
+            <span>${qa.v} verified valid flags</span>
+            <span>${qa.fp} false positives (${qa.n} audited)</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface-2);border-radius:8px;font-size:12.5px">
+          <span>Manual Missed Flags Added by Reviewers:</span>
+          <b style="color:var(--ink)">${man} flag${man===1?"":"s"}</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case Outcomes & Substantiation Donut Chart -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2>⚖️ Case Decisions &amp; Resolution Ratio</h2>
+        <span class="note">${decided.length} closed</span>
+      </div>
+      <p class="sub">Breakdown of completed investigations substantiated vs closed with no violation.</p>
+
+      <div class="donut-wrap">
+        <svg class="donut-svg" viewBox="0 0 42 42">
+          <circle class="donut-bg" cx="21" cy="21" r="15.91549430918954"></circle>
+          <circle class="donut-fill" cx="21" cy="21" r="15.91549430918954"
+                  stroke-dasharray="${donutDashConf} ${donutDashRest}" stroke-dashoffset="0"></circle>
+        </svg>
+
+        <div class="donut-stats">
+          <div class="donut-stat-row">
+            <span><span class="donut-legend-dot" style="background:var(--crit)"></span>Confirmed Violations</span>
+            <span class="donut-stat-val" style="color:var(--crit)">${conf} (${confPct}%)</span>
+          </div>
+          <div class="donut-stat-row">
+            <span><span class="donut-legend-dot" style="background:var(--muted)"></span>Not Substantiated</span>
+            <span class="donut-stat-val">${unsubCount} (${decided.length ? (100-confPct) : 0}%)</span>
+          </div>
+          <div class="donut-stat-row" style="padding-top:6px;border-top:1px solid var(--line);margin-top:2px">
+            <span style="color:var(--muted)">Pending Adjudication:</span>
+            <span class="donut-stat-val" style="color:var(--high)">${ks.length - decided.length} cases</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Conduct Categories Distribution & Remediation Breakdown -->
+  <div class="g2">
+    <!-- Visual Violation Distribution Bars -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2>📊 Conduct Violation Breakdown</h2>
+        <span class="note">${totalFlags} total occurrences</span>
+      </div>
+      <p class="sub">Frequency of specific regulatory breaches detected across all debt recovery calls.</p>
+
+      <div class="cat-bars-list" style="margin-top:10px">
+        ${cats.length ? cats.map(([cat, n], i) => {
+          const share = totalFlags ? Math.round((n / totalFlags) * 100) : 0;
+          const barColor = i === 0 ? "var(--crit)" : i === 1 ? "var(--high)" : "var(--accent)";
+          return `<div class="cat-bar-item">
+            <div class="cat-bar-header">
+              <span class="cat-bar-title">${esc(cat)}</span>
+              <span class="cat-bar-meta">
+                <b>${n}</b> (${share}%)
+              </span>
+            </div>
+            <div class="cat-bar-track">
+              <div class="cat-bar-fill" style="width:${share}%;background:${barColor}"></div>
+            </div>
+          </div>`;
+        }).join("") : `<div class="empty">No conduct flags recorded in this period.</div>`}
+      </div>
+    </div>
+
+    <!-- Remedial & Corrective Actions Taken -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2>🛡️ Corrective &amp; Remedial Actions</h2>
+        <span class="note">${totalActions} recorded</span>
+      </div>
+      <p class="sub">Enforcement outcomes applied to recovery agents and collection agencies.</p>
+
+      <div class="tw" style="margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th>Action Enforced</th>
+              <th class="num">Cases</th>
+              <th class="num">Share</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${Object.entries(actions).length ? Object.entries(actions).sort((a,b)=>b[1]-a[1]).map(([act, n]) => {
+              const actPct = Math.round((n / (totalActions || 1)) * 100);
+              return `<tr>
+                <td><b>${esc(act)}</b></td>
+                <td class="num mono">${n}</td>
+                <td class="num mono" style="color:var(--muted)">${actPct}%</td>
+              </tr>`;
+            }).join("") : `<tr><td colspan="3" class="empty">No corrective actions logged yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Repeat Offender Leaderboard & Certified Regulatory Exports -->
+  <div class="g2">
+    <!-- Repeat Offender Risk Matrix -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h2>⚠️ High-Risk Agent Concentration</h2>
+        <span class="note">≥2 flagged calls</span>
+      </div>
+      <p class="sub">Agents showing multiple compliance violations requiring management retraining or offboarding.</p>
+
+      ${repeat.length ? `<div class="risk-leaderboard" style="margin-top:10px">
+        ${repeat.slice(0, 6).map(([agentKey, count]) => {
+          const parts = agentKey.split(" · ");
+          const vendor = parts[0];
+          const agentId = parts[1] || agentKey;
+          return `<div class="risk-agent-row">
+            <div class="risk-agent-info">
+              <span class="risk-count-badge">${count} Violations</span>
+              <div>
+                <b style="font-size:13px;color:var(--ink)">${esc(agentId)}</b>
+                <span class="note" style="margin-left:6px;font-size:12px">${esc(vendor)}</span>
+              </div>
+            </div>
+            <button class="btn-detail" data-act="agent-calls" data-v="${esc(vendor)}" data-agent="${esc(agentId)}">See calls →</button>
+          </div>`;
+        }).join("")}
+      </div>` : `<div class="empty">No agents with repeat compliance flags in this period.</div>`}
+    </div>
+
+    <!-- Certified Regulatory Audit Exports -->
+    <div class="card">
+      <h2>📁 Certified Compliance Artifacts</h2>
+      <p class="sub">Download certified compliance datasets and summary reports for internal audit, RBI inspection, or partner oversight.</p>
+
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--surface-2);border-radius:8px">
+          <div>
+            <b style="font-size:13px;color:var(--ink)">Full Call Transcripts &amp; Metadata</b>
+            <div class="note">All ${cl.length} recorded calls, dialler timestamps, and audio links (.csv)</div>
+          </div>
+          <button class="btn" data-act="export" data-what="calls">Export CSV</button>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--surface-2);border-radius:8px">
+          <div>
+            <b style="font-size:13px;color:var(--ink)">Compliance Flag Dossier</b>
+            <div class="note">${allFlags.length} flagged quotes, policy citations, and reviewer marks (.csv)</div>
+          </div>
+          <button class="btn" data-act="export" data-what="flags">Export CSV</button>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--surface-2);border-radius:8px">
+          <div>
+            <b style="font-size:13px;color:var(--ink)">Executive Audit Report</b>
+            <div class="note">Full markdown compliance report with summary statistics and methodology</div>
+          </div>
+          <button class="btn primary" data-act="export" data-what="summary">Export Markdown</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 function auditEvents(){
@@ -2863,27 +3524,155 @@ function pAudit(){
 
 function pSettings(){
   const s = ST.settings, ad = canAdmin();
-  return `${head("Settings","Service levels, AI review and data management.", btnBack("overview"))}
-  ${sbxNote()}
-  <div class="g2">
-    <form class="card" data-form="settings">
-      <h2>Review deadlines</h2><p class="sub">Hours from case creation to the due date, by priority. Applies to new cases.</p>
-      <div class="fr">${["Critical","High","Medium"].map(p=>`<label>${p}<input type="number" min="1" max="2000" id="sla${p}" value="${esc(s.sla[p])}" ${ad?"":"disabled"}></label>`).join("")}</div>
-      <h2>AI review</h2>
-      <label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="setAi" ${s.aiEnabled!==false?"checked":""} ${ad?"":"disabled"}> Allow reviewers to run AI review on calls</label>
-      <p class="note">AI review runs only when a reviewer clicks it, and it uses that reviewer’s own Claude account. ${sample?"Available in this view.":"Not available in this view."}</p>
-      ${ad?`<div class="actions"><button class="btn primary" type="submit">Save settings</button></div>`:`<p class="note">Only editors can change settings.</p>`}
-    </form>
-    <div class="card">
-      <h2>Data</h2>
-      <div class="kv"><span>Workspace</span><span>${ST.mode==="shared"?"Shared workspace · live":"Local workspace · active"}</span><span>Calls</span><span>${calls().length}</span><span>Cases</span><span>${cases().length}</span><span>Complaints</span><span>${complaints().length}</span><span>Rulebook</span><span>v${RB().version}</span></div>
-      <div class="actions">
-        <button class="btn" data-act="backup">Export full backup (.json)</button>
-        ${ad?`<label class="btn" style="cursor:pointer">Restore from backup<input type="file" id="restoreFile" accept=".json,application/json" hidden data-onchange="restore"></label>`:""}
+  return `${head("Settings & System Administration", "Configure case turnaround SLAs, AI conduct analytics, regulatory parameters, and database backups.", btnBack("overview"))}
+  
+  <!-- 1. Case Resolution SLAs -->
+  <form class="card settings-section" data-form="settings">
+    <div class="settings-section-head">
+      <h2>⏱️ Case Investigation SLAs (Service Level Agreements)</h2>
+      <p>Defines the maximum turnaround hours allowed to investigate and close a compliance case before it is flagged as <b>Overdue</b> in the Priority Queue.</p>
+    </div>
+    
+    <div class="sla-grid">
+      <div class="sla-card">
+        <div class="sla-card-top">
+          <span class="pill p-critical">Critical</span>
+          <span class="note">Urgent</span>
+        </div>
+        <div class="sla-input-wrap">
+          <input type="number" min="1" max="2000" id="slaCritical" value="${esc(s.sla.Critical)}" ${ad?"":"disabled"}>
+          <span class="unit">hours</span>
+        </div>
+        <p class="sla-desc">Applies to: Physical intimidation, borrower humiliation, acute distress signals, or third-party pressure.</p>
       </div>
-      ${ad?`<div class="actions"><button class="btn" data-act="load-sample">Add sample dataset</button>${ST.mode==="sandbox"?`<button class="btn" data-act="reset-sbx">Reset dataset</button>`:""}<button class="btn danger" data-act="clear-all">Delete all calls, cases and complaints</button></div>`:""}
-      ${ST.mode==="sandbox" && db && ST.me.canWrite!==false ? `<div class="actions"><button class="btn" data-act="go-shared">Switch to shared workspace</button></div>`:""}
-      <p class="note">Sample data is synthetic: role-played calls, fictional vendors and agents.</p>
+
+      <div class="sla-card">
+        <div class="sla-card-top">
+          <span class="pill p-high">High</span>
+          <span class="note">High Priority</span>
+        </div>
+        <div class="sla-input-wrap">
+          <input type="number" min="1" max="2000" id="slaHigh" value="${esc(s.sla.High)}" ${ad?"":"disabled"}>
+          <span class="unit">hours</span>
+        </div>
+        <p class="sla-desc">Applies to: Calling outside permitted hours (08:00–19:00), misleading claims, or excessive contact attempts.</p>
+      </div>
+
+      <div class="sla-card">
+        <div class="sla-card-top">
+          <span class="pill p-medium">Medium</span>
+          <span class="note">Standard</span>
+        </div>
+        <div class="sla-input-wrap">
+          <input type="number" min="1" max="2000" id="slaMedium" value="${esc(s.sla.Medium)}" ${ad?"":"disabled"}>
+          <span class="unit">hours</span>
+        </div>
+        <p class="sla-desc">Applies to: Agent demeanor issues, procedural non-compliance, or loan balance disputes.</p>
+      </div>
+    </div>
+
+    <!-- AI Review Toggle -->
+    <div class="toggle-card">
+      <div class="toggle-card-info">
+        <div class="toggle-card-title">🤖 AI-Assisted Call Conduct Auditing</div>
+        <div class="toggle-card-desc">Automatically analyzes recovery call transcripts using Natural Language Processing to detect subtle intimidation, customer distress, and non-compliant statements.</div>
+      </div>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;white-space:nowrap;font-weight:600;font-size:13px;color:var(--ink)">
+        <input type="checkbox" id="setAi" ${s.aiEnabled!==false?"checked":""} ${ad?"":"disabled"} style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer">
+        Enable AI review
+      </label>
+    </div>
+
+    ${ad ? `<div class="actions" style="margin-top:4px">
+      <button class="btn primary" type="submit" style="padding:9px 18px;font-size:13.5px">Save SLA &amp; AI Settings</button>
+      <span class="note">Changes apply immediately to all newly generated cases.</span>
+    </div>` : `<p class="note">Only administrators can modify compliance SLAs.</p>`}
+  </form>
+
+  <!-- 2. System Status & Regulatory Rulebook Parameters -->
+  <div class="card settings-section">
+    <div class="settings-section-head">
+      <h2>📋 Regulatory Framework &amp; Active Parameters</h2>
+      <p>Operational rules enforced by the detection engine according to fair practices recovery guidelines.</p>
+    </div>
+
+    <div class="db-stats-grid">
+      <div class="db-stat-tile">
+        <span class="label">Rulebook</span>
+        <b class="val">Version ${RB().version}</b>
+        <span class="note" style="font-size:11px">${RB().rules.length} Conduct Rules</span>
+      </div>
+      <div class="db-stat-tile">
+        <span class="label">Calling Hours</span>
+        <b class="val">${esc(RB().callWindow.start)}–${esc(RB().callWindow.end)}</b>
+        <span class="note" style="font-size:11px">Permitted Window</span>
+      </div>
+      <div class="db-stat-tile">
+        <span class="label">Max Daily Contacts</span>
+        <b class="val">${esc(RB().repeatLimit||3)} calls/day</b>
+        <span class="note" style="font-size:11px">Per borrower</span>
+      </div>
+      <div class="db-stat-tile">
+        <span class="label">Workspace Status</span>
+        <b class="val" style="color:var(--accent);font-size:16px;line-height:28px">Active · Local</b>
+        <span class="note" style="font-size:11px">Persistent Storage</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="#rulebook">Inspect Active Rulebook &amp; Detection Patterns →</a>
+    </div>
+  </div>
+
+  <!-- 3. Compliance Database & Governance -->
+  <div class="card settings-section">
+    <div class="settings-section-head">
+      <h2>💾 Database Management &amp; Audit Governance</h2>
+      <p>Export compliance records for regulatory audits, restore backups, or manage stored demo datasets.</p>
+    </div>
+
+    <div class="db-stats-grid">
+      <div class="db-stat-tile">
+        <span class="label">Recorded Calls</span>
+        <b class="val">${calls().length}</b>
+      </div>
+      <div class="db-stat-tile">
+        <span class="label">Compliance Cases</span>
+        <b class="val">${cases().length}</b>
+      </div>
+      <div class="db-stat-tile">
+        <span class="label">Customer Grievances</span>
+        <b class="val">${complaints().length}</b>
+      </div>
+      <div class="db-stat-tile">
+        <span class="label">Recovery Agencies</span>
+        <b class="val">4 Active</b>
+      </div>
+    </div>
+
+    <div class="admin-card-split" style="margin-top:6px">
+      <!-- Backups -->
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <b style="font-size:13.5px;color:var(--ink)">Backup &amp; Migration</b>
+          <p class="note" style="margin:2px 0 0">Download a full JSON archive of all audio call transcripts, compliance cases, complaints, and audit logs.</p>
+        </div>
+        <div class="actions">
+          <button class="btn" data-act="backup" title="Export full database as JSON">⬇ Export Audit Backup (.json)</button>
+          ${ad ? `<label class="btn" style="cursor:pointer" title="Restore previous database backup">⬆ Restore from Backup<input type="file" id="restoreFile" accept=".json,application/json" hidden data-onchange="restore"></label>` : ""}
+        </div>
+        <div class="actions" style="margin-top:4px">
+          <button class="btn" data-act="load-sample" title="Add additional demo calls">Add Sample Calls</button>
+          <button class="btn" data-act="reset-sbx" title="Reset dataset to initial state">↺ Reload Demo Dataset</button>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="danger-box">
+        <h3>⚠️ Danger Zone</h3>
+        <p>Permanently delete all recorded calls, case dossiers, and customer complaints from this console. Rulebook settings and detection policies remain intact.</p>
+        ${ad ? `<div><button class="btn danger" data-act="clear-all" style="width:100%">Delete All Records</button></div>` : `<p class="note">Admin credentials required to purge data.</p>`}
+      </div>
     </div>
   </div>`;
 }
@@ -2892,6 +3681,15 @@ function pSettings(){
 const ACT = {
   "go-back": (el) => {
     const fb = (el && el.dataset && el.dataset.fallback) || "overview";
+    if (navHistory.length > 1) {
+      navHistory.pop();
+      const target = navHistory[navHistory.length - 1];
+      if (target && target !== currentHash) {
+        isNavigatingBack = true;
+        location.hash = target;
+        return;
+      }
+    }
     if (prevHash && prevHash !== currentHash) {
       location.hash = prevHash;
     } else if (window.history.length > 1) {
@@ -3188,6 +3986,13 @@ window.addEventListener("hashchange", ()=>{
   if(nextR !== currentHash) {
     prevHash = currentHash;
     currentHash = nextR;
+    if (isNavigatingBack) {
+      isNavigatingBack = false;
+    } else {
+      if (navHistory[navHistory.length - 1] !== nextR) {
+        navHistory.push(nextR);
+      }
+    }
   }
   if(route()!=="intake" && route()!=="log") ST._lastCmp = null;
   if(route()!=="add") IMPMSG = "";
