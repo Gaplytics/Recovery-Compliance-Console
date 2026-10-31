@@ -1,0 +1,1522 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body style="margin:0">
+<title>Recovery Compliance Console</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:wght@600&display=swap">
+<style>
+/* Layout: operations console. Fixed left navigation on desktop (horizontal on phones); each module renders into one work area of cards, tables and detail panes. */
+:root{
+  --bg:#F3F5F2; --surface:#FFFFFF; --surface-2:#F7F9F6; --ink:#1A2034; --muted:#5B6372; --line:#DCE1DB;
+  --accent:#2D5C50; --accent-ink:#FFFFFF; --accent-soft:#E2EEE9; --nav:#1A2034; --nav-ink:#E9ECF1; --nav-muted:#9AA6B8; --nav-active:#26304A;
+  --crit:#B42318; --crit-bg:#FDECEA; --high:#A94A06; --high-bg:#FDEFE0; --med:#7A5A00; --med-bg:#FAF3D7; --ok:#1F7A4D; --ok-bg:#E5F3EB; --info-bg:#EAF0FA; --info:#24508F;
+  --hl:#FFF4D6; --bar2:#B9C6D6;
+  --f-display:'Source Serif 4', Georgia, serif; --f-ui:'IBM Plex Sans', Arial, sans-serif; --f-mono:'IBM Plex Mono', 'Courier New', monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E131D; --surface:#161C29; --surface-2:#1B2232; --ink:#E7EAF0; --muted:#A2AAB8; --line:#2A3245;
+  --accent:#7FC4AE; --accent-ink:#0E131D; --accent-soft:#1D3530; --nav:#0A0E16; --nav-ink:#E7EAF0; --nav-muted:#8D97A8; --nav-active:#1B2232;
+  --crit:#FF8F86; --crit-bg:#3A1B1B; --high:#FFB56B; --high-bg:#3A2614; --med:#E9CF6B; --med-bg:#332C13; --ok:#7FD3A5; --ok-bg:#15301F; --info-bg:#172540; --info:#9CC0F5;
+  --hl:#3A3216; --bar2:#3D4A60; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E131D; --surface:#161C29; --surface-2:#1B2232; --ink:#E7EAF0; --muted:#A2AAB8; --line:#2A3245;
+  --accent:#7FC4AE; --accent-ink:#0E131D; --accent-soft:#1D3530; --nav:#0A0E16; --nav-ink:#E7EAF0; --nav-muted:#8D97A8; --nav-active:#1B2232;
+  --crit:#FF8F86; --crit-bg:#3A1B1B; --high:#FFB56B; --high-bg:#3A2614; --med:#E9CF6B; --med-bg:#332C13; --ok:#7FD3A5; --ok-bg:#15301F; --info-bg:#172540; --info:#9CC0F5;
+  --hl:#3A3216; --bar2:#3D4A60; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
+aside.nav{background:var(--nav);color:var(--nav-ink);padding:20px 12px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{padding:0 10px;display:flex;flex-direction:column;gap:2px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7FC4AE}
+.brand b{font-family:var(--f-display);font-size:20px;line-height:1.15;font-weight:600}
+.navlist{display:flex;flex-direction:column;gap:2px}
+.navlist a{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--nav-ink);text-decoration:none;padding:9px 10px;border-radius:8px;font-size:14px;font-weight:500}
+.navlist a:hover{background:var(--nav-active)}
+.navlist a.on{background:var(--nav-active);box-shadow:inset 3px 0 0 #7FC4AE}
+.navlist .cnt{font-size:11px;font-weight:700;background:#33405C;color:#E9ECF1;border-radius:999px;padding:1px 7px}
+.navlist .cnt.crit{background:#8E2A22}
+.navsec{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--nav-muted);padding:8px 10px 2px}
+.navfoot{margin-top:auto;font-size:12px;color:var(--nav-muted);padding:0 10px;display:flex;flex-direction:column;gap:6px}
+.mode{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#24504A;color:#CFEDE3}
+.mode.sbx{background:#5A4413;color:#FBE7B5}
+main{min-width:0;padding-block:24px 64px;padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
+.page{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.ph{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between}
+.ph h1{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw,32px);line-height:1.15;margin:0;text-wrap:balance}
+.ph p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:70ch}
+.crumb{font-size:13px;color:var(--muted)}
+.crumb a{color:var(--accent);text-decoration:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card h2{font-size:16px;font-weight:600;margin:0}
+.card h3{font-size:14px;font-weight:600;margin:0}
+.sub,.note{font-size:13px;color:var(--muted);margin:0}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.g32{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;align-items:start}
+.g23{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.kpi b{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.crit b{color:var(--crit)} .kpi.warn b{color:var(--high)}
+label{font-size:13px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:5px;min-width:0}
+input,select,textarea{font:14px var(--f-ui);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+textarea{line-height:1.5;resize:vertical}
+textarea.mono{font-family:var(--f-mono);font-size:13px}
+input[type=checkbox]{width:auto}
+.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.filters label{flex:1 1 150px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{appearance:none;font:600 13px var(--f-ui);border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{background:var(--crit-bg);border-color:var(--crit);color:var(--crit)}
+.btn.sm{padding:4px 9px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+a{color:var(--accent)}
+.link{color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:0;font:inherit;padding:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.p-critical{background:var(--crit-bg);color:var(--crit)} .p-high{background:var(--high-bg);color:var(--high)} .p-medium{background:var(--med-bg);color:var(--med)} .p-clean{background:var(--ok-bg);color:var(--ok)}
+.st{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.st-open{background:var(--info-bg);color:var(--info);border-color:transparent}
+.st-closed{background:var(--surface-2);color:var(--muted)}
+.st-confirmed{background:var(--crit-bg);color:var(--crit);border-color:transparent}
+.src{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.src.ai{border-color:var(--accent);color:var(--accent)}
+.src.man{border-color:var(--high);color:var(--high)}
+.mono{font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tr.rowlink{cursor:pointer}
+tr.rowlink:hover td{background:var(--surface-2)}
+td a.mono,td.mono{white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.flag{border:1px solid var(--line);border-left:5px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.flag.s-critical{border-left-color:var(--crit)} .flag.s-high{border-left-color:var(--high)} .flag.s-medium{border-left-color:var(--med)}
+.flag.fp{opacity:.62}
+.fh{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.fh strong{font-size:14px;margin-right:auto}
+blockquote{margin:0;padding:7px 11px;background:var(--surface-2);border-radius:8px;font-size:13.5px;font-style:italic}
+dl.ev{display:grid;grid-template-columns:118px minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+dl.ev dt{color:var(--muted);font-weight:600}
+dl.ev dd{margin:0;min-width:0}
+.tx{display:flex;flex-direction:column;gap:1px;max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px}
+.txl{display:grid;grid-template-columns:50px 84px minmax(0,1fr);gap:8px;padding:5px 8px;border-radius:6px;font-size:13px}
+.txl.hit{background:var(--hl)}
+.txl .who{font-weight:600;color:var(--muted);font-size:11px;letter-spacing:.04em;padding-top:2px}
+.banner{border-radius:10px;padding:10px 14px;font-size:13.5px}
+.banner.crit{background:var(--crit-bg);color:var(--crit);font-weight:600}
+.banner.ok{background:var(--ok-bg);color:var(--ok)}
+.banner.info{background:var(--info-bg);color:var(--info)}
+.banner.warn{background:var(--med-bg);color:var(--med)}
+.empty{color:var(--muted);font-size:14px;padding:28px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.hist li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px}
+.hist .t{color:var(--muted);font-family:var(--f-mono);font-size:12px}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px}
+.bar .track{height:12px;background:var(--surface-2);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar .fill{height:100%;background:var(--accent)}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;font-size:13.5px}
+.kv span:nth-child(odd){color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.toast{position:fixed;right:max(16px, env(safe-area-inset-right, 0px));bottom:calc(16px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:min(420px, calc(100vw - 32px));box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50}
+.overlay{position:fixed;inset:0;background:rgba(10,14,22,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:40}
+.modal{background:var(--surface);border-radius:14px;padding:20px;max-width:640px;width:100%;max-height:85vh;overflow:auto;display:flex;flex-direction:column;gap:12px;border:1px solid var(--line)}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .9s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.intake{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.intake-head{background:var(--nav);color:var(--nav-ink);border-radius:14px;padding:22px 24px}
+.intake-head h1{font-family:var(--f-display);font-size:28px;margin:4px 0 6px;font-weight:600}
+.intake-head p{margin:0;color:#C9D3D0;font-size:14px}
+.ok-big{font-size:28px;font-family:var(--f-mono);font-weight:500}
+svg text{font-family:var(--f-ui)}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  aside.nav{position:sticky;top:env(safe-area-inset-top, 0px);height:auto;flex-direction:row;align-items:center;padding:10px 12px;gap:10px;overflow-x:auto;z-index:20;padding-left:max(12px, env(safe-area-inset-left, 0px));padding-right:max(12px, env(safe-area-inset-right, 0px))}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:21;background:var(--nav)}
+  .brand,.navsec,.navfoot{display:none}
+  .navlist{flex-direction:row}
+  .navlist a{white-space:nowrap;padding:7px 10px}
+  .g2,.g32,.g23{grid-template-columns:minmax(0,1fr)}
+  main{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}dl.ev{grid-template-columns:minmax(0,1fr)}.txl{grid-template-columns:44px minmax(0,1fr)}.txl .who{display:none}.hist li{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:minmax(0,110px) minmax(0,1fr) 36px}}
+</style>
+
+<div class="app" id="app">
+  <aside class="nav" id="nav"></aside>
+  <main><div class="page" id="view"><div class="empty"><span class="spin"></span> Loading workspace…</div></div></main>
+</div>
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+/*ENGINE-START*/
+const RBI = "RBI directions on recovery agents (12 Aug 2022)";
+const TEAMS = ["Investigation & Safety","Compliance","Grievance Redressal","Vendor Management"];
+const SEV_RANK = {critical:3, high:2, medium:1};
+const PRIO_OF = s => s==="critical"?"Critical":s==="high"?"High":s==="medium"?"Medium":"Clean";
+const PRIO_RANK = {Critical:3, High:2, Medium:1, Clean:0};
+
+function defaultRulebook(now){
+  return {
+    version:1, updatedAt:now, callWindow:{start:"08:00", end:"19:00"}, repeatLimit:3,
+    history:[{version:1, at:now, by:"system", summary:"Initial rulebook mapped to RBI recovery-agent directions"}],
+    rules:[
+      {id:"threat", cat:"Threats & intimidation", sev:"critical", team:"Investigation & Safety", scope:"agent", enabled:true, restricted:false,
+       ref:RBI+": no intimidation or harassment, verbal or physical; no threatening calls",
+       why:"Suggests harm, retaliation or an intimidating home or office visit.",
+       next:"Preserve the audio segment. Urgent human review; consider pausing the agent pending review.",
+       pats:["teach (you|u) a lesson","sabak sikha","(come|coming|visit) (to )?your (home|house|office)","ghar (pe |par )?aa(unga|yenge|ke dekh)","ghar aaunga","dekh lena","anjaam","uthwa (lenge|dunga)","maar(unga|enge|denge)","break your","you will regret","pachhtaoge","make a scene"]},
+      {id:"sexual", cat:"Sexual or physical misconduct", sev:"critical", team:"Investigation & Safety", scope:"agent", enabled:true, restricted:true,
+       ref:RBI+": no harassment of any kind, verbal or physical; lender POSH and code of conduct",
+       why:"Personal or sexual remarks, or a request to meet privately, directed at the customer.",
+       next:"Restrict access. A trained reviewer contacts the customer through an approved channel.",
+       pats:["meet me alone","come alone","akel(e|i) mil","you (are|look) (so )?(beautiful|pretty|sexy|hot)","bahut sundar","\\bsweetheart\\b","\\bdarling\\b","\\bjaanu\\b","personal favou?r"]},
+      {id:"abuse", cat:"Verbal abuse & humiliation", sev:"high", team:"Compliance", scope:"agent", enabled:true, restricted:false,
+       ref:RBI+": no verbal intimidation; no acts intended to humiliate the borrower",
+       why:"Insulting or degrading language aimed at the customer.",
+       next:"Compliance review. Log against the agent and vendor for conduct tracking.",
+       pats:["besharam","shameless","\\bchor\\b","be?v[ae]?koof","\\bidiot\\b","\\bullu\\b","bhikhari","\\bbeggar\\b","kameen","no shame","sharam nahi","useless (fellow|person|man|woman)"]},
+      {id:"privacy", cat:"Privacy & third-party pressure", sev:"high", team:"Compliance", scope:"agent", enabled:true, restricted:false,
+       ref:RBI+": no intrusion into the privacy of family, referees or friends; no public humiliation",
+       why:"Threatens to disclose the debt to family, employer, neighbours or a group.",
+       next:"Compliance review. Check whether any third party was actually contacted.",
+       pats:["(tell|inform|call|message|contact) your (boss|manager|office|colleagues?|neighbou?rs?|family|relatives|wife|husband|father|mother|parents)","office (mein|me)( bhi)? (bata|call)","sabko bata","sabke saamne","padosi","rishted(a|aa)r","whatsapp group","social media","everyone will know","mohall?e ko"]},
+      {id:"misleading", cat:"Misleading statements", sev:"high", team:"Compliance", scope:"agent", enabled:true, restricted:false,
+       ref:RBI+": no false or misleading representations",
+       why:"Claims of arrest, police action, warrants or seizure that a recovery agent cannot make.",
+       next:"Compliance review. Correct the information to the customer through an approved channel.",
+       pats:["\\barrest","giraft?aar","\\bjail\\b","police (will|ko|aayegi|aa)","\\bwarrant\\b","\\bFIR\\b","seize your (house|home|property|car|bike|vehicle)","(ghar|gaadi|bike) (zabt|seize)","court (will|ka order)"]},
+      {id:"distress", cat:"Customer distress signal", sev:"medium", team:"Grievance Redressal", scope:"customer", enabled:true, restricted:false,
+       ref:"Customer-protection policy: distress triggers human follow-up",
+       why:"The customer expresses fear or discomfort during the call.",
+       next:"Offer a human follow-up through an approved channel.",
+       pats:["dar lag","\\b(scared|afraid|frightened|uncomfortable)\\b","(hit|slapped|touched|grabbed|pushed) me","mujhe maara","going to complain"]}
+    ]
+  };
+}
+function defaultSettings(){ return {sla:{Critical:24, High:72, Medium:168}, aiEnabled:true}; }
+
+function compileRule(r){
+  const out = [];
+  for(const p of (r.pats||[])){ try{ out.push(new RegExp(p, /FIR/.test(p)?"":"i")); }catch(e){} }
+  return out;
+}
+function parseTranscript(text){
+  return String(text||"").split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
+    const m = l.match(/^\[(\d{1,2}:\d{2})\]\s*([A-Za-z ]+?)\s*:\s*(.*)$/);
+    return m ? {ts:m[1].padStart(5,"0"), speaker:m[2].toUpperCase().trim(), text:m[3]} : {ts:"", speaker:"", text:l};
+  });
+}
+const isAgentLine = l => l.speaker==="" || /AGENT/.test(l.speaker);
+function toMins(t){ const m=/^(\d{1,2}):(\d{2})/.exec(t||""); return m? (+m[1])*60+(+m[2]) : null; }
+
+function runRules(call, rb){
+  const lines = parseTranscript(call.transcript);
+  const flags = [];
+  const rules = rb.rules.filter(r=>r.enabled).map(r=>({r, re:compileRule(r)}));
+  lines.forEach((ln,i)=>{
+    const agent = isAgentLine(ln);
+    for(const {r,re} of rules){
+      if((r.scope==="agent") !== agent) continue;
+      const hit = re.find(p=>p.test(ln.text));
+      if(hit) flags.push({fid:r.id+"-L"+i, rule:r.id, category:r.cat, severity:r.sev, ts:ln.ts||"—", quote:ln.text, why:r.why, ref:r.ref, next:r.next, team:r.team,
+        confidence:"Exact rule match", source:"Rule", line:i, restricted:!!r.restricted, review:null});
+    }
+  });
+  const m = toMins(call.time), ws = toMins(rb.callWindow.start), we = toMins(rb.callWindow.end);
+  if(m!=null && ws!=null && we!=null && (m<ws || m>=we)){
+    flags.push({fid:"calltime", rule:"calltime", category:"Calling-time rule", severity:"high", ts:"00:00", quote:"Call started at "+call.time+".",
+      why:"Call placed outside the permitted "+rb.callWindow.start+" to "+rb.callWindow.end+" window.", ref:RBI+": no calls before 8:00 am or after 7:00 pm",
+      next:"Vendor Management to check the dialler schedule for this vendor.", team:"Vendor Management", confidence:"Exact rule match", source:"Rule", line:-1, restricted:false, review:null});
+  }
+  const prior = +call.prior||0;
+  if(prior >= rb.repeatLimit){
+    flags.push({fid:"repeat", rule:"repeat", category:"Repeat contact", severity:"medium", ts:"—", quote:prior+" earlier calls to this customer today; this is call "+(prior+1)+".",
+      why:"Contact frequency above the policy threshold of "+rb.repeatLimit+" calls a day.", ref:"Lender contact-frequency policy (threshold set by Compliance)",
+      next:"Vendor Management to review the vendor’s dialling pattern.", team:"Vendor Management", confidence:"Exact rule match", source:"Rule", line:-1, restricted:false, review:null});
+  }
+  return flags;
+}
+function sortFlags(flags){ return flags.slice().sort((a,b)=>(SEV_RANK[b.severity]||0)-(SEV_RANK[a.severity]||0)); }
+function activeFlags(flags){ return (flags||[]).filter(f=>!(f.review && f.review.v==="fp")); }
+function maxSev(flags){ let m=null; for(const f of flags){ if(!m || SEV_RANK[f.severity]>SEV_RANK[m]) m=f.severity; } return m; }
+function teamFor(flags){
+  const teams = flags.map(f=>f.team);
+  for(const t of TEAMS) if(teams.includes(t)) return t;
+  return "Compliance";
+}
+/* Re-run rules, keeping AI/manual flags and carrying reviews over */
+function analyseCall(call, rb, nowIso){
+  const prev = (call.analysis && call.analysis.flags) || [];
+  const fresh = runRules(call, rb);
+  for(const f of fresh){ const old = prev.find(p=>p.fid===f.fid && p.source==="Rule"); if(old && old.review) f.review = old.review; }
+  const kept = prev.filter(p=>p.source!=="Rule");
+  const flags = sortFlags(fresh.concat(kept));
+  const act = activeFlags(flags);
+  return {flags, priority:PRIO_OF(maxSev(act)), engine: (call.analysis && call.analysis.aiAt) ? "Rules + AI" : "Rules", aiSummary:(call.analysis&&call.analysis.aiSummary)||"", aiAt:(call.analysis&&call.analysis.aiAt)||null, rulebookVersion:rb.version, at:nowIso};
+}
+
+/* ---------- Synthetic sample dataset (deterministic) ---------- */
+function rng(seed){ let s = seed>>>0; return ()=>{ s = (s*1664525 + 1013904223)>>>0; return s/4294967296; }; }
+function buildSample(nowMs){
+  const R = rng(20261216);
+  const pick = a => a[Math.floor(R()*a.length)];
+  const pad = n => String(n).padStart(2,"0");
+  const VENDORS = [
+    {v:"Vendor A", agents:[{id:"AG-117", bad:0.75},{id:"AG-121", bad:0.05},{id:"AG-124", bad:0.15}], late:0.05},
+    {v:"Vendor B", agents:[{id:"AG-208", bad:0.5},{id:"AG-212", bad:0.35},{id:"AG-215", bad:0.05}], late:0.05},
+    {v:"Vendor C", agents:[{id:"AG-305", bad:0.45},{id:"AG-309", bad:0.15}], late:0.4},
+    {v:"Vendor D", agents:[{id:"AG-402", bad:0.05},{id:"AG-406", bad:0.1}], late:0.0}
+  ];
+  const PRODUCTS = ["Two-wheeler loan","Personal loan","Home loan","Microfinance (JLG)","Farm equipment loan","Consumer durable loan"];
+  const OPEN_HI = ["Namaste, main {V} se aapke lender ki taraf se bol raha hoon. Aapki {P} EMI {D} din se due hai.","Hello, {V} collections se bol raha hoon, aapki {P} ki EMI pending hai."];
+  const OPEN_EN = ["Good afternoon, this is {V} calling on behalf of your lender about your {P} account, overdue by {D} days.","Hello, this is a reminder call from {V} regarding your {P} EMI that is {D} days past due."];
+  const CUST = ["Salary 5 tareekh ko aayegi, tab pay kar dunga.","I can pay part of it next week.","Is mahine medical kharcha ho gaya, thoda time chahiye.","Please send me the payment link, I'll pay by Friday.","Business slow chal raha hai, do hafte de dijiye.","I already paid half at the branch yesterday."];
+  const CLOSE = ["Theek hai, main payment link SMS kar raha hoon. Dhanyavaad.","Understood. I'll note a promise to pay. You'll get an SMS confirmation.","Late fee lag sakti hai aur credit score par asar pad sakta hai, isliye jaldi kar dijiye.","If it helps, I can arrange a callback from the branch about restructuring options.","Receipt mil jaye toh branch ko bhej dijiye, main record update karwa dunga."];
+  const BAD = {
+    threat:["Paise nahi diye toh kal ghar aaunga, phir dekh lena.","If you don't pay, I will come to your office and make a scene. You will regret it.","Agli baar main akela nahi aaunga, anjaam acha nahi hoga."],
+    abuse:["Besharam ho tum, paisa lete waqt yaad tha?","You are shameless. Useless fellow, always making excuses.","Itna bhi sharam nahi hai kya, bhikhari jaisa behave kar rahe ho."],
+    privacy:["Aapke office mein call karke sabko bata dunga.","I will call your wife and tell her everything.","Society ke WhatsApp group mein naam daal denge, sabko pata chalega."],
+    misleading:["Kal tak payment nahi hua toh police aayegi aur arrest hoga.","There is already a warrant in your name. We will seize your bike tomorrow.","Court ka order aa gaya hai, ghar zabt hoga."],
+    sexual:["Aap bahut sundar ho, akele milo toh settle kar dete hain.","You look beautiful in your photo. Meet me alone and we can settle this."],
+    subtle:["Aapke bachche roz school jaate hain na? Dhyan rakhna.","We know where your shop is. It would be a pity if something happened to it."]
+  };
+  const DIST = ["Mujhe dar lag raha hai, please aisa mat boliye.","I'm scared. Please stop saying these things.","This makes me uncomfortable. I'm going to complain."];
+  const day0 = new Date(nowMs); day0.setHours(0,0,0,0);
+  const calls = [];
+  for(let i=0;i<64;i++){
+    const vd = pick(VENDORS), ag = pick(vd.agents), prod = pick(PRODUCTS);
+    const hindi = R()<0.6;
+    const dOff = Math.floor(R()*14);
+    const d = new Date(day0.getTime() - dOff*86400000);
+    let hh = 9 + Math.floor(R()*10), mm = Math.floor(R()*60);
+    if(R()<vd.late){ hh = R()<0.5 ? 19+Math.floor(R()*2) : 7; }
+    const due = 10 + Math.floor(R()*60);
+    const lines = [];
+    let t = 2 + Math.floor(R()*4);
+    const say = (who, txt)=>{ lines.push("["+pad(Math.floor(t/60))+":"+pad(t%60)+"] "+who+": "+txt.replace("{V}",vd.v).replace("{P}",prod.toLowerCase()).replace("{D}",due)); t += 5 + Math.floor(R()*9); };
+    say("AGENT", pick(hindi?OPEN_HI:OPEN_EN));
+    say("CUSTOMER", pick(CUST));
+    const forceSex = (i===23 || i===51);
+    const bad = R() < ag.bad || forceSex;
+    if(bad){
+      const kinds = ["threat","abuse","privacy","misleading","threat","privacy","misleading","subtle"];
+      if(R()<0.12) kinds.push("sexual","sexual");
+      const k1 = forceSex ? "sexual" : pick(kinds); say("AGENT", pick(BAD[k1]));
+      if(R()<0.55) say("CUSTOMER", pick(DIST));
+      if(R()<0.45){ const k2 = pick(kinds.filter(k=>k!==k1)); say("AGENT", pick(BAD[k2])); }
+      else say("AGENT", pick(CLOSE));
+    } else {
+      say("AGENT", pick(CLOSE));
+      if(R()<0.5){ say("CUSTOMER", "Theek hai, dhanyavaad."); }
+    }
+    const prior = R()<0.12 ? 3+Math.floor(R()*5) : Math.floor(R()*3);
+    calls.push({vendor:vd.v, agent:ag.id, product:prod, lang:hindi?"Hinglish":"English", date:d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()), time:pad(hh)+":"+pad(mm), prior, transcript:lines.join("\n"), _ms:d.getTime()+(hh*60+mm)*60000});
+  }
+  calls.sort((a,b)=>a._ms-b._ms);
+  calls.forEach((c,i)=>{ c.id = "CL-"+(1001+i); c.source="sample"; c.createdAt = new Date(c._ms + 3600000).toISOString(); c.createdBy="system"; delete c._ms; });
+  return {calls, rand:R};
+}
+
+function aiPrompt(call, rb){
+  const cats = rb.rules.filter(r=>r.enabled && r.scope==="agent").map(r=>'"'+r.cat+'"').join(", ");
+  const tx = parseTranscript(call.transcript).map(l=>"["+l.ts+"] "+(l.speaker||"AGENT")+": "+l.text).join("\n").slice(0,12000);
+  return "You are a compliance analyst reviewing a recorded loan-recovery call made by a third-party collection agent on behalf of an Indian lender.\n"+
+  "Review what the AGENT says; customer lines are context only. Flag conduct that may breach the RBI directions on recovery agents (12 Aug 2022: no intimidation or harassment of any kind, verbal or physical; no acts intended to humiliate the borrower publicly; no intrusion into the privacy of family members, referees or friends; no threatening calls; no false or misleading representations) or fair practices.\n"+
+  "Use exactly one of these categories per flag: "+cats+".\n"+
+  "You understand Hindi, Hinglish and English, including romanized Hindi. Judge meaning in context, not keywords, and catch implied threats. Do NOT flag firm but lawful statements: reminders of dues, late fees, credit-score impact, or legal process described accurately. Quote the agent's words verbatim from the transcript.\n"+
+  'Reply with only JSON of this shape: {"summary": "one sentence on the call\'s conduct", "customer_distress": true|false, "flags": [{"category": "...", "timestamp": "mm:ss", "quote": "...", "why": "one sentence", "severity": "critical"|"high"|"medium", "confidence": 0.0-1.0, "next_step": "one sentence"}]}\n'+
+  "Use an empty flags array if the agent's conduct is compliant.\n\n"+
+  "Call metadata: product "+call.product+"; language "+call.lang+"; vendor "+call.vendor+"; call start "+call.time+".\nTranscript:\n"+tx;
+}
+const addH = (iso,h) => new Date(new Date(iso).getTime()+h*3600000).toISOString();
+function makeCaseFromCall(call, settings, id, nowIso, by){
+  const act = activeFlags(call.analysis.flags);
+  const p = PRIO_OF(maxSev(act)) === "Clean" ? "Medium" : PRIO_OF(maxSev(act));
+  const team = teamFor(act);
+  return {id, source:"call", callId:call.id, complaintId:null, title:(act[0]?act[0].category:"Reviewer-raised concern")+" · "+call.vendor+" · "+call.agent,
+    vendor:call.vendor, agent:call.agent, priority:p, team, status:"Open", decision:null, action:null, assignee:null,
+    restricted:act.some(f=>f.restricted), flags:[], createdAt:nowIso, dueAt:addH(nowIso, (settings.sla[p]||72)), firstReviewAt:null, closedAt:null,
+    history:[{at:nowIso, by:by||"system", kind:"system", text:"Case opened from "+call.id+" with "+act.length+" flag(s); routed to "+team+"."}]};
+}
+function complaintFlags(text, danger, rb){
+  const flags = [];
+  const physical = /(touch|touched|molest|grab|grabbed|\bhit\b|slap|slapped|pushed|assault|followed me|maara|chhua)/i;
+  if(physical.test(text)) flags.push({fid:"c-physical", rule:"sexual", category:"Sexual or physical misconduct (reported)", severity:"critical", ts:"—", quote:text, why:"Customer reports physical contact or assault.", ref:RBI+": no harassment of any kind, verbal or physical", next:"Restrict access; urgent human contact with the customer.", team:"Investigation & Safety", confidence:"Customer report", source:"Complaint", line:-1, restricted:true, review:null});
+  const extra = {threat:/(teach me a lesson|come to my (house|home|office)|threaten)/i, privacy:/(call|tell|inform) my (office|boss|family|wife|husband|neighbou?rs)/i, misleading:/(arrest|police|warrant|jail)/i, abuse:/(abus|insult|shout)/i};
+  for(const r of rb.rules.filter(x=>x.enabled && x.scope==="agent")){
+    const re = compileRule(r);
+    if(re.some(p=>p.test(text)) || (extra[r.id] && extra[r.id].test(text))){
+      if(!flags.some(f=>f.rule===r.id)) flags.push({fid:"c-"+r.id, rule:r.id, category:r.cat+" (reported)", severity:r.sev, ts:"—", quote:text, why:r.why, ref:r.ref, next:r.next, team:r.team, confidence:"Customer report", source:"Complaint", line:-1, restricted:!!r.restricted, review:null});
+    }
+  }
+  if(/(night|raat|late evening|1[01] ?pm|[89] ?pm|[67] ?am|early morning)/i.test(text)) flags.push({fid:"c-calltime", rule:"calltime", category:"Calling-time rule (reported)", severity:"high", ts:"—", quote:text, why:"Customer reports contact outside permitted hours.", ref:RBI+": no calls before 8:00 am or after 7:00 pm", next:"Verify against call logs.", team:"Vendor Management", confidence:"Customer report", source:"Complaint", line:-1, restricted:false, review:null});
+  if(danger) flags.unshift({fid:"c-danger", rule:"danger", category:"Immediate safety concern", severity:"critical", ts:"—", quote:"Customer indicated they feel unsafe right now.", why:"Customer safety takes priority over any recovery process.", ref:"Customer-protection policy", next:"Hand to a human responder now; stop the routine recovery questionnaire.", team:"Investigation & Safety", confidence:"Customer report", source:"Complaint", line:-1, restricted:false, review:null});
+  if(!flags.length) flags.push({fid:"c-general", rule:"general", category:"Agent conduct concern (reported)", severity:"medium", ts:"—", quote:text, why:"Concern reported by the customer; investigated whatever evidence is available.", ref:"Lender grievance redressal process", next:"Assign a reviewer; contact the customer if more detail is needed.", team:"Grievance Redressal", confidence:"Customer report", source:"Complaint", line:-1, restricted:false, review:null});
+  return sortFlags(flags);
+}
+function findLinkedCall(calls, type, date, time){
+  if(type!=="Phone call" || !date) return null;
+  const t = toMins(time); let best = null;
+  for(const c of calls){ if(c.date!==date) continue; const d = (t==null||toMins(c.time)==null) ? 999 : Math.abs(toMins(c.time)-t); if(d<=180 && (!best || d<best.d)) best = {id:c.id, d, flagged: activeFlags(c.analysis&&c.analysis.flags).length>0}; }
+  return best;
+}
+function makeComplaint(input, calls, rb, settings, ids, nowIso, by){
+  const flags = complaintFlags(input.text, input.danger, rb);
+  const p = PRIO_OF(maxSev(flags));
+  const team = flags.some(f=>["danger","threat","sexual"].includes(f.rule)) ? "Investigation & Safety" : "Grievance Redressal";
+  const link = findLinkedCall(calls, input.type, input.date, input.time);
+  const cmp = {id:ids.cmp, receivedAt:nowIso, type:input.type, date:input.date, time:input.time, acct:input.acct||"", channel:input.channel, text:input.text, danger:!!input.danger, via:input.via||"customer-form", linkedCallId:link?link.id:null, caseId:ids.cs};
+  const linkedCall = link ? calls.find(c=>c.id===link.id) : null;
+  const cs = {id:ids.cs, source:"complaint", callId:link?link.id:null, complaintId:cmp.id, title:flags[0].category+" · customer complaint", vendor:linkedCall?linkedCall.vendor:"", agent:linkedCall?linkedCall.agent:"",
+    priority:p, team, status:"Open", decision:null, action:null, assignee:null, restricted:flags.some(f=>f.restricted), flags, createdAt:nowIso, dueAt:addH(nowIso, settings.sla[p]||72), firstReviewAt:null, closedAt:null,
+    history:[{at:nowIso, by:by||"system", kind:"system", text:"Complaint "+cmp.id+" registered via "+(cmp.via==="staff"?"staff entry":"customer form")+"; routed to "+team+"."},
+      link ? {at:nowIso, by:"system", kind:"system", text:"Matched to recorded call "+link.id+" by date and time."} : {at:nowIso, by:"system", kind:"system", text:"No matching recording found. Case proceeds on the customer’s account."}]};
+  if(input.danger) cs.history.push({at:nowIso, by:"system", kind:"system", text:"Immediate-safety flag: handed to the human responder queue."});
+  return {cmp, cs};
+}
+const ACTIONS = ["Warning issued to agent","Agent retrained","Agent removed from portfolio","Vendor penalty applied","Customer contacted with apology and correction","No further action"];
+
+function buildSampleDataset(nowMs){
+  const nowIso = new Date(nowMs).toISOString();
+  const rb = defaultRulebook(nowIso), settings = defaultSettings();
+  const {calls, rand:R} = buildSample(nowMs);
+  const cases = [], complaints = [];
+  let cs = 2001, cmp = 5001;
+  for(const c of calls){
+    c.analysis = analyseCall(c, rb, c.createdAt);
+    const subtle = /Dhyan rakhna|pity if something/i.test(c.transcript);
+    const ageDays = (nowMs - new Date(c.createdAt).getTime())/86400000;
+    if(subtle && ageDays>2){
+      const ln = parseTranscript(c.transcript).findIndex(l=>/Dhyan rakhna|pity if something/i.test(l.text));
+      const L = parseTranscript(c.transcript)[ln];
+      c.analysis.flags.push({fid:"manual-"+ln, rule:"threat", category:"Threats & intimidation", severity:"critical", ts:L.ts, quote:L.text, why:"Implied threat to the customer’s family or property; missed by keyword rules.", ref:rb.rules[0].ref, next:rb.rules[0].next, team:"Investigation & Safety", confidence:"Reviewer judgement", source:"Manual", line:ln, restricted:false, review:{v:"valid", by:"sample", at:addH(c.createdAt, 20)}});
+      c.analysis.flags = sortFlags(c.analysis.flags);
+      c.analysis.priority = PRIO_OF(maxSev(activeFlags(c.analysis.flags)));
+    }
+    if(!activeFlags(c.analysis.flags).length) continue;
+    const k = makeCaseFromCall(c, settings, "CS-"+(cs++), c.createdAt, "system");
+    c.caseId = k.id;
+    if(ageDays>5 && R()<0.8){
+      k.assignee = "sample"; k.status = "Under review"; k.firstReviewAt = addH(k.createdAt, 2+Math.floor(R()*30));
+      k.history.push({at:k.firstReviewAt, by:"sample", kind:"action", text:"Review started; case assigned."});
+      const confirm = R()<0.7;
+      for(const f of c.analysis.flags){ if(f.source!=="Manual") f.review = {v: confirm ? "valid" : (R()<0.6?"fp":"valid"), by:"sample", at:addH(k.firstReviewAt,1)}; }
+      const decAt = addH(k.firstReviewAt, 6+Math.floor(R()*40));
+      k.decision = confirm ? "confirmed" : "unsubstantiated";
+      k.status = confirm ? "Violation confirmed" : "Not substantiated";
+      k.history.push({at:decAt, by:"sample", kind:"action", text: confirm ? "Violation confirmed. Findings: audio reviewed; statement matches transcript and breaches policy." : "Not substantiated, with reasons: full call context reviewed; statement did not amount to a breach."});
+      if(R()<0.85){
+        k.action = confirm ? pick2(R, ACTIONS.slice(0,5)) : "No further action";
+        k.status = "Closed"; k.closedAt = addH(decAt, 4+Math.floor(R()*30));
+        k.history.push({at:k.closedAt, by:"sample", kind:"action", text:"Case closed. Corrective action: "+k.action+"."});
+      }
+      c.analysis.priority = PRIO_OF(maxSev(activeFlags(c.analysis.flags)));
+    } else if(ageDays>1.5 && R()<0.5){
+      k.assignee = "sample"; k.status = "Under review"; k.firstReviewAt = addH(k.createdAt, 3+Math.floor(R()*20));
+      k.history.push({at:k.firstReviewAt, by:"sample", kind:"action", text:"Review started; case assigned."});
+    }
+    cases.push(k);
+  }
+  // complaints
+  const flagged = calls.filter(c=>c.caseId);
+  const pickC = [flagged[flagged.length-2], flagged[Math.floor(flagged.length/2)]].filter(Boolean);
+  const inputs = [];
+  if(pickC[0]) inputs.push({type:"Phone call", date:pickC[0].date, time:addMinutes(pickC[0].time, 25), acct:"4821", channel:"SMS", text:"The agent called about my EMI and said he will come to my house and that I will regret it. He also threatened to call my office.", danger:false, at:addH(pickC[0].createdAt, 5)});
+  if(pickC[1]) inputs.push({type:"Phone call", date:pickC[1].date, time:addMinutes(pickC[1].time, -15), acct:"1937", channel:"Phone call", text:"The recovery agent was rude and insulting to me on the phone and told me police will come to arrest me.", danger:false, at:addH(pickC[1].createdAt, 8)});
+  const d3 = new Date(nowMs-3*86400000), d1 = new Date(nowMs-86400000);
+  const ds = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  inputs.push({type:"In-person visit", date:ds(d3), time:"18:30", acct:"7752", channel:"SMS", text:"Two men came to my shop for loan recovery and shouted at me in front of customers and neighbours.", danger:false, at:new Date(nowMs-2.6*86400000).toISOString()});
+  inputs.push({type:"Message", date:ds(d1), time:"21:40", acct:"", channel:"Email", text:"I got WhatsApp messages late at night saying my photo will be shared on social media if I don't pay.", danger:false, at:new Date(nowMs-0.8*86400000).toISOString()});
+  for(const inp of inputs){
+    const r = makeComplaint(inp, calls, rb, settings, {cmp:"CMP-"+(cmp++), cs:"CS-"+(cs++)}, inp.at, "system");
+    cases.push(r.cs); complaints.push(r.cmp);
+  }
+  return {calls, cases, complaints, rulebook:rb, settings};
+}
+function pick2(R, a){ return a[Math.floor(R()*a.length)]; }
+function addMinutes(t, d){ const m = Math.max(0, Math.min(1439, toMins(t)+d)); return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"); }
+/*ENGINE-END*/
+
+</script>
+<script>
+(function(){
+"use strict";
+/* ================= helpers ================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const nowIso = () => new Date().toISOString();
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const pad2 = n => String(n).padStart(2,"0");
+function fmtDT(iso){ if(!iso) return "—"; const d = new Date(iso); if(isNaN(d)) return "—"; return d.getDate()+" "+MON[d.getMonth()]+", "+pad2(d.getHours())+":"+pad2(d.getMinutes()); }
+function fmtD(ds){ if(!ds) return "—"; const p = ds.split("-"); return (+p[2])+" "+MON[(+p[1])-1]; }
+function dayStr(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+function hoursBetween(a,b){ return (new Date(b)-new Date(a))/3600000; }
+function fmtH(h){ if(h==null || isNaN(h)) return "—"; if(h<1) return Math.round(h*60)+" min"; if(h<48) return (Math.round(h*10)/10)+" h"; return (Math.round(h/24*10)/10)+" d"; }
+function newId(prefix){ return prefix+"-"+(Date.now().toString(36).slice(-5)+Math.random().toString(36).slice(2,4)).toUpperCase(); }
+const pct = (a,b) => b ? Math.round(a/b*1000)/10 : 0;
+const pillP = p => `<span class="pill p-${String(p||"clean").toLowerCase()}">${esc(p||"Clean")}</span>`;
+function pillS(s){ const m = {"Open":"st-open","Under review":"st","Violation confirmed":"st-confirmed","Not substantiated":"st","Closed":"st-closed"}; return `<span class="pill ${m[s]||"st"}">${esc(s)}</span>`; }
+let toastT = null;
+function toast(msg, ms){ const r = $("toastRoot"); r.innerHTML = `<div class="toast" role="status">${esc(msg)}</div>`; clearTimeout(toastT); toastT = setTimeout(()=>{ r.innerHTML=""; }, ms||3200); }
+function closeModal(){ $("modalRoot").innerHTML = ""; }
+function openModal(html){ $("modalRoot").innerHTML = `<div class="overlay" data-act="modal-bg"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`; const f = $("modalRoot").querySelector("input,textarea,button"); if(f) f.focus(); }
+function confirmModal(o){
+  return new Promise(res=>{
+    openModal(`<h2 style="margin:0;font-size:18px">${esc(o.title)}</h2><p class="sub">${esc(o.body)}</p>${o.requireText?`<label>Type ${esc(o.requireText)} to confirm<input id="cfText" autocomplete="off"></label>`:""}<div class="actions"><button class="btn ${o.danger?"danger":"primary"}" id="cfYes">${esc(o.confirm||"Confirm")}</button><button class="btn" id="cfNo">Cancel</button></div>`);
+    $("cfYes").onclick = ()=>{ if(o.requireText && ($("cfText").value||"").trim()!==o.requireText){ $("cfText").focus(); return; } closeModal(); res(true); };
+    $("cfNo").onclick = ()=>{ closeModal(); res(false); };
+  });
+}
+function csvCell(v){ const s = String(v==null?"":v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function toCSV(rows){ return rows.map(r=>r.map(csvCell).join(",")).join("\n"); }
+function parseCSV(text){
+  const rows=[]; let row=[], cell="", q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=ch; }
+    else if(ch==='"') q=true;
+    else if(ch===','){ row.push(cell); cell=""; }
+    else if(ch==='\n'){ row.push(cell); rows.push(row); row=[]; cell=""; }
+    else if(ch!=='\r') cell+=ch;
+  }
+  if(cell!=="" || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(c=>c.trim()!==""));
+}
+
+/* ================= state ================= */
+const ST = {mode:"loading", ready:false, needsSetup:false, calls:{}, cases:{}, complaints:{}, rulebook:null, settings:null,
+  me:{id:null, name:"", canWrite:null, admin:false, owner:false}};
+let db=null, user=null, sample=null, downloads=null;
+const NAMES = {}, asked = new Set();
+const F = {range:14, calls:{q:"",vendor:"",result:"",days:"all"}, callsLimit:50, cases:{status:"active",priority:"",team:"",assignee:"",overdue:false,q:""}, audit:{q:"",type:""}, vendors:{days:30, sel:null}, reports:{days:30}};
+const AI = {callId:null, ctl:null, msg:null, msgFor:null};
+const revealed = {};
+let IMPMSG = "";
+const SBX = "rci-app-sbx-v1";
+let sbxTimer = null;
+function sbxSave(){ clearTimeout(sbxTimer); sbxTimer = setTimeout(()=>{ try{ localStorage.setItem(SBX, JSON.stringify({calls:ST.calls,cases:ST.cases,complaints:ST.complaints,rulebook:ST.rulebook,settings:ST.settings,forcedSandbox:!!ST.forced})); }catch(e){} }, 250); }
+function sbxLoad(){ try{ const v = JSON.parse(localStorage.getItem(SBX)); return v && v.calls ? v : null; }catch(e){ return null; } }
+const byMe = () => ST.mode==="shared" ? (ST.me.id||"unknown") : "local";
+const canAdmin = () => ST.mode==="sandbox" || ST.me.admin || ST.me.owner;
+const RB = () => ST.rulebook;
+const calls = () => Object.values(ST.calls);
+const cases = () => Object.values(ST.cases);
+const complaints = () => Object.values(ST.complaints);
+function whoLabel(id){ if(id==="system") return "System"; if(id==="sample") return "Sample reviewer"; if(id==="local") return "You (sandbox)"; if(!id) return "—"; if(id===ST.me.id) return "You"; return NAMES[id] || "Team member"; }
+
+/* ================= persistence ================= */
+const KEYMAP = {calls:"calls", cases:"cases", complaints:"complaints"};
+async function put(coll, obj){
+  ST[KEYMAP[coll]][obj.id] = obj;
+  if(ST.mode==="shared"){
+    try{ await db.doc(coll+"/"+obj.id).set(clone(obj)); }
+    catch(e){ await writeFailed(e, ()=>db.doc(coll+"/"+obj.id).set(clone(obj))); }
+  } else sbxSave();
+  schedule();
+}
+async function putConfig(name, obj){
+  ST[name] = obj;
+  if(ST.mode==="shared"){
+    try{ await db.doc("config/"+name).set(clone(obj)); }
+    catch(e){ await writeFailed(e, ()=>db.doc("config/"+name).set(clone(obj))); }
+  } else sbxSave();
+  schedule();
+}
+async function removeDoc(coll, id){
+  delete ST[KEYMAP[coll]][id];
+  if(ST.mode==="shared"){ try{ await db.doc(coll+"/"+id).delete(); }catch(e){ await writeFailed(e, ()=>db.doc(coll+"/"+id).delete()); } }
+  else sbxSave();
+  schedule();
+}
+async function writeFailed(e, retry){
+  const code = e && e.code;
+  if(code==="unavailable"){ await new Promise(r=>setTimeout(r, 400+Math.random()*600)); try{ await retry(); return; }catch(e2){} toast("The shared store did not respond. Your change is shown here but may not be saved; try again."); return; }
+  if(code==="quota_exceeded"){ toast("The shared store is full. Export a backup and clear old data in Settings."); return; }
+  if(code==="invalid_argument" || code==="revoked" || code==="not_granted"){ switchToSandbox("You have view-only access to the shared workspace, so your changes are kept in this browser."); return; }
+  toast("Could not save: "+(e && e.message || "unknown error"));
+}
+function switchToSandbox(msg){
+  if(ST.mode==="sandbox") return;
+  unsubs.forEach(u=>{ try{u();}catch(e){} }); unsubs = [];
+  ST.mode = "sandbox"; ST.forced = true; sbxSave(); if(msg) toast(msg, 5000); schedule();
+}
+
+/* ================= init ================= */
+let unsubs = [];
+async function init(){
+  const C = window.claude;
+  if(C && typeof C.use==="function"){
+    const safe = p => Promise.resolve(p).catch(()=>null);
+    [user, db, sample, downloads] = await Promise.all([safe(C.use("user")), safe(C.use("db")), safe(C.use("sample")), safe(C.use("downloads"))]);
+  }
+  if(user){
+    try{ const me = await user.me(); ST.me.id = me.id; ST.me.name = me.name; ST.me.admin = !!me.canEdit; ST.me.owner = !!me.isOwner; }catch(e){}
+    try{ ST.me.canWrite = await user.can("data.write"); }catch(e){ ST.me.canWrite = null; }
+  }
+  const saved = sbxLoad();
+  if(db && ST.me.canWrite !== false && !(saved && saved.forcedSandbox)) startShared();
+  else if(db) await startSandboxFromStore(saved);
+  else startSandbox(saved);
+}
+function startSandbox(saved){
+  ST.mode = "sandbox";
+  const d = saved || buildSampleDataset(Date.now());
+  loadData(d); ST.ready = true; if(!saved) sbxSave(); schedule();
+}
+async function startSandboxFromStore(saved){
+  if(saved){ startSandbox(saved); return; }
+  try{
+    const [c,k,m,rb,se] = await Promise.all([db.collection("calls").get(), db.collection("cases").get(), db.collection("complaints").get(), db.doc("config/rulebook").get(), db.doc("config/settings").get()]);
+    if(c.size){
+      const d = {calls:c.docs.map(x=>x.data()), cases:k.docs.map(x=>x.data()), complaints:m.docs.map(x=>x.data()), rulebook: rb.exists?rb.data():null, settings: se.exists?se.data():null};
+      startSandbox(normalize(d)); return;
+    }
+  }catch(e){}
+  startSandbox(null);
+}
+function normalize(d){
+  const o = {calls:{}, cases:{}, complaints:{}, rulebook:d.rulebook||defaultRulebook(nowIso()), settings:d.settings||defaultSettings()};
+  for(const k of ["calls","cases","complaints"]){ const v = d[k]; if(Array.isArray(v)) v.forEach(x=>{ o[k][x.id]=clone(x); }); else if(v) Object.assign(o[k], clone(v)); }
+  return o;
+}
+function loadData(d){
+  const n = normalize(d);
+  ST.calls = n.calls; ST.cases = n.cases; ST.complaints = n.complaints; ST.rulebook = n.rulebook; ST.settings = n.settings;
+}
+function startShared(){
+  ST.mode = "shared";
+  const got = {calls:false, cases:false, complaints:false, rulebook:false, settings:false};
+  const check = () => {
+    if(ST.ready || !Object.values(got).every(Boolean)) return;
+    ST.ready = true;
+    ST.needsSetup = !Object.keys(ST.calls).length && !ST.rulebook;
+    if(!ST.rulebook) ST.rulebook = defaultRulebook(nowIso());
+    if(!ST.settings) ST.settings = defaultSettings();
+    schedule();
+  };
+  const onErr = e => { if(e && (e.code==="revoked"||e.code==="not_granted")) switchToSandbox("Access to the shared workspace changed. Continuing in this browser."); };
+  for(const coll of ["calls","cases","complaints"]){
+    unsubs.push(db.collection(coll).onSnapshot(s=>{ const o = {}; s.docs.forEach(d=>{ o[d.id] = d.data(); }); ST[coll] = o; got[coll] = true; check(); schedule(); }, onErr));
+  }
+  for(const name of ["rulebook","settings"]){
+    unsubs.push(db.doc("config/"+name).onSnapshot(s=>{ if(s.exists) ST[name] = s.data(); else if(ST.ready && !ST[name]) ST[name] = name==="rulebook"?defaultRulebook(nowIso()):defaultSettings(); got[name] = true; check(); schedule(); }, onErr));
+  }
+  setTimeout(()=>{ if(!ST.ready){ Object.keys(got).forEach(k=>got[k]=true); check(); } }, 8000);
+}
+
+/* ================= domain operations ================= */
+function getCall(id){ return ST.calls[id] ? clone(ST.calls[id]) : null; }
+function getCase(id){ return ST.cases[id] ? clone(ST.cases[id]) : null; }
+function hist(k, text, kind){ (k.history = k.history||[]).push({at:nowIso(), by:byMe(), kind:kind||"action", text}); }
+async function syncCallCase(call){
+  const act = activeFlags(call.analysis && call.analysis.flags);
+  if(call.caseId && ST.cases[call.caseId]){
+    const k = getCase(call.caseId);
+    if(k.status==="Closed") return;
+    const p = act.length ? PRIO_OF(maxSev(act)) : k.priority;
+    const t = act.length ? teamFor(act) : k.team;
+    const restricted = act.some(f=>f.restricted);
+    if(p!==k.priority || t!==k.team || restricted!==k.restricted){
+      if(p!==k.priority) k.history.push({at:nowIso(), by:"system", kind:"system", text:"Priority changed from "+k.priority+" to "+p+" after evidence update."});
+      if(t!==k.team) k.history.push({at:nowIso(), by:"system", kind:"system", text:"Routed to "+t+"."});
+      k.priority = p; k.team = t; k.restricted = restricted;
+      await put("cases", k);
+    }
+    return;
+  }
+  if(!act.length) return;
+  const k = makeCaseFromCall(call, ST.settings, newId("CS"), nowIso(), "system");
+  call.caseId = k.id;
+  await put("cases", k);
+  await put("calls", call);
+}
+async function ingestCall(data, opts){
+  const call = {id:data.id && !ST.calls[data.id] && /^[A-Za-z0-9_-]{1,40}$/.test(data.id) ? data.id : newId("CL"),
+    vendor:data.vendor||"Unspecified", agent:data.agent||"—", product:data.product||"Unspecified", lang:data.lang||"Unspecified",
+    date:data.date||dayStr(new Date()), time:data.time||"12:00", prior:Math.max(0, parseInt(data.prior,10)||0), transcript:String(data.transcript||"").trim(),
+    source:opts&&opts.source||"manual", createdAt:nowIso(), createdBy:byMe(), caseId:null};
+  call.analysis = analyseCall(call, RB(), nowIso());
+  await put("calls", call);
+  await syncCallCase(call);
+  return call;
+}
+async function reanalyseAll(){
+  const list = calls(); let i = 0, changed = 0;
+  for(const c0 of list){
+    const c = clone(c0); const before = JSON.stringify(activeFlags(c.analysis&&c.analysis.flags).map(f=>f.fid).sort());
+    c.analysis = analyseCall(c, RB(), nowIso());
+    const after = JSON.stringify(activeFlags(c.analysis.flags).map(f=>f.fid).sort());
+    if(before!==after) changed++;
+    await put("calls", c); await syncCallCase(c);
+    if(++i % 10 === 0) toast("Re-analysed "+i+" of "+list.length+" calls…", 1500);
+  }
+  toast("Re-analysed "+list.length+" calls with rulebook v"+RB().version+". "+changed+" changed result.", 5000);
+}
+async function runAI(callId){
+  if(!sample){ toast("AI review is not available in this view."); return; }
+  if(ST.settings && ST.settings.aiEnabled===false){ toast("AI review is turned off in Settings."); return; }
+  const call0 = getCall(callId); if(!call0) return;
+  AI.callId = callId; AI.ctl = new AbortController(); AI.msg = null; schedule();
+  try{
+    const ai = await sample.json(aiPrompt(call0, RB()), {signal:AI.ctl.signal, modelTier:"default"});
+    if(!ai || typeof ai!=="object") throw {code:"invalid_json"};
+    const call = getCall(callId) || call0;
+    const lines = parseTranscript(call.transcript);
+    const cats = RB().rules.filter(r=>r.enabled && r.scope==="agent");
+    let flags = (call.analysis.flags||[]).filter(f=>f.source!=="AI");
+    flags.forEach(f=>{ delete f.aiConfirmed; delete f.aiConf; });
+    let added = 0, confirmed = 0;
+    for(const a of (Array.isArray(ai.flags)?ai.flags:[])){
+      const r = cats.find(x=>x.cat===a.category); if(!r) continue;
+      const ts = String(a.timestamp||"").padStart(5,"0");
+      const conf = typeof a.confidence==="number" ? Math.round(Math.max(0,Math.min(1,a.confidence))*100)+"%" : "—";
+      const twin = flags.find(f=>f.rule===r.id && f.ts===ts);
+      if(twin){ twin.aiConfirmed = true; twin.aiConf = conf; confirmed++; continue; }
+      const li = lines.findIndex(l=>l.ts===ts);
+      flags.push({fid:"ai-"+r.id+"-"+ts, rule:r.id, category:r.cat, severity:SEV_RANK[a.severity]?a.severity:r.sev, ts:ts||"—", quote:String(a.quote||""), why:String(a.why||r.why), ref:r.ref, next:String(a.next_step||r.next), team:r.team, confidence:conf, source:"AI", line:li, restricted:!!r.restricted, review:null});
+      added++;
+    }
+    call.analysis.flags = sortFlags(flags);
+    call.analysis.aiSummary = String(ai.summary||""); call.analysis.aiAt = nowIso(); call.analysis.engine = "Rules + AI";
+    call.analysis.priority = PRIO_OF(maxSev(activeFlags(call.analysis.flags)));
+    await put("calls", call); await syncCallCase(call);
+    AI.msg = "AI review finished: "+added+" new flag"+(added===1?"":"s")+", "+confirmed+" rule flag"+(confirmed===1?"":"s")+" confirmed."; AI.msgFor = callId;
+  }catch(e){
+    const code = e && e.code;
+    if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(code)){ sample = null; AI.msg = "AI review is not available in this view. Rules-engine results are shown."; }
+    else if(code==="cancelled") AI.msg = "AI review stopped.";
+    else if(code==="rate_limited") AI.msg = "AI review is busy. Try again in a minute.";
+    else if(code==="session_expired") AI.msg = "Sign in to Claude again to run AI review.";
+    else AI.msg = "AI review could not finish. You can run it again.";
+    AI.msgFor = callId;
+  }finally{ AI.callId = null; AI.ctl = null; schedule(); }
+}
+
+/* ================= metrics ================= */
+function cutoffDay(days){ if(days==="all") return "0000-00-00"; const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-(days-1)); return dayStr(d); }
+function cutoffIso(days){ if(days==="all") return "0000"; const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-(days-1)); return d.toISOString(); }
+const isOverdue = k => k.status!=="Closed" && k.dueAt && new Date(k.dueAt) < new Date();
+const isFlagged = c => activeFlags(c.analysis&&c.analysis.flags).length>0;
+function callPrio(c){ return (c.analysis && c.analysis.priority) || "Clean"; }
+function outsideWindow(c){ const m = toMins(c.time), s = toMins(RB().callWindow.start), e = toMins(RB().callWindow.end); return m!=null && (m<s || m>=e); }
+function metrics(days){
+  const cd = cutoffDay(days), ci = cutoffIso(days);
+  const cl = calls().filter(c=>c.date>=cd);
+  const fl = cl.filter(isFlagged);
+  const ks = cases().filter(k=>k.createdAt>=ci);
+  const open = cases().filter(k=>k.status!=="Closed");
+  const fr = ks.filter(k=>k.firstReviewAt).map(k=>hoursBetween(k.createdAt,k.firstReviewAt));
+  const cls = ks.filter(k=>k.closedAt).map(k=>hoursBetween(k.createdAt,k.closedAt));
+  const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : null;
+  return {calls:cl, flagged:fl, cases:ks, open, critOpen:open.filter(k=>k.priority==="Critical"), overdue:open.filter(isOverdue), avgFirst:avg(fr), avgClose:avg(cls)};
+}
+function catCounts(cl){
+  const m = {};
+  for(const c of cl) for(const f of activeFlags(c.analysis.flags)) m[f.category] = (m[f.category]||0)+1;
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+}
+function vendorStats(days){
+  const cd = cutoffDay(days), ci = cutoffIso(days);
+  const V = {};
+  const g = (v,a) => { V[v] = V[v] || {v, calls:0, flagged:0, crit:0, late:0, open:0, confirmed:0, unsub:0, agents:{}}; const o = V[v]; if(a){ o.agents[a] = o.agents[a] || {a, calls:0, flagged:0, crit:0, late:0, open:0, confirmed:0, unsub:0}; } return o; };
+  for(const c of calls().filter(c=>c.date>=cd)){
+    const o = g(c.vendor, c.agent), a = o.agents[c.agent];
+    for(const x of [o,a]){ x.calls++; if(isFlagged(c)) x.flagged++; if(callPrio(c)==="Critical") x.crit++; if(outsideWindow(c)) x.late++; }
+  }
+  for(const k of cases().filter(k=>k.createdAt>=ci && k.vendor)){
+    const o = g(k.vendor, k.agent||"—"), a = o.agents[k.agent||"—"];
+    for(const x of [o,a]){ if(k.status!=="Closed") x.open++; if(k.decision==="confirmed") x.confirmed++; if(k.decision==="unsubstantiated") x.unsub++; }
+  }
+  return Object.values(V).sort((a,b)=>pct(b.flagged,b.calls)-pct(a.flagged,a.calls));
+}
+
+/* ================= rendering infra ================= */
+let pending = false, lastRoute = null;
+function schedule(){ if(pending) return; pending = true; requestAnimationFrame(()=>{ pending = false; render(); }); }
+function route(){ const h = decodeURIComponent(location.hash.replace(/^#/,"")) || "overview"; return h; }
+function stash(){
+  const s = {vals:{}, focus:null, sel:null, scroll:window.scrollY};
+  document.querySelectorAll("#view [id]").forEach(el=>{ if(el.matches("input,textarea,select")){ s.vals[el.id] = el.type==="checkbox" ? {c:el.checked} : {v:el.value}; } });
+  const a = document.activeElement; if(a && a.id && a.closest("#view")){ s.focus = a.id; try{ s.sel = [a.selectionStart, a.selectionEnd]; }catch(e){} }
+  document.querySelectorAll("#view details[id]").forEach(d=>{ s.vals[d.id] = {open:d.open}; });
+  return s;
+}
+function restore(s){
+  for(const [id,v] of Object.entries(s.vals)){
+    const el = document.getElementById(id); if(!el || el.dataset.fresh) continue;
+    if("c" in v) el.checked = v.c; else if("v" in v && el.matches("input,textarea,select") && el.type!=="file") el.value = v.v; else if("open" in v && el.tagName==="DETAILS") el.open = v.open;
+  }
+  if(s.focus){ const el = document.getElementById(s.focus); if(el){ el.focus({preventScroll:true}); if(s.sel && s.sel[0]!=null){ try{ el.setSelectionRange(s.sel[0], s.sel[1]); }catch(e){} } } }
+}
+function render(){
+  if(!ST.ready) return;
+  const r = route();
+  const isIntake = r==="intake";
+  $("app").style.gridTemplateColumns = isIntake ? "minmax(0,1fr)" : "";
+  $("nav").hidden = isIntake;
+  if(!isIntake) renderNav(r);
+  const same = r===lastRoute;
+  const s = same ? stash() : null;
+  let html;
+  try{ html = page(r); }catch(e){ console.error(e); html = `<div class="banner crit">Something went wrong rendering this page: ${esc(e.message)}</div>`; }
+  $("view").innerHTML = html;
+  if(s){ restore(s); } else { window.scrollTo(0,0); }
+  lastRoute = r;
+  resolveNames();
+}
+function resolveNames(){
+  if(!user || typeof user.profiles!=="function") return;
+  const ids = new Set();
+  for(const k of cases()){ if(k.assignee) ids.add(k.assignee); for(const h of (k.history||[])) ids.add(h.by); }
+  const need = [...ids].filter(id=>id && !["system","sample","local","unknown"].includes(id) && id!==ST.me.id && !asked.has(id));
+  if(!need.length) return;
+  need.forEach(id=>asked.add(id));
+  user.profiles(need).then(ps=>{ for(const id of need){ const p = ps && ps[id]; NAMES[id] = (p && p.name) || "Team member"; } schedule(); }).catch(()=>{});
+}
+function renderNav(r){
+  const open = cases().filter(k=>k.status!=="Closed");
+  const crit = open.filter(k=>k.priority==="Critical").length;
+  const base = r.split("-")[0];
+  const on = n => (base===n || (n==="calls" && (base==="call"||r==="add")) || (n==="cases" && base==="case") || (n==="complaints" && r==="log")) ? "on" : "";
+  const item = (h, label, extra) => `<a href="#${h}" class="${on(h)}">${label}${extra||""}</a>`;
+  $("nav").innerHTML = `
+    <div class="brand"><span class="eyebrow">Talkar</span><b>Recovery Compliance Console</b></div>
+    <div class="navlist">
+      ${item("overview","Overview")}
+      ${item("calls","Calls",`<span class="cnt">${calls().length}</span>`)}
+      ${item("cases","Cases",`<span class="cnt ${crit?"crit":""}">${open.length}</span>`)}
+      ${item("complaints","Complaints",`<span class="cnt">${complaints().length}</span>`)}
+      <div class="navsec">Oversight</div>
+      ${item("vendors","Vendors &amp; agents")}
+      ${item("rulebook","Rulebook",`<span class="cnt">v${RB().version}</span>`)}
+      ${item("reports","Reports")}
+      ${item("audit","Audit trail")}
+      ${item("settings","Settings")}
+      <div class="navsec">Customer</div>
+      <a href="#intake">Complaint form ↗</a>
+    </div>
+    <div class="navfoot">
+      <span class="mode ${ST.mode==="sandbox"?"sbx":""}">${ST.mode==="shared"?"Shared workspace · live":"Sandbox · this browser"}</span>
+      <span>${esc(ST.mode==="shared" ? (ST.me.name ? "Signed in as "+ST.me.name : "Signed in") : "Changes stay in this browser")}</span>
+      <span>AI review: ${sample && ST.settings.aiEnabled!==false ? "available" : "off in this view"}</span>
+    </div>`;
+}
+function page(r){
+  if(ST.needsSetup && r!=="intake") return pSetup();
+  if(r==="overview") return pOverview();
+  if(r==="calls") return pCalls();
+  if(r.startsWith("call-")) return pCall(r.slice(5));
+  if(r==="add") return pAdd();
+  if(r==="cases") return pCases();
+  if(r.startsWith("case-")) return pCase(r.slice(5));
+  if(r==="complaints") return pComplaints();
+  if(r==="log") return pIntake(true);
+  if(r==="intake") return pIntake(false);
+  if(r==="vendors") return pVendors();
+  if(r==="rulebook") return pRulebook();
+  if(r==="reports") return pReports();
+  if(r==="audit") return pAudit();
+  if(r==="settings") return pSettings();
+  return `<div class="empty">That page does not exist. <a href="#overview">Go to Overview</a></div>`;
+}
+const head = (title, sub, right, crumb) => `<div class="ph"><div>${crumb?`<div class="crumb">${crumb}</div>`:""}<h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div>${right?`<div class="actions">${right}</div>`:""}</div>`;
+const rangeChips = (key, val, opts) => `<div class="chips">${(opts||[7,14,30,"all"]).map(o=>`<button class="chip ${String(val)===String(o)?"on":""}" data-act="set" data-k="${key}" data-v="${o}">${o==="all"?"All time":"Last "+o+" days"}</button>`).join("")}</div>`;
+const sbxNote = () => ST.mode==="sandbox" ? `<div class="banner warn">Sandbox mode: you can use every feature, and your changes are saved in this browser only. ${ST.me.canWrite===false?"Ask the owner for Contributor access to work in the shared workspace.":""}</div>` : "";
+
+/* ================= pages ================= */
+function pSetup(){
+  return `${head("Set up the shared workspace","The shared store is empty. Everyone with access will see the same calls, cases and rulebook.")}
+  <div class="g2">
+    <div class="card"><h2>Load the sample dataset</h2><p class="sub">64 simulated recovery calls across four vendors over the last 14 days, with cases at different stages and four customer complaints. Useful for demos and training. You can clear it later in Settings.</p><div class="actions"><button class="btn primary" data-act="setup-sample">Load sample dataset</button></div></div>
+    <div class="card"><h2>Start empty</h2><p class="sub">Begin with the default rulebook and no calls. Add calls one by one or import a CSV.</p><div class="actions"><button class="btn" data-act="setup-empty">Start empty</button></div></div>
+  </div>`;
+}
+
+function pOverview(){
+  const m = metrics(F.range);
+  const days = F.range==="all" ? 30 : F.range;
+  const cats = catCounts(m.calls);
+  const maxCat = cats.length ? cats[0][1] : 1;
+  const queue = m.open.slice().sort((a,b)=>(PRIO_RANK[b.priority]-PRIO_RANK[a.priority]) || (new Date(a.dueAt)-new Date(b.dueAt))).slice(0,8);
+  const vs = vendorStats(F.range).slice(0,5);
+  return `${head("Overview","Recovery-call conduct, complaints and case handling at a glance.", rangeChips("range", F.range))}
+  ${sbxNote()}
+  <div class="kpis">
+    <div class="kpi"><b>${m.calls.length}</b><span>Calls reviewed</span></div>
+    <div class="kpi"><b>${pct(m.flagged.length, m.calls.length)}%</b><span>Flag rate (${m.flagged.length} calls)</span></div>
+    <div class="kpi"><b>${m.open.length}</b><span>Open cases</span></div>
+    <div class="kpi crit"><b>${m.critOpen.length}</b><span>Critical, open</span></div>
+    <div class="kpi ${m.overdue.length?"warn":""}"><b>${m.overdue.length}</b><span>Past due date</span></div>
+    <div class="kpi"><b>${fmtH(m.avgFirst)}</b><span>Avg time to first review</span></div>
+  </div>
+  <div class="g32">
+    <div class="card"><h2>Calls reviewed and flagged per day</h2>${dailyChart(days)}</div>
+    <div class="card"><h2>Concerns by category</h2>${cats.length?`<div class="bars">${cats.map(([c,n])=>`<div class="bar"><span>${esc(c)}</span><div class="track"><div class="fill" style="width:${Math.max(4,n/maxCat*100)}%"></div></div><span class="v">${n}</span></div>`).join("")}</div>`:`<div class="empty">No concerns in this period.</div>`}</div>
+  </div>
+  <div class="g32">
+    <div class="card"><div class="ph" style="align-items:center"><h2>Priority queue</h2><a class="btn sm" href="#cases">All cases →</a></div>${caseTable(queue, true)}</div>
+    <div class="card"><div class="ph" style="align-items:center"><h2>Vendors by flag rate</h2><a class="btn sm" href="#vendors">Scorecards →</a></div>
+      ${vs.length?`<div class="tw"><table><thead><tr><th>Vendor</th><th class="num">Calls</th><th class="num">Flag rate</th><th class="num">Confirmed</th></tr></thead><tbody>${vs.map(v=>`<tr><td>${esc(v.v)}</td><td class="num">${v.calls}</td><td class="num">${pct(v.flagged,v.calls)}%</td><td class="num">${v.confirmed}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No calls in this period.</div>`}
+    </div>
+  </div>`;
+}
+function dailyChart(days){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const ds = []; for(let i=days-1;i>=0;i--){ const d = new Date(today); d.setDate(d.getDate()-i); ds.push(dayStr(d)); }
+  const by = {}; ds.forEach(d=>by[d]={r:0,f:0});
+  for(const c of calls()){ if(by[c.date]){ by[c.date].r++; if(isFlagged(c)) by[c.date].f++; } }
+  const max = Math.max(1, ...ds.map(d=>by[d].r));
+  const top = Math.max(2, Math.ceil(max/2)*2);
+  const W = 720, H = 220, L = 34, B = 30, T = 10, R = 8;
+  const bw = (W-L-R)/ds.length;
+  const y = v => T + (H-T-B) * (1 - v/top);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Daily calls reviewed and flagged">`;
+  for(const g of [0, top/2, top]){ s += `<line x1="${L}" x2="${W-R}" y1="${y(g)}" y2="${y(g)}" style="stroke:var(--line)" stroke-width="1"/><text x="${L-6}" y="${y(g)+4}" text-anchor="end" font-size="11" style="fill:var(--muted)">${g}</text>`; }
+  ds.forEach((d,i)=>{
+    const x = L + i*bw + bw*0.15, w = bw*0.7, v = by[d];
+    if(v.r) s += `<rect x="${x}" y="${y(v.r)}" width="${w}" height="${y(0)-y(v.r)}" rx="2" style="fill:var(--bar2)"><title>${fmtD(d)}: ${v.r} reviewed</title></rect>`;
+    if(v.f) s += `<rect x="${x}" y="${y(v.f)}" width="${w}" height="${y(0)-y(v.f)}" rx="2" style="fill:var(--accent)"><title>${fmtD(d)}: ${v.f} flagged</title></rect>`;
+    const step = days>14 ? 5 : days>7 ? 2 : 1;
+    if((ds.length-1-i) % step === 0) s += `<text x="${L+i*bw+bw/2}" y="${H-10}" text-anchor="middle" font-size="11" style="fill:var(--muted)">${fmtD(d)}</text>`;
+  });
+  s += `</svg>`;
+  return s + `<div class="legend"><span><i class="sw" style="background:var(--bar2)"></i>Reviewed</span><span><i class="sw" style="background:var(--accent)"></i>Flagged</span></div>`;
+}
+function caseTable(list, compact){
+  if(!list.length) return `<div class="empty">No cases match.</div>`;
+  return `<div class="tw"><table><thead><tr><th>Case</th><th>Priority</th>${compact?"":"<th>Source</th>"}<th>Concern</th>${compact?"":"<th>Team</th><th>Assignee</th>"}<th>Status</th><th>Due</th></tr></thead><tbody>${
+    list.map(k=>`<tr class="rowlink" data-href="case-${esc(k.id)}" tabindex="0"><td><a class="mono" href="#case-${esc(k.id)}">${esc(k.id)}</a>${k.restricted?` <span class="src man">Restricted</span>`:""}</td><td>${pillP(k.priority)}</td>${compact?"":`<td>${k.source==="complaint"?"Complaint":"Call"}<br><span class="mono">${esc(k.callId||k.complaintId||"")}</span></td>`}<td>${esc(k.title)}</td>${compact?"":`<td>${esc(k.team)}</td><td>${esc(k.assignee?whoLabel(k.assignee):"Unassigned")}</td>`}<td>${pillS(k.status)}</td><td>${k.status==="Closed"?`<span class="note">Closed ${esc(fmtDT(k.closedAt))}</span>`:`<span class="${isOverdue(k)?"pill p-critical":"note"}">${isOverdue(k)?"Overdue · ":""}${esc(fmtDT(k.dueAt))}</span>`}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function pCalls(){
+  const f = F.calls, cd = cutoffDay(f.days);
+  const q = f.q.trim().toLowerCase();
+  let list = calls().filter(c=>c.date>=cd);
+  if(f.vendor) list = list.filter(c=>c.vendor===f.vendor);
+  if(f.result==="flagged") list = list.filter(isFlagged); else if(f.result==="clean") list = list.filter(c=>!isFlagged(c)); else if(f.result) list = list.filter(c=>callPrio(c)===f.result);
+  if(q) list = list.filter(c=>(c.id+" "+c.agent+" "+c.vendor+" "+c.product+" "+c.transcript).toLowerCase().includes(q));
+  list.sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  const vendors = [...new Set(calls().map(c=>c.vendor))].sort();
+  const shown = list.slice(0, F.callsLimit);
+  return `${head("Calls","Every recorded recovery call reviewed against the rulebook. Open a call to see evidence, run AI review or mark flags.",
+    `<a class="btn primary" href="#add">+ Add or import calls</a><button class="btn" data-act="reanalyse">Re-analyse all (rulebook v${RB().version})</button>`)}
+  ${sbxNote()}
+  <div class="card">
+    <div class="filters">
+      <label>Search<input id="fCallsQ" data-live="calls.q" placeholder="Call ID, agent, words in transcript" value="${esc(f.q)}"></label>
+      <label>Vendor<select id="fCallsV" data-filter="calls.vendor"><option value="">All vendors</option>${vendors.map(v=>`<option ${v===f.vendor?"selected":""}>${esc(v)}</option>`).join("")}</select></label>
+      <label>Result<select id="fCallsR" data-filter="calls.result">${[["","All results"],["flagged","Flagged"],["clean","Clean"],["Critical","Critical"],["High","High"],["Medium","Medium"]].map(([v,l])=>`<option value="${v}" ${v===f.result?"selected":""}>${l}</option>`).join("")}</select></label>
+      <label>Period<select id="fCallsD" data-filter="calls.days">${[["all","All time"],["7","Last 7 days"],["14","Last 14 days"],["30","Last 30 days"]].map(([v,l])=>`<option value="${v}" ${String(f.days)===v?"selected":""}>${l}</option>`).join("")}</select></label>
+    </div>
+    <p class="note">${list.length} call${list.length===1?"":"s"} · ${list.filter(isFlagged).length} flagged</p>
+    ${shown.length?`<div class="tw"><table><thead><tr><th>Call</th><th>When</th><th>Vendor · agent</th><th>Product</th><th>Language</th><th>Result</th><th class="num">Flags</th><th>Case</th></tr></thead><tbody>${
+      shown.map(c=>{ const n = activeFlags(c.analysis.flags).length; return `<tr class="rowlink" data-href="call-${esc(c.id)}" tabindex="0"><td><a class="mono" href="#call-${esc(c.id)}">${esc(c.id)}</a></td><td>${esc(fmtD(c.date))} <span class="mono">${esc(c.time)}</span>${outsideWindow(c)?` <span class="src man">Off-hours</span>`:""}</td><td>${esc(c.vendor)} · <span class="mono">${esc(c.agent)}</span></td><td>${esc(c.product)}</td><td>${esc(c.lang)}</td><td>${n?pillP(callPrio(c)):`<span class="pill p-clean">Clean</span>`}${c.analysis.aiAt?` <span class="src ai">AI</span>`:""}</td><td class="num">${n}</td><td>${c.caseId?`<a class="mono" href="#case-${esc(c.caseId)}">${esc(c.caseId)}</a>`:"—"}</td></tr>`; }).join("")}</tbody></table></div>`:`<div class="empty">No calls match. <a href="#add">Add or import calls</a>.</div>`}
+    ${list.length>shown.length?`<div class="actions"><button class="btn" data-act="more-calls">Show ${Math.min(50, list.length-shown.length)} more</button></div>`:""}
+  </div>`;
+}
+
+function flagCard(f, ctx){
+  const src = f.source==="AI" ? `<span class="src ai">AI review</span>` : f.source==="Manual" ? `<span class="src man">Reviewer-added</span>` : f.source==="Complaint" ? `<span class="src">Customer report</span>` : `<span class="src">Rule</span>`+(f.aiConfirmed?` <span class="src ai">AI confirmed</span>`:"");
+  const conf = f.source==="AI" ? "AI confidence "+esc(f.confidence) : f.aiConfirmed ? esc(f.confidence)+" · AI "+esc(f.aiConf) : esc(f.confidence);
+  const rv = f.review ? `<span class="chip ${f.review.v==="valid"?"on":""}">${f.review.v==="valid"?"Marked valid":"Marked false positive"} · ${esc(whoLabel(f.review.by))}</span>` : `<span class="note">Not yet reviewed</span>`;
+  const btns = ctx ? `<div class="actions">${rv}<button class="btn sm" data-act="flag-review" data-ctx="${ctx}" data-fid="${esc(f.fid)}" data-v="valid">Valid</button><button class="btn sm" data-act="flag-review" data-ctx="${ctx}" data-fid="${esc(f.fid)}" data-v="fp">False positive</button>${f.review?`<button class="btn sm" data-act="flag-review" data-ctx="${ctx}" data-fid="${esc(f.fid)}" data-v="">Clear</button>`:""}</div>` : "";
+  const showQuote = !(f.source==="Complaint" && f.rule!=="danger");
+  return `<div class="flag s-${esc(f.severity)} ${f.review&&f.review.v==="fp"?"fp":""}">
+    <div class="fh"><strong>${esc(f.category)}</strong>${pillP(PRIO_OF(f.severity))}${src}<span class="mono">${esc(f.ts)}</span></div>
+    ${showQuote?`<blockquote>“${esc(f.quote)}”</blockquote>`:""}
+    <dl class="ev"><dt>Rule or policy</dt><dd>${esc(f.ref)}</dd><dt>Why flagged</dt><dd>${esc(f.why)}</dd><dt>Confidence</dt><dd>${conf}</dd><dt>Next step</dt><dd>${esc(f.next)}</dd></dl>
+    ${btns}
+  </div>`;
+}
+function pCall(id){
+  const c = ST.calls[id];
+  if(!c) return `${head("Call not found","", "", `<a href="#calls">Calls</a>`)}<div class="empty">No call with ID ${esc(id)}. It may have been deleted.</div>`;
+  const a = c.analysis, flags = a.flags||[], act = activeFlags(flags);
+  const lines = parseTranscript(c.transcript);
+  const hit = new Map(); act.forEach(f=>{ if(f.line>=0){ const s = hit.get(f.line); if(!s || SEV_RANK[f.severity]>SEV_RANK[s]) hit.set(f.line, f.severity); } });
+  const running = AI.callId===id;
+  const aiOk = sample && ST.settings.aiEnabled!==false;
+  const restricted = act.some(x=>x.restricted) && !revealed["call-"+id];
+  return `${head(`<span class="mono" style="font-family:var(--f-mono)">${esc(c.id)}</span>`, `${esc(c.product)} · ${esc(c.vendor)} · agent ${esc(c.agent)}`,
+    `${running?`<button class="btn" data-act="ai-stop">Stop AI review</button>`:`<button class="btn primary" data-act="ai-run" data-id="${esc(id)}" ${aiOk?"":"disabled"} title="${aiOk?"Reads the call for meaning and context":"AI review is not available in this view"}">Run AI review</button>`}
+     <button class="btn" data-act="rerun" data-id="${esc(id)}">Re-run rules</button>
+     ${c.caseId?`<a class="btn" href="#case-${esc(c.caseId)}">Open ${esc(c.caseId)} →</a>`:`<button class="btn" data-act="case-manual" data-id="${esc(id)}">Open a case</button>`}`,
+    `<a href="#calls">Calls</a> / ${esc(c.id)}`)}
+  ${running?`<div class="banner info"><span class="spin"></span> AI review is reading the call for meaning and context. This can take up to a minute.</div>`:""}
+  ${AI.msg && AI.msgFor===id && !running?`<div class="banner info">${esc(AI.msg)}</div>`:""}
+  <div class="g23">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="card"><h2>Call details</h2>
+        <div class="kv"><span>Result</span><span>${act.length?pillP(a.priority)+" · "+act.length+" active flag"+(act.length===1?"":"s"):`<span class="pill p-clean">Clean</span>`}</span>
+        <span>Date and time</span><span>${esc(fmtD(c.date))} <span class="mono">${esc(c.time)}</span>${outsideWindow(c)?` <span class="src man">Outside ${esc(RB().callWindow.start)}–${esc(RB().callWindow.end)}</span>`:""}</span>
+        <span>Earlier calls today</span><span>${esc(c.prior)}</span><span>Language</span><span>${esc(c.lang)}</span>
+        <span>Engine</span><span>${esc(a.engine)} · rulebook v${esc(a.rulebookVersion)}</span><span>Analysed</span><span>${esc(fmtDT(a.at))}</span>
+        <span>Ingested</span><span>${esc(fmtDT(c.createdAt))} · ${esc(c.source==="sample"?"sample data":c.source==="import"?"bulk import":"manual entry")}</span></div>
+        ${a.aiSummary?`<div class="banner ok"><b>AI summary:</b> ${esc(a.aiSummary)}</div>`:""}
+      </div>
+      <div class="card"><h2>Transcript with evidence</h2><div class="tx">${lines.map((l,i)=>`<div class="txl ${hit.has(i)&&!restricted?"hit":""}"><span class="mono">${esc(l.ts)}</span><span class="who">${esc(l.speaker||"AGENT")}</span><span>${restricted&&hit.has(i)?"<i>Restricted line hidden</i>":esc(l.text)}</span></div>`).join("")}</div></div>
+      <div class="card"><details id="dAddFlag"><summary style="cursor:pointer;font-weight:600">Add a concern the engine missed</summary>
+        <form data-form="manual-flag" data-id="${esc(id)}" style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <div class="fr"><label>Category<select id="mfCat">${RB().rules.filter(r=>r.scope==="agent").map(r=>`<option value="${esc(r.id)}">${esc(r.cat)}</option>`).join("")}</select></label>
+          <label>Severity<select id="mfSev"><option value="critical">Critical</option><option value="high" selected>High</option><option value="medium">Medium</option></select></label>
+          <label>Timestamp<select id="mfTs">${lines.map((l,i)=>`<option value="${i}">${esc(l.ts)} ${esc((l.speaker||"AGENT").slice(0,8))}</option>`).join("")}</select></label></div>
+          <label>Why it is a concern<input id="mfWhy" placeholder="e.g. Implied threat to the customer’s family"></label>
+          <div class="actions"><button class="btn primary" type="submit">Add flag</button><span class="note">Counts as a miss in detection-quality reports.</span></div>
+        </form></details></div>
+    </div>
+    <div class="card"><div class="ph" style="align-items:center"><h2>Flags and evidence</h2><span class="note">${flags.length} total · ${flags.length-act.length} marked false positive</span></div>
+      ${restricted?`<div class="banner crit">This call contains a sensitive allegation. Evidence is hidden until you open it, and access is logged on the case.</div><div class="actions"><button class="btn danger" data-act="reveal-call" data-id="${esc(id)}">View restricted evidence</button></div>`
+        : flags.length ? flags.map(f=>flagCard(f, "call:"+id)).join("") : `<div class="banner ok">Agent conduct within policy. No case needed.</div>`}
+      ${canAdmin()?`<div class="actions" style="margin-top:8px"><button class="btn sm danger" data-act="del-call" data-id="${esc(id)}">Delete call</button></div>`:""}
+    </div>
+  </div>`;
+}
+
+function pAdd(){
+  return `${head("Add or import calls","Calls are analysed against the current rulebook as soon as they arrive. Flagged calls open a case automatically.","",`<a href="#calls">Calls</a> / Add`)}
+  ${sbxNote()}
+  <div class="g2">
+    <form class="card" data-form="add-call">
+      <h2>Add one call</h2>
+      <div class="fr">
+        <label>Vendor<input id="acVendor" placeholder="e.g. Vendor A" list="vendorList"></label>
+        <label>Agent ID<input id="acAgent" placeholder="e.g. AG-117"></label>
+        <label>Product<input id="acProduct" placeholder="e.g. Two-wheeler loan"></label>
+      </div>
+      <div class="fr">
+        <label>Language<select id="acLang"><option>Hinglish</option><option>Hindi</option><option>English</option><option>Marathi</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Bengali</option><option>Other</option></select></label>
+        <label>Call date<input type="date" id="acDate" value="${dayStr(new Date())}"></label>
+        <label>Call start<input type="time" id="acTime" value="11:00"></label>
+        <label>Earlier calls today<input type="number" id="acPrior" min="0" max="50" value="0"></label>
+      </div>
+      <label>Transcript<textarea id="acTx" class="mono" rows="10" placeholder="[00:04] AGENT: Hello, I am calling about your EMI…&#10;[00:11] CUSTOMER: …"></textarea></label>
+      <p class="note">One line per turn: <span class="mono">[mm:ss] AGENT: text</span> or <span class="mono">[mm:ss] CUSTOMER: text</span>. Lines without a label are treated as the agent.</p>
+      <div class="actions"><button class="btn primary" type="submit">Analyse and save</button></div>
+      <datalist id="vendorList">${[...new Set(calls().map(c=>c.vendor))].map(v=>`<option value="${esc(v)}">`).join("")}</datalist>
+    </form>
+    <div class="card">
+      <h2>Bulk import</h2>
+      <p class="sub">Upload a CSV or JSON export from your call-recording or speech-to-text system, or paste it below.</p>
+      <label>File (.csv or .json)<input type="file" id="impFile" accept=".csv,.json,text/csv,application/json"></label>
+      <label>Or paste CSV / JSON<textarea id="impText" class="mono" rows="7" placeholder="call_id,vendor,agent,product,language,date,time,prior_calls,transcript"></textarea></label>
+      <p class="note">Columns: <span class="mono">call_id, vendor, agent, product, language, date (YYYY-MM-DD), time (HH:MM), prior_calls, transcript</span>. Only transcript is required. Separate transcript lines with a real line break inside quotes or with <span class="mono">||</span>.</p>
+      <div class="actions"><button class="btn primary" data-act="import">Import</button><button class="btn" data-act="template">Download CSV template</button></div>
+      <div id="impOut">${IMPMSG||""}</div>
+    </div>
+  </div>`;
+}
+
+function pCases(){
+  const f = F.cases, q = f.q.trim().toLowerCase();
+  let list = cases();
+  const active = s => s!=="Closed";
+  if(f.status==="active") list = list.filter(k=>active(k.status)); else if(f.status==="decided") list = list.filter(k=>k.status==="Violation confirmed"||k.status==="Not substantiated"); else if(f.status && f.status!=="all") list = list.filter(k=>k.status===f.status);
+  if(f.priority) list = list.filter(k=>k.priority===f.priority);
+  if(f.team) list = list.filter(k=>k.team===f.team);
+  if(f.assignee==="me") list = list.filter(k=>k.assignee && k.assignee===byMe()); else if(f.assignee==="none") list = list.filter(k=>!k.assignee);
+  if(f.overdue) list = list.filter(isOverdue);
+  if(q) list = list.filter(k=>(k.id+" "+k.title+" "+(k.callId||"")+" "+(k.complaintId||"")+" "+k.vendor+" "+k.agent).toLowerCase().includes(q));
+  list.sort((a,b)=>((a.status==="Closed")-(b.status==="Closed")) || (PRIO_RANK[b.priority]-PRIO_RANK[a.priority]) || (new Date(a.dueAt)-new Date(b.dueAt)));
+  return `${head("Cases","Every flagged call and every complaint becomes a case with an owner team, a due date and a recorded human decision.")}
+  ${sbxNote()}
+  <div class="card">
+    <div class="filters">
+      <label>Search<input id="fCasesQ" data-live="cases.q" value="${esc(f.q)}" placeholder="Case, call, complaint, vendor, agent"></label>
+      <label>Status<select id="fCasesS" data-filter="cases.status">${[["active","Active (not closed)"],["Open","Open"],["Under review","Under review"],["decided","Decided, not closed"],["Closed","Closed"],["all","All"]].map(([v,l])=>`<option value="${v}" ${f.status===v?"selected":""}>${l}</option>`).join("")}</select></label>
+      <label>Priority<select id="fCasesP" data-filter="cases.priority"><option value="">All</option>${["Critical","High","Medium"].map(p=>`<option ${f.priority===p?"selected":""}>${p}</option>`).join("")}</select></label>
+      <label>Team<select id="fCasesT" data-filter="cases.team"><option value="">All teams</option>${TEAMS.map(t=>`<option ${f.team===t?"selected":""}>${esc(t)}</option>`).join("")}</select></label>
+      <label>Assignee<select id="fCasesA" data-filter="cases.assignee">${[["","Anyone"],["me","Assigned to me"],["none","Unassigned"]].map(([v,l])=>`<option value="${v}" ${f.assignee===v?"selected":""}>${l}</option>`).join("")}</select></label>
+      <label style="flex:0 0 auto;flex-direction:row;align-items:center;gap:6px;padding-bottom:8px"><input type="checkbox" id="fCasesO" data-filter="cases.overdue" ${f.overdue?"checked":""}> Overdue only</label>
+    </div>
+    <p class="note">${list.length} case${list.length===1?"":"s"}</p>
+    ${caseTable(list, false)}
+  </div>`;
+}
+
+function pCase(id){
+  const k = ST.cases[id];
+  if(!k) return `${head("Case not found","","",`<a href="#cases">Cases</a>`)}<div class="empty">No case with ID ${esc(id)}.</div>`;
+  const call = k.callId ? ST.calls[k.callId] : null;
+  const cmp = k.complaintId ? ST.complaints[k.complaintId] : null;
+  const evidence = k.source==="call" ? (call ? call.analysis.flags : []) : (k.flags||[]);
+  const ctx = k.source==="call" ? (call ? "call:"+call.id : null) : "case:"+k.id;
+  const locked = k.restricted && !revealed[k.id];
+  const st = k.status;
+  let btns = "";
+  if(st==="Open") btns = `<button class="btn primary" data-act="cs" data-op="review">Start review</button><button class="btn" data-act="cs" data-op="note">Add note</button>`;
+  else if(st==="Under review") btns = `<button class="btn danger" data-act="cs" data-op="confirm">Confirm violation</button><button class="btn" data-act="cs" data-op="unsub">Not substantiated</button><button class="btn" data-act="cs" data-op="note">Add note</button>`;
+  else if(st==="Violation confirmed"||st==="Not substantiated") btns = `<button class="btn primary" data-act="cs" data-op="close">Close case</button><button class="btn" data-act="cs" data-op="reopen">Back to review</button><button class="btn" data-act="cs" data-op="note">Add note</button>`;
+  else btns = `<button class="btn" data-act="cs" data-op="reopen">Reopen</button><button class="btn" data-act="cs" data-op="note">Add note</button>`;
+  const showAction = st==="Violation confirmed"||st==="Not substantiated";
+  return `${head(`<span style="font-family:var(--f-mono)">${esc(k.id)}</span>`, esc(k.title), `${pillP(k.priority)} ${pillS(k.status)} ${isOverdue(k)?`<span class="pill p-critical">Overdue</span>`:""}`, `<a href="#cases">Cases</a> / ${esc(k.id)}`)}
+  ${ST.mode==="sandbox"?sbxNote():""}
+  <div class="g23">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="card"><h2>Case summary</h2>
+        <div class="kv">
+          <span>Source</span><span>${k.source==="complaint"?"Customer complaint "+`<span class="mono">${esc(k.complaintId)}</span>`:"Recorded call"}</span>
+          <span>Recorded call</span><span>${k.callId?`<a class="mono" href="#call-${esc(k.callId)}">${esc(k.callId)}</a>`:"None linked"}</span>
+          <span>Vendor · agent</span><span>${esc(k.vendor||"—")} · <span class="mono">${esc(k.agent||"—")}</span></span>
+          <span>Opened</span><span>${esc(fmtDT(k.createdAt))}</span>
+          <span>Due</span><span>${esc(fmtDT(k.dueAt))} <span class="note">(${esc(ST.settings.sla[k.priority]||"—")} h for ${esc(k.priority)})</span></span>
+          <span>First review</span><span>${esc(fmtDT(k.firstReviewAt))}</span>
+          <span>Decision</span><span>${k.decision==="confirmed"?"Violation confirmed":k.decision==="unsubstantiated"?"Not substantiated":"Pending"}</span>
+          <span>Corrective action</span><span>${esc(k.action||"—")}</span>
+          <span>Closed</span><span>${esc(fmtDT(k.closedAt))}</span>
+        </div>
+        <div class="fr">
+          <label>Owner team<select id="csTeam" data-onchange="cs-team">${TEAMS.map(t=>`<option ${t===k.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label>
+          <label>Priority<select id="csPrio" data-onchange="cs-prio">${["Critical","High","Medium"].map(p=>`<option ${p===k.priority?"selected":""}>${p}</option>`).join("")}</select></label>
+        </div>
+        <div class="actions"><span class="note">Assignee: <b>${esc(k.assignee?whoLabel(k.assignee):"Unassigned")}</b></span>${k.assignee===byMe()?`<button class="btn sm" data-act="cs" data-op="unassign">Unassign</button>`:`<button class="btn sm" data-act="cs" data-op="assign">Assign to me</button>`}</div>
+      </div>
+      <div class="card"><h2>Reviewer decision</h2>
+        <p class="note">Flags are signals; an authorised reviewer decides. Decisions need written reasons. A complaint is never rejected only because a recording is missing.</p>
+        <label>Findings or note<textarea id="csNote" rows="3" placeholder="What did you check, and what did you find?"></textarea></label>
+        ${showAction?`<label>Corrective action (required to close a confirmed violation)<select id="csAction"><option value="">Choose…</option>${ACTIONS.map(a=>`<option ${a===k.action?"selected":""}>${esc(a)}</option>`).join("")}</select></label>`:""}
+        <div class="actions">${btns}</div>
+      </div>
+      <div class="card"><h2>History</h2><ul class="hist">${(k.history||[]).slice().reverse().map(h=>`<li><span class="t">${esc(fmtDT(h.at))}</span><span><b>${esc(whoLabel(h.by))}:</b> ${esc(h.text)}</span></li>`).join("")}</ul></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      ${cmp?`<div class="card"><h2>Customer complaint <span class="mono">${esc(cmp.id)}</span></h2>
+        ${locked?"":`<blockquote>“${esc(cmp.text)}”</blockquote>`}
+        <div class="kv"><span>Contact type</span><span>${esc(cmp.type)}</span><span>Incident</span><span>${esc(fmtD(cmp.date))} ${esc(cmp.time||"")}</span><span>Account</span><span>${cmp.acct?"••••"+esc(cmp.acct):"Not given"}</span><span>Updates by</span><span>${esc(cmp.channel)}</span><span>Received</span><span>${esc(fmtDT(cmp.receivedAt))} via ${esc(cmp.via==="staff"?"staff entry":"customer form")}</span>${cmp.danger?`<span>Safety</span><span class="pill p-critical">Customer reported feeling unsafe</span>`:""}</div></div>`:""}
+      <div class="card"><h2>Evidence</h2>
+        ${locked?`<div class="banner crit">Restricted case: sensitive allegation. Evidence is hidden until you open it, and access is logged.</div><div class="actions"><button class="btn danger" data-act="reveal-case" data-id="${esc(k.id)}">View restricted evidence</button></div>`
+          : evidence.length ? evidence.map(f=>flagCard(f, ctx)).join("") : `<div class="empty">No automated evidence. The case proceeds on the customer’s account.</div>`}
+        ${call && !locked?`<details id="dCaseTx"><summary style="cursor:pointer;font-weight:600">Full transcript of ${esc(call.id)}</summary><div class="tx" style="margin-top:8px">${parseTranscript(call.transcript).map(l=>`<div class="txl"><span class="mono">${esc(l.ts)}</span><span class="who">${esc(l.speaker||"AGENT")}</span><span>${esc(l.text)}</span></div>`).join("")}</div></details>`:""}
+      </div>
+    </div>
+  </div>`;
+}
+
+function pComplaints(){
+  const list = complaints().sort((a,b)=>b.receivedAt.localeCompare(a.receivedAt));
+  return `${head("Complaints","Customer reports of agent misconduct, matched to recorded calls where possible.", `<a class="btn primary" href="#log">Log a complaint for a customer</a><a class="btn" href="#intake">Open customer form ↗</a>`)}
+  ${sbxNote()}
+  <div class="card">
+    ${list.length?`<div class="tw"><table><thead><tr><th>Reference</th><th>Received</th><th>Contact</th><th>Incident</th><th>Linked call</th><th>Case</th><th>Priority</th><th>Status</th></tr></thead><tbody>${
+      list.map(c=>{ const k = ST.cases[c.caseId]; return `<tr class="rowlink" data-href="case-${esc(c.caseId)}" tabindex="0"><td class="mono">${esc(c.id)}${c.danger?` <span class="pill p-critical">Unsafe</span>`:""}</td><td>${esc(fmtDT(c.receivedAt))}</td><td>${esc(c.type)}</td><td>${esc(fmtD(c.date))} ${esc(c.time||"")}</td><td>${c.linkedCallId?`<a class="mono" href="#call-${esc(c.linkedCallId)}">${esc(c.linkedCallId)}</a>`:`<span class="note">No recording</span>`}</td><td><a class="mono" href="#case-${esc(c.caseId)}">${esc(c.caseId)}</a></td><td>${k?pillP(k.priority):"—"}</td><td>${k?pillS(k.status):"—"}</td></tr>`; }).join("")}</tbody></table></div>`
+    :`<div class="empty">No complaints yet. Share the customer form link, or log one for a customer.</div>`}
+  </div>
+  <div class="card"><h2>Customer form link</h2><p class="sub">Customers can report a problem at this page’s address followed by <span class="mono">#intake</span>. The form needs no agent name and no recording.</p></div>`;
+}
+
+function pIntake(staff){
+  const done = ST._lastCmp && ST._lastCmp.staff===staff ? ST._lastCmp : null;
+  const form = `<form class="card" data-form="complaint" data-staff="${staff?"1":""}">
+      <div class="fr"><label>What kind of contact?<select id="ciType"><option>Phone call</option><option>In-person visit</option><option>Message</option></select></label>
+      <label>Loan account, last 4 digits<input id="ciAcct" inputmode="numeric" maxlength="4" placeholder="Optional"></label></div>
+      <div class="fr"><label>Date<input type="date" id="ciDate" value="${dayStr(new Date())}"></label><label>Approximate time<input type="time" id="ciTime"></label></div>
+      <label>What happened?<textarea id="ciText" rows="5" placeholder="Tell us in your own words. You don’t need the agent’s name or a recording."></textarea></label>
+      <label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="ciDanger"> ${staff?"Customer feels unsafe right now":"I feel unsafe right now"}</label>
+      <label>How should we update ${staff?"the customer":"you"}?<select id="ciChannel"><option>SMS</option><option>Phone call</option><option>Email</option></select></label>
+      <div class="actions"><button class="btn primary" type="submit">Register complaint</button></div>
+    </form>`;
+  const conf = done ? `<div class="card">${done.danger?`<div class="banner crit">If ${staff?"the customer is":"you are"} in immediate danger, call 112 now. Our team has been alerted to call back urgently.</div>`:""}
+      <h2>Complaint registered</h2><p class="ok-big">${esc(done.id)}</p>
+      <p class="sub">${staff?"Share this reference with the customer.":"Keep this reference."} Updates will come by ${esc(done.channel)}. No recording or agent name is needed for us to investigate.</p>
+      ${staff?`<div class="actions"><a class="btn primary" href="#case-${esc(done.caseId)}">Open ${esc(done.caseId)} →</a></div>`:""}
+      <div class="actions"><button class="btn" data-act="cmp-new">${staff?"Log another":"Report another problem"}</button></div></div>` : "";
+  if(staff) return `${head("Log a complaint","Record a complaint received by phone, email or in a branch.","",`<a href="#complaints">Complaints</a> / Log`)}${sbxNote()}<div class="g2">${done?conf:form}<div class="card"><h2>What happens next</h2><ol class="sub" style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px"><li>A reference number is issued immediately.</li><li>Recorded calls on that date within three hours are matched and attached.</li><li>Safety reports go straight to Investigation &amp; Safety.</li><li>A reviewer investigates and records the decision.</li></ol></div></div>`;
+  return `<div class="intake">
+    <div class="intake-head"><span class="eyebrow">Customer support</span><h1>Report a problem with a recovery agent</h1><p>Tell us what happened during a call, message or visit about your loan. We take every report seriously and investigate it, even without a recording.</p></div>
+    ${done?conf:form}
+    <p class="note">If you are in immediate danger, call 112. This form is part of a proof-of-concept and uses sample data.</p>
+  </div>`;
+}
+
+function pVendors(){
+  const vs = vendorStats(F.vendors.days);
+  const sel = vs.find(v=>v.v===F.vendors.sel) || null;
+  const row = (x, name) => `<td class="num">${x.calls}</td><td class="num">${x.flagged}</td><td class="num"><b>${pct(x.flagged,x.calls)}%</b></td><td class="num">${x.crit}</td><td class="num">${x.late}</td><td class="num">${x.open}</td><td class="num">${x.confirmed}</td><td class="num">${x.unsub}</td>`;
+  const th = `<th class="num">Calls</th><th class="num">Flagged</th><th class="num">Flag rate</th><th class="num">Critical</th><th class="num">Off-hours</th><th class="num">Open cases</th><th class="num">Confirmed</th><th class="num">Not substantiated</th>`;
+  return `${head("Vendors & agents","Conduct by collection vendor and agent. Allegations (open cases) are kept apart from confirmed findings.", rangeChips("vendors.days", F.vendors.days))}
+  <div class="card">
+    ${vs.length?`<div class="tw"><table><thead><tr><th>Vendor</th>${th}</tr></thead><tbody>${vs.map(v=>`<tr class="rowlink" data-act="vendor-sel" data-v="${esc(v.v)}" tabindex="0" ${sel&&sel.v===v.v?'style="background:var(--accent-soft)"':""}><td><b>${esc(v.v)}</b> <span class="note">${Object.keys(v.agents).length} agents</span></td>${row(v)}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">No calls in this period.</div>`}
+    <p class="note">Select a vendor to see its agents.</p>
+  </div>
+  ${sel?`<div class="card"><h2>${esc(sel.v)} · agents</h2><div class="tw"><table><thead><tr><th>Agent</th>${th}</tr></thead><tbody>${Object.values(sel.agents).sort((a,b)=>pct(b.flagged,b.calls)-pct(a.flagged,a.calls)).map(a=>`<tr><td class="mono">${esc(a.a)} ${a.confirmed>=2||a.crit>=2?`<span class="pill p-critical">Repeat concern</span>`:""}</td>${row(a)}</tr>`).join("")}</tbody></table></div>
+    <div class="actions"><button class="btn sm" data-act="vendor-calls" data-v="${esc(sel.v)}">View this vendor’s calls →</button></div></div>`:""}`;
+}
+
+function pRulebook(){
+  const rb = RB(), ro = !canAdmin();
+  const dis = ro ? "disabled" : "";
+  return `${head("Rulebook", `Version ${rb.version} · updated ${esc(fmtDT(rb.updatedAt))}. Every flag cites a rule from this book. Changes create a new version; past results keep the version they were analysed with.`,
+    `<button class="btn" data-act="reanalyse">Re-analyse all calls with v${rb.version}</button>`)}
+  ${ro?`<div class="banner info">Only editors can change the rulebook. You can read it and test sentences.</div>`:""}
+  ${sbxNote()}
+  <div class="g32">
+    <form class="card" data-form="rulebook" style="gap:14px">
+      <h2>Global rules</h2>
+      <div class="fr"><label>Calls allowed from<input type="time" id="rbStart" value="${esc(rb.callWindow.start)}" ${dis}></label><label>Calls allowed until<input type="time" id="rbEnd" value="${esc(rb.callWindow.end)}" ${dis}></label><label>Max calls per customer per day<input type="number" id="rbRepeat" min="1" max="20" value="${esc(rb.repeatLimit)}" ${dis}></label></div>
+      <h2>Conduct rules</h2>
+      ${rb.rules.map((r,i)=>`<fieldset style="border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:0">
+        <div class="actions" style="justify-content:space-between"><label style="flex-direction:row;align-items:center;gap:6px;color:var(--ink)"><input type="checkbox" id="rbEn${i}" ${r.enabled?"checked":""} ${dis}> <b>${esc(r.cat)}</b></label><span class="note">${r.scope==="agent"?"Checks agent lines":"Checks customer lines"} · id <span class="mono">${esc(r.id)}</span></span></div>
+        <div class="fr"><label>Category name<input id="rbCat${i}" value="${esc(r.cat)}" ${dis}></label><label>Severity<select id="rbSev${i}" ${dis}>${["critical","high","medium"].map(s=>`<option value="${s}" ${s===r.sev?"selected":""}>${PRIO_OF(s)}</option>`).join("")}</select></label><label>Owner team<select id="rbTeam${i}" ${dis}>${TEAMS.map(t=>`<option ${t===r.team?"selected":""}>${esc(t)}</option>`).join("")}</select></label></div>
+        <label>Rule or policy reference<input id="rbRef${i}" value="${esc(r.ref)}" ${dis}></label>
+        <label>Patterns, one per line (regular expressions, case-insensitive)<textarea id="rbPats${i}" class="mono" rows="4" ${dis}>${esc((r.pats||[]).join("\n"))}</textarea></label>
+        <div class="fr"><label>Why flagged<input id="rbWhy${i}" value="${esc(r.why)}" ${dis}></label><label>Next step<input id="rbNext${i}" value="${esc(r.next)}" ${dis}></label></div>
+        <label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="rbRes${i}" ${r.restricted?"checked":""} ${dis}> Restrict access to cases with this flag</label>
+      </fieldset>`).join("")}
+      ${ro?"":`<label>Change summary (required)<input id="rbSummary" placeholder="e.g. Added Marathi threat phrases after reviewer feedback"></label>
+      <div class="actions"><button class="btn primary" type="submit">Save as v${rb.version+1}</button><button class="btn" type="button" data-act="rb-add">Add a rule</button><button class="btn" type="button" data-act="rb-reset">Restore defaults</button></div>`}
+    </form>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="card"><h2>Test a sentence</h2><p class="sub">Check what the current version would flag. Nothing is saved.</p>
+        <label>Speaker<select id="tSpk" data-onchange="test"><option value="AGENT">Agent</option><option value="CUSTOMER">Customer</option></select></label>
+        <label>Sentence<input id="tTxt" data-live-test="1" placeholder="e.g. Kal ghar aaunga, phir dekh lena"></label>
+        <div id="tOut">${testOut()}</div>
+      </div>
+      <div class="card"><h2>Version history</h2><ul class="hist">${(rb.history||[]).slice().reverse().map(h=>`<li><span class="t">v${esc(h.version)} · ${esc(fmtDT(h.at))}</span><span><b>${esc(whoLabel(h.by))}:</b> ${esc(h.summary)}</span></li>`).join("")}</ul></div>
+    </div>
+  </div>`;
+}
+function testOut(){
+  const t = ($("tTxt") && $("tTxt").value) || "", spk = ($("tSpk") && $("tSpk").value) || "AGENT";
+  if(!t.trim()) return `<p class="note">Type a sentence to test it.</p>`;
+  const fl = runRules({transcript:"[00:00] "+spk+": "+t, time:"12:00", prior:0}, RB());
+  return fl.length ? fl.map(f=>`<div class="fh" style="margin-top:6px"><strong>${esc(f.category)}</strong>${pillP(PRIO_OF(f.severity))}</div>`).join("") : `<div class="banner ok" style="margin-top:6px">No rule matches.</div>`;
+}
+
+function pReports(){
+  const d = F.reports.days, m = metrics(d);
+  const cl = m.calls, ks = m.cases;
+  const allFlags = cl.flatMap(c=>c.analysis.flags||[]);
+  const q = src => { const r = allFlags.filter(f=>f.source===src && f.review); const v = r.filter(f=>f.review.v==="valid").length; return {n:r.length, v, fp:r.length-v}; };
+  const qr = q("Rule"), qa = q("AI"), man = allFlags.filter(f=>f.source==="Manual").length;
+  const decided = ks.filter(k=>k.decision); const conf = decided.filter(k=>k.decision==="confirmed").length;
+  const actions = {}; ks.filter(k=>k.action).forEach(k=>actions[k.action]=(actions[k.action]||0)+1);
+  const cmps = complaints().filter(c=>c.receivedAt>=cutoffIso(d));
+  const linked = cmps.filter(c=>c.linkedCallId).length;
+  const agents = {}; for(const c of cl){ if(isFlagged(c)){ const key = c.vendor+" · "+c.agent; agents[key]=(agents[key]||0)+1; } }
+  const repeat = Object.entries(agents).filter(([,n])=>n>=2).sort((a,b)=>b[1]-a[1]);
+  const cats = catCounts(cl);
+  return `${head("Reports","Management view for Compliance, Collections and vendor governance. Export any table as CSV.", rangeChips("reports.days", d))}
+  <div class="kpis">
+    <div class="kpi"><b>${cl.length}</b><span>Calls reviewed</span></div>
+    <div class="kpi"><b>${m.flagged.length}</b><span>Calls flagged (${pct(m.flagged.length,cl.length)}%)</span></div>
+    <div class="kpi"><b>${ks.length}</b><span>Cases opened</span></div>
+    <div class="kpi"><b>${fmtH(m.avgFirst)}</b><span>Avg to first review</span></div>
+    <div class="kpi"><b>${fmtH(m.avgClose)}</b><span>Avg to closure</span></div>
+    <div class="kpi ${m.overdue.length?"warn":""}"><b>${m.overdue.length}</b><span>Open past due date</span></div>
+  </div>
+  <div class="g2">
+    <div class="card"><h2>Detection quality</h2><p class="sub">From reviewer marks on flags. Precision = valid ÷ reviewed. Reviewer-added flags are concerns the engine missed.</p>
+      <div class="tw"><table><thead><tr><th>Engine</th><th class="num">Reviewed</th><th class="num">Valid</th><th class="num">False positive</th><th class="num">Precision</th></tr></thead><tbody>
+      <tr><td>Rules</td><td class="num">${qr.n}</td><td class="num">${qr.v}</td><td class="num">${qr.fp}</td><td class="num">${qr.n?pct(qr.v,qr.n)+"%":"—"}</td></tr>
+      <tr><td>AI review</td><td class="num">${qa.n}</td><td class="num">${qa.v}</td><td class="num">${qa.fp}</td><td class="num">${qa.n?pct(qa.v,qa.n)+"%":"—"}</td></tr>
+      <tr><td>Missed by engine (reviewer-added)</td><td class="num" colspan="4">${man}</td></tr></tbody></table></div></div>
+    <div class="card"><h2>Outcomes</h2>
+      <div class="kv"><span>Decided cases</span><span>${decided.length}</span><span>Violations confirmed</span><span>${conf} (${pct(conf,decided.length)}%)</span><span>Not substantiated</span><span>${decided.length-conf}</span><span>Complaints received</span><span>${cmps.length} · ${linked} matched to a recording</span></div>
+      <h3>Corrective actions</h3>${Object.keys(actions).length?`<div class="bars">${Object.entries(actions).sort((a,b)=>b[1]-a[1]).map(([a,n])=>`<div class="bar"><span>${esc(a)}</span><div class="track"><div class="fill" style="width:${n/Math.max(...Object.values(actions))*100}%"></div></div><span class="v">${n}</span></div>`).join("")}</div>`:`<p class="note">None recorded in this period.</p>`}
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card"><h2>Concerns by category</h2>${cats.length?`<div class="tw"><table><thead><tr><th>Category</th><th class="num">Flags</th></tr></thead><tbody>${cats.map(([c,n])=>`<tr><td>${esc(c)}</td><td class="num">${n}</td></tr>`).join("")}</tbody></table></div>`:`<p class="note">None.</p>`}</div>
+    <div class="card"><h2>Repeat incidents</h2><p class="sub">Agents with two or more flagged calls in the period.</p>${repeat.length?`<div class="tw"><table><thead><tr><th>Vendor · agent</th><th class="num">Flagged calls</th></tr></thead><tbody>${repeat.map(([a,n])=>`<tr><td>${esc(a)}</td><td class="num">${n}</td></tr>`).join("")}</tbody></table></div>`:`<p class="note">None.</p>`}</div>
+  </div>
+  <div class="card"><h2>Export</h2><div class="actions"><button class="btn" data-act="export" data-what="cases">Cases (.csv)</button><button class="btn" data-act="export" data-what="calls">Calls (.csv)</button><button class="btn" data-act="export" data-what="flags">Flags (.csv)</button><button class="btn" data-act="export" data-what="summary">Summary report (.md)</button></div><p class="note">Exports cover the selected period.</p></div>`;
+}
+
+function auditEvents(){
+  const ev = [];
+  for(const k of cases()) for(const h of (k.history||[])) ev.push({at:h.at, by:h.by, type: h.kind==="access"?"Access":"Case", ref:k.id, href:"case-"+k.id, text:h.text});
+  for(const c of calls()) ev.push({at:c.createdAt, by:c.createdBy||"system", type:"Call", ref:c.id, href:"call-"+c.id, text:"Call ingested ("+(c.source==="sample"?"sample data":c.source==="import"?"bulk import":"manual entry")+") and analysed: "+activeFlags(c.analysis.flags).length+" flag(s)."});
+  for(const h of (RB().history||[])) ev.push({at:h.at, by:h.by, type:"Rulebook", ref:"v"+h.version, href:"rulebook", text:h.summary});
+  return ev.filter(e=>e.at).sort((a,b)=>b.at.localeCompare(a.at));
+}
+function pAudit(){
+  const f = F.audit, q = f.q.trim().toLowerCase();
+  let ev = auditEvents();
+  if(f.type) ev = ev.filter(e=>e.type===f.type);
+  if(q) ev = ev.filter(e=>(e.ref+" "+e.text+" "+whoLabel(e.by)).toLowerCase().includes(q));
+  const shown = ev.slice(0, 300);
+  return `${head("Audit trail","Who did what, and when: ingestion, routing, evidence access, decisions and rulebook changes.")}
+  <div class="card">
+    <div class="filters"><label>Search<input id="fAudQ" data-live="audit.q" value="${esc(f.q)}" placeholder="Case, call, person or text"></label>
+    <label>Type<select id="fAudT" data-filter="audit.type"><option value="">All events</option>${["Case","Access","Call","Rulebook"].map(t=>`<option ${f.type===t?"selected":""}>${t}</option>`).join("")}</select></label></div>
+    <p class="note">${ev.length} event${ev.length===1?"":"s"}${ev.length>300?" · showing latest 300":""}</p>
+    ${shown.length?`<div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>Type</th><th>Ref</th><th>Event</th></tr></thead><tbody>${shown.map(e=>`<tr><td class="mono">${esc(fmtDT(e.at))}</td><td>${esc(whoLabel(e.by))}</td><td>${e.type==="Access"?`<span class="src man">Access</span>`:esc(e.type)}</td><td><a class="mono" href="#${esc(e.href)}">${esc(e.ref)}</a></td><td>${esc(e.text)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No events match.</div>`}
+  </div>`;
+}
+
+function pSettings(){
+  const s = ST.settings, ad = canAdmin();
+  return `${head("Settings","Service levels, AI review and data management.")}
+  ${sbxNote()}
+  <div class="g2">
+    <form class="card" data-form="settings">
+      <h2>Review deadlines</h2><p class="sub">Hours from case creation to the due date, by priority. Applies to new cases.</p>
+      <div class="fr">${["Critical","High","Medium"].map(p=>`<label>${p}<input type="number" min="1" max="2000" id="sla${p}" value="${esc(s.sla[p])}" ${ad?"":"disabled"}></label>`).join("")}</div>
+      <h2>AI review</h2>
+      <label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="setAi" ${s.aiEnabled!==false?"checked":""} ${ad?"":"disabled"}> Allow reviewers to run AI review on calls</label>
+      <p class="note">AI review runs only when a reviewer clicks it, and it uses that reviewer’s own Claude account. ${sample?"Available in this view.":"Not available in this view."}</p>
+      ${ad?`<div class="actions"><button class="btn primary" type="submit">Save settings</button></div>`:`<p class="note">Only editors can change settings.</p>`}
+    </form>
+    <div class="card">
+      <h2>Data</h2>
+      <div class="kv"><span>Workspace</span><span>${ST.mode==="shared"?"Shared, live for everyone with access":"Sandbox in this browser"}</span><span>Calls</span><span>${calls().length}</span><span>Cases</span><span>${cases().length}</span><span>Complaints</span><span>${complaints().length}</span><span>Rulebook</span><span>v${RB().version}</span></div>
+      <div class="actions">
+        <button class="btn" data-act="backup">Export full backup (.json)</button>
+        ${ad?`<label class="btn" style="cursor:pointer">Restore from backup<input type="file" id="restoreFile" accept=".json,application/json" hidden data-onchange="restore"></label>`:""}
+      </div>
+      ${ad?`<div class="actions"><button class="btn" data-act="load-sample">Add sample dataset</button>${ST.mode==="sandbox"?`<button class="btn" data-act="reset-sbx">Reset sandbox</button>`:""}<button class="btn danger" data-act="clear-all">Delete all calls, cases and complaints</button></div>`:""}
+      ${ST.mode==="sandbox" && db && ST.me.canWrite!==false ? `<div class="actions"><button class="btn" data-act="go-shared">Switch to shared workspace</button></div>`:""}
+      <p class="note">Sample data is synthetic: role-played calls, fictional vendors and agents.</p>
+    </div>
+  </div>`;
+}
+
+/* ================= actions ================= */
+const ACT = {
+  "modal-bg": (el, e) => { if(e.target===el) closeModal(); },
+  set: el => { const [a,b] = el.dataset.k.split("."); const v = el.dataset.v==="all" ? "all" : +el.dataset.v; if(b) F[a][b] = v; else F[a] = v; schedule(); },
+  "more-calls": () => { F.callsLimit += 50; schedule(); },
+  "setup-sample": async el => { el.disabled = true; await loadSampleInto(true); ST.needsSetup = false; schedule(); },
+  "setup-empty": async () => { await putConfig("rulebook", defaultRulebook(nowIso())); await putConfig("settings", defaultSettings()); ST.needsSetup = false; schedule(); },
+  reanalyse: async el => { if(!calls().length) return; el.disabled = true; await reanalyseAll(); el.disabled = false; },
+  "ai-run": el => runAI(el.dataset.id),
+  "ai-stop": () => { if(AI.ctl) AI.ctl.abort(); },
+  rerun: async el => { const c = getCall(el.dataset.id); c.analysis = analyseCall(c, RB(), nowIso()); await put("calls", c); await syncCallCase(c); toast("Rules re-run with v"+RB().version+"."); },
+  "case-manual": async el => { const c = getCall(el.dataset.id); const k = makeCaseFromCall(c, ST.settings, newId("CS"), nowIso(), byMe()); k.history[0].text = "Case opened manually by a reviewer from "+c.id+"."; c.caseId = k.id; await put("cases", k); await put("calls", c); location.hash = "case-"+k.id; },
+  "del-call": async el => { const id = el.dataset.id; if(!(await confirmModal({title:"Delete "+id+"?", body:"The call and its analysis are removed. Any case stays, with its history.", confirm:"Delete call", danger:true}))) return; await removeDoc("calls", id); location.hash = "calls"; toast(id+" deleted."); },
+  "reveal-call": async el => { const c = ST.calls[el.dataset.id]; revealed["call-"+el.dataset.id] = true; if(c && c.caseId){ revealed[c.caseId] = true; const k = getCase(c.caseId); if(k){ k.history.push({at:nowIso(), by:byMe(), kind:"access", text:"Viewed restricted evidence on "+c.id+"."}); await put("cases", k); } } schedule(); },
+  "reveal-case": async el => { const k = getCase(el.dataset.id); revealed[k.id] = true; if(k.callId) revealed["call-"+k.callId] = true; k.history.push({at:nowIso(), by:byMe(), kind:"access", text:"Viewed restricted evidence."}); await put("cases", k); },
+  "flag-review": async el => {
+    const [kind, id] = el.dataset.ctx.split(":"); const v = el.dataset.v, fid = el.dataset.fid;
+    if(kind==="call"){
+      const c = getCall(id); const f = c.analysis.flags.find(x=>x.fid===fid); if(!f) return;
+      f.review = v ? {v, by:byMe(), at:nowIso()} : null;
+      c.analysis.priority = PRIO_OF(maxSev(activeFlags(c.analysis.flags)));
+      await put("calls", c);
+      if(c.caseId && ST.cases[c.caseId]){ const k = getCase(c.caseId); k.history.push({at:nowIso(), by:byMe(), kind:"action", text: v ? "Flag “"+f.category+"” at "+f.ts+" marked "+(v==="valid"?"valid":"false positive")+"." : "Review mark cleared on “"+f.category+"”."}); await put("cases", k); }
+      await syncCallCase(c);
+    } else {
+      const k = getCase(id); const f = k.flags.find(x=>x.fid===fid); if(!f) return;
+      f.review = v ? {v, by:byMe(), at:nowIso()} : null;
+      k.history.push({at:nowIso(), by:byMe(), kind:"action", text: v ? "Reported concern “"+f.category+"” marked "+(v==="valid"?"valid":"not supported")+"." : "Review mark cleared."});
+      await put("cases", k);
+    }
+  },
+  cs: async el => caseOp(el.dataset.op),
+  "cmp-new": () => { ST._lastCmp = null; schedule(); },
+  "vendor-sel": el => { F.vendors.sel = F.vendors.sel===el.dataset.v ? null : el.dataset.v; schedule(); },
+  "vendor-calls": el => { F.calls.vendor = el.dataset.v; F.calls.days = "all"; location.hash = "calls"; },
+  template: () => offerFile("call-import-template.csv", toCSV([["call_id","vendor","agent","product","language","date","time","prior_calls","transcript"],["","Vendor A","AG-117","Two-wheeler loan","Hinglish",dayStr(new Date()),"11:30","0","[00:04] AGENT: Namaste, aapki EMI pending hai. || [00:11] CUSTOMER: Main Friday ko pay karunga. || [00:18] AGENT: Theek hai, payment link SMS kar raha hoon."]])),
+  import: async el => { el.disabled = true; try{ await doImport(); } finally { el.disabled = false; } },
+  "rb-add": () => { const rb = clone(RB()); rb.rules.push({id:"r"+Date.now().toString(36), cat:"New rule", sev:"high", team:"Compliance", scope:"agent", enabled:false, restricted:false, ref:"Internal policy", why:"Describe why this is a concern.", next:"Describe the next step.", pats:[]}); ST.rulebook = rb; toast("Rule added below. Fill it in, enable it and save a new version."); schedule(); },
+  "rb-reset": async () => { if(!(await confirmModal({title:"Restore the default rulebook?", body:"The default rules replace the current ones as a new version. Past results are unchanged until you re-analyse.", confirm:"Restore defaults"}))) return; const cur = RB(); const d = defaultRulebook(nowIso()); d.version = cur.version+1; d.history = (cur.history||[]).concat([{version:d.version, at:nowIso(), by:byMe(), summary:"Restored default rulebook"}]); await putConfig("rulebook", d); toast("Rulebook v"+d.version+" saved."); },
+  export: el => doExport(el.dataset.what),
+  backup: () => offerFile("recovery-compliance-backup-"+dayStr(new Date())+".json", JSON.stringify({exportedAt:nowIso(), calls:calls(), cases:cases(), complaints:complaints(), rulebook:RB(), settings:ST.settings}, null, 1)),
+  "load-sample": async el => { if(!(await confirmModal({title:"Add the sample dataset?", body:"Adds 64 simulated calls, their cases and four complaints. Sample IDs that already exist are skipped.", confirm:"Add sample data"}))) return; el.disabled = true; await loadSampleInto(false); el.disabled = false; },
+  "reset-sbx": async () => { if(!(await confirmModal({title:"Reset the sandbox?", body:"Your changes in this browser are discarded and the sample dataset is reloaded.", confirm:"Reset", danger:true}))) return; try{ localStorage.removeItem(SBX); }catch(e){} loadData(buildSampleDataset(Date.now())); sbxSave(); location.hash = "overview"; schedule(); toast("Sandbox reset."); },
+  "clear-all": async () => { if(!(await confirmModal({title:"Delete all data?", body:"Every call, case and complaint is permanently deleted"+(ST.mode==="shared"?" for everyone":"")+". The rulebook and settings stay. Export a backup first if you need one.", confirm:"Delete everything", danger:true, requireText:"DELETE"}))) return; for(const c of calls()) await removeDoc("calls", c.id); for(const k of cases()) await removeDoc("cases", k.id); for(const m of complaints()) await removeDoc("complaints", m.id); toast("All calls, cases and complaints deleted."); location.hash = "overview"; },
+  "go-shared": () => { ST.forced = false; sbxSave(); ST.ready = false; startShared(); }
+};
+async function loadSampleInto(all){
+  const d = buildSampleDataset(Date.now());
+  let n = 0; const total = d.calls.length + d.cases.length + d.complaints.length;
+  if(all || !ST.rulebook) await putConfig("rulebook", d.rulebook);
+  if(all || !ST.settings) await putConfig("settings", d.settings);
+  for(const [coll, list] of [["calls",d.calls],["cases",d.cases],["complaints",d.complaints]]){
+    for(const o of list){ if(ST[coll][o.id]) continue; await put(coll, o); if(++n % 20 === 0) toast("Loading sample data… "+n+" of "+total, 1500); }
+  }
+  toast("Sample dataset loaded.");
+}
+async function caseOp(op){
+  const k = getCase(route().slice(5)); if(!k) return;
+  const note = (($("csNote")||{}).value||"").trim();
+  const need = ["confirm","unsub","note"].includes(op);
+  if(need && note.length < 15){ toast("Write your findings first (at least a sentence). Decisions need recorded reasons."); $("csNote") && $("csNote").focus(); return; }
+  const me = byMe();
+  if(op==="assign"){ k.assignee = me; hist(k, "Assigned to "+(ST.mode==="shared"?"reviewer":"you")+"."); }
+  if(op==="unassign"){ k.assignee = null; hist(k, "Unassigned."); }
+  if(op==="review"){ k.status = "Under review"; if(!k.firstReviewAt) k.firstReviewAt = nowIso(); if(!k.assignee) k.assignee = me; hist(k, "Review started"+(note?": "+note:"")+"."); }
+  if(op==="confirm"){ k.status = "Violation confirmed"; k.decision = "confirmed"; hist(k, "Violation confirmed. Findings: "+note); }
+  if(op==="unsub"){ k.status = "Not substantiated"; k.decision = "unsubstantiated"; hist(k, "Not substantiated, with reasons: "+note); }
+  if(op==="note"){ hist(k, "Note: "+note, "note"); }
+  if(op==="reopen"){ k.status = "Under review"; k.closedAt = null; hist(k, "Returned to review"+(note?": "+note:"")+"."); }
+  if(op==="close"){
+    const act = ($("csAction")||{}).value || "";
+    if(k.decision==="confirmed" && !act){ toast("Choose the corrective action before closing a confirmed violation."); return; }
+    k.action = act || k.action || "No further action"; k.status = "Closed"; k.closedAt = nowIso();
+    hist(k, "Case closed. Corrective action: "+k.action+"."+(note?" "+note:""));
+    if(k.complaintId){ const c = ST.complaints[k.complaintId]; k.history.push({at:nowIso(), by:"system", kind:"system", text:"Closure update queued to the customer by "+(c?c.channel:"SMS")+"."}); }
+  }
+  if($("csNote")) $("csNote").value = "";
+  await put("cases", k);
+  toast(k.id+" updated.");
+}
+const CHG = {
+  "cs-team": async el => { const k = getCase(route().slice(5)); if(k.team===el.value) return; hist(k, "Routed from "+k.team+" to "+el.value+"."); k.team = el.value; await put("cases", k); },
+  "cs-prio": async el => { const k = getCase(route().slice(5)); if(k.priority===el.value) return; hist(k, "Priority changed from "+k.priority+" to "+el.value+" by reviewer."); k.priority = el.value; await put("cases", k); },
+  test: () => { const o = $("tOut"); if(o) o.innerHTML = testOut(); },
+  restore: async el => {
+    const file = el.files && el.files[0]; if(!file) return;
+    let d; try{ d = JSON.parse(await file.text()); }catch(e){ toast("That file is not valid JSON."); return; }
+    if(!d || !Array.isArray(d.calls)){ toast("That file is not a backup from this app."); return; }
+    if(!(await confirmModal({title:"Restore this backup?", body:"Adds or overwrites "+d.calls.length+" calls, "+(d.cases||[]).length+" cases and "+(d.complaints||[]).length+" complaints, and replaces the rulebook and settings.", confirm:"Restore"}))) return;
+    if(d.rulebook) await putConfig("rulebook", d.rulebook); if(d.settings) await putConfig("settings", d.settings);
+    for(const c of d.calls) await put("calls", c); for(const k of (d.cases||[])) await put("cases", k); for(const m of (d.complaints||[])) await put("complaints", m);
+    toast("Backup restored.");
+  }
+};
+const FORM = {
+  "add-call": async f => {
+    const tx = $("acTx").value.trim();
+    if(parseTranscript(tx).length < 1){ toast("Paste a transcript first."); $("acTx").focus(); return; }
+    const c = await ingestCall({vendor:$("acVendor").value.trim(), agent:$("acAgent").value.trim(), product:$("acProduct").value.trim(), lang:$("acLang").value, date:$("acDate").value, time:$("acTime").value, prior:$("acPrior").value, transcript:tx}, {source:"manual"});
+    $("acTx").value = "";
+    toast(c.id+" analysed: "+activeFlags(c.analysis.flags).length+" flag(s).");
+    location.hash = "call-"+c.id;
+  },
+  "manual-flag": async f => {
+    const c = getCall(f.dataset.id); const r = RB().rules.find(x=>x.id===$("mfCat").value); const li = +$("mfTs").value;
+    const L = parseTranscript(c.transcript)[li]; const why = $("mfWhy").value.trim();
+    if(!why){ toast("Say why it is a concern."); return; }
+    c.analysis.flags.push({fid:"manual-"+Date.now().toString(36), rule:r.id, category:r.cat, severity:$("mfSev").value, ts:L?L.ts:"—", quote:L?L.text:"", why, ref:r.ref, next:r.next, team:r.team, confidence:"Reviewer judgement", source:"Manual", line:li, restricted:!!r.restricted, review:{v:"valid", by:byMe(), at:nowIso()}});
+    c.analysis.flags = sortFlags(c.analysis.flags); c.analysis.priority = PRIO_OF(maxSev(activeFlags(c.analysis.flags)));
+    $("mfWhy").value = "";
+    await put("calls", c); await syncCallCase(c);
+    if(c.caseId && ST.cases[c.caseId]){ const k = getCase(c.caseId); k.history.push({at:nowIso(), by:byMe(), kind:"action", text:"Reviewer added a missed concern: "+r.cat+" at "+(L?L.ts:"—")+"."}); await put("cases", k); }
+    toast("Flag added.");
+  },
+  complaint: async f => {
+    const staff = !!f.dataset.staff;
+    const text = $("ciText").value.trim(), acct = $("ciAcct").value.trim();
+    if(text.length < 10){ toast("Describe what happened in at least a sentence."); $("ciText").focus(); return; }
+    if(acct && !/^\d{4}$/.test(acct)){ toast("Enter exactly 4 digits for the account, or leave it blank."); return; }
+    const r = makeComplaint({type:$("ciType").value, date:$("ciDate").value, time:$("ciTime").value, acct, channel:$("ciChannel").value, text, danger:$("ciDanger").checked, via:staff?"staff":"customer-form"}, calls(), RB(), ST.settings, {cmp:newId("CMP"), cs:newId("CS")}, nowIso(), staff?byMe():"system");
+    await put("complaints", r.cmp); await put("cases", r.cs);
+    if(r.cmp.linkedCallId && ST.calls[r.cmp.linkedCallId] && ST.calls[r.cmp.linkedCallId].caseId){ const k = getCase(ST.calls[r.cmp.linkedCallId].caseId); if(k){ k.history.push({at:nowIso(), by:"system", kind:"system", text:"Customer complaint "+r.cmp.id+" received about this call ("+r.cs.id+")."}); await put("cases", k); } }
+    ST._lastCmp = {id:r.cmp.id, caseId:r.cs.id, channel:r.cmp.channel, danger:r.cmp.danger, staff};
+    schedule();
+  },
+  rulebook: async f => {
+    const summary = ($("rbSummary").value||"").trim();
+    if(summary.length < 5){ toast("Add a short change summary."); $("rbSummary").focus(); return; }
+    const rb = clone(RB());
+    const s = $("rbStart").value, e = $("rbEnd").value;
+    if(toMins(s)==null || toMins(e)==null || toMins(s)>=toMins(e)){ toast("The calling window must start before it ends."); return; }
+    rb.callWindow = {start:s, end:e}; rb.repeatLimit = Math.max(1, parseInt($("rbRepeat").value,10)||3);
+    const bad = [];
+    rb.rules.forEach((r,i)=>{
+      r.enabled = $("rbEn"+i).checked; r.cat = $("rbCat"+i).value.trim()||r.cat; r.sev = $("rbSev"+i).value; r.team = $("rbTeam"+i).value;
+      r.ref = $("rbRef"+i).value.trim(); r.why = $("rbWhy"+i).value.trim(); r.next = $("rbNext"+i).value.trim(); r.restricted = $("rbRes"+i).checked;
+      r.pats = $("rbPats"+i).value.split("\n").map(x=>x.trim()).filter(Boolean);
+      r.pats.forEach(p=>{ try{ new RegExp(p); }catch(err){ bad.push(r.cat+": "+p); } });
+    });
+    if(bad.length){ toast("Fix invalid pattern: "+bad[0], 5000); return; }
+    rb.version = RB().version + 1; rb.updatedAt = nowIso();
+    rb.history = (rb.history||[]).concat([{version:rb.version, at:nowIso(), by:byMe(), summary}]);
+    $("rbSummary").value = "";
+    await putConfig("rulebook", rb);
+    toast("Rulebook v"+rb.version+" saved. Re-analyse calls to apply it to past results.", 5000);
+  },
+  settings: async f => {
+    const s = clone(ST.settings);
+    for(const p of ["Critical","High","Medium"]) s.sla[p] = Math.max(1, parseInt($("sla"+p).value,10)||s.sla[p]);
+    s.aiEnabled = $("setAi").checked;
+    await putConfig("settings", s); toast("Settings saved.");
+  }
+};
+async function doImport(){
+  IMPMSG = "";
+  let text = ($("impText").value||"").trim();
+  const file = $("impFile").files && $("impFile").files[0];
+  if(file) text = (await file.text()).trim();
+  if(!text){ toast("Choose a file or paste CSV or JSON."); return; }
+  let rows = [];
+  try{
+    if(text[0]==="[" || text[0]==="{"){ const j = JSON.parse(text); rows = (Array.isArray(j)?j:(j.calls||[])).map(o=>({...o, transcript: Array.isArray(o.transcript)?o.transcript.join("\n"):o.transcript})); }
+    else { const t = parseCSV(text); const h = t[0].map(x=>x.trim().toLowerCase()); rows = t.slice(1).map(r=>{ const o = {}; h.forEach((k,i)=>o[k]=r[i]); return o; }); }
+  }catch(e){ IMPMSG = `<div class="banner crit">Could not read that data: ${esc(e.message)}</div>`; schedule(); return; }
+  const get = (o, ...ks) => { for(const k of ks){ if(o[k]!=null && String(o[k]).trim()!=="") return String(o[k]).trim(); } return ""; };
+  let ok = 0, skipped = 0, flagged = 0; const errs = [];
+  for(let i=0;i<rows.length;i++){
+    const o = rows[i];
+    const tx = get(o,"transcript","text").split(/\s*\|\|\s*/).join("\n");
+    if(!tx){ skipped++; errs.push("Row "+(i+2)+": no transcript"); continue; }
+    const date = get(o,"date"); if(date && !/^\d{4}-\d{2}-\d{2}$/.test(date)){ skipped++; errs.push("Row "+(i+2)+": date must be YYYY-MM-DD"); continue; }
+    const c = await ingestCall({id:get(o,"call_id","id"), vendor:get(o,"vendor"), agent:get(o,"agent","agent_id"), product:get(o,"product"), lang:get(o,"language","lang"), date, time:get(o,"time"), prior:get(o,"prior_calls","prior"), transcript:tx}, {source:"import"});
+    ok++; if(isFlagged(c)) flagged++;
+    if(ok % 10 === 0) toast("Imported "+ok+"…", 1200);
+  }
+  $("impText").value = ""; try{ $("impFile").value = ""; }catch(e){}
+  IMPMSG = `<div class="banner ${ok?"ok":"warn"}">Imported ${ok} call${ok===1?"":"s"}; ${flagged} flagged and opened as cases.${skipped?" Skipped "+skipped+": "+esc(errs.slice(0,3).join("; ")):""}</div>`;
+  schedule();
+}
+function doExport(what){
+  const d = F.reports.days, cd = cutoffDay(d), ci = cutoffIso(d);
+  const cl = calls().filter(c=>c.date>=cd), ks = cases().filter(k=>k.createdAt>=ci);
+  if(what==="cases") return offerFile("cases-"+dayStr(new Date())+".csv", toCSV([["case_id","source","call_id","complaint_id","priority","status","team","vendor","agent","title","created","due","first_review","decision","corrective_action","closed","overdue"]].concat(ks.map(k=>[k.id,k.source,k.callId||"",k.complaintId||"",k.priority,k.status,k.team,k.vendor,k.agent,k.title,k.createdAt,k.dueAt,k.firstReviewAt||"",k.decision||"",k.action||"",k.closedAt||"",isOverdue(k)?"yes":"no"]))));
+  if(what==="calls") return offerFile("calls-"+dayStr(new Date())+".csv", toCSV([["call_id","date","time","vendor","agent","product","language","prior_calls","result","active_flags","engine","rulebook_version","case_id"]].concat(cl.map(c=>[c.id,c.date,c.time,c.vendor,c.agent,c.product,c.lang,c.prior,callPrio(c),activeFlags(c.analysis.flags).length,c.analysis.engine,c.analysis.rulebookVersion,c.caseId||""]))));
+  if(what==="flags") return offerFile("flags-"+dayStr(new Date())+".csv", toCSV([["call_id","timestamp","category","severity","source","review","quote","rule_reference"]].concat(cl.flatMap(c=>(c.analysis.flags||[]).map(f=>[c.id,f.ts,f.category,f.severity,f.source,f.review?f.review.v:"",f.quote,f.ref])))));
+  if(what==="summary"){
+    const m = metrics(d), cats = catCounts(cl);
+    const md = `# Recovery compliance summary\n\nPeriod: ${d==="all"?"all time":"last "+d+" days"} · generated ${fmtDT(nowIso())}\n\n| Measure | Value |\n|---|---|\n| Calls reviewed | ${cl.length} |\n| Calls flagged | ${m.flagged.length} (${pct(m.flagged.length,cl.length)}%) |\n| Cases opened | ${ks.length} |\n| Open cases now | ${m.open.length} |\n| Critical open | ${m.critOpen.length} |\n| Past due date | ${m.overdue.length} |\n| Avg time to first review | ${fmtH(m.avgFirst)} |\n| Avg time to closure | ${fmtH(m.avgClose)} |\n\n## Concerns by category\n\n${cats.map(([c,n])=>"- "+c+": "+n).join("\n")||"- None"}\n\nRulebook version ${RB().version}. ${ST.mode==="sandbox"?"Generated from a sandbox copy.":""}\n`;
+    return offerFile("compliance-summary-"+dayStr(new Date())+".md", md);
+  }
+}
+async function offerFile(name, text){
+  if(downloads){
+    try{ await downloads.save({filename:name, data:text}); toast(name+" saved."); return; }
+    catch(e){ if(e && e.code==="declined") return; if(e && e.code==="rate_limited"){ toast("A save prompt is already open."); return; } }
+  }
+  openModal(`<h2 style="margin:0;font-size:18px">${esc(name)}</h2><p class="sub">Downloads are not available in this view. Copy the contents below.</p><textarea id="dlText" class="mono" rows="14" readonly>${esc(text)}</textarea><div class="actions"><button class="btn primary" id="dlCopy">Copy</button><button class="btn" id="dlClose">Close</button></div>`);
+  $("dlCopy").onclick = async ()=>{ try{ await navigator.clipboard.writeText(text); toast("Copied."); }catch(e){ const t = $("dlText"); t.focus(); t.select(); toast("Press Ctrl+C or ⌘C to copy."); } };
+  $("dlClose").onclick = closeModal;
+}
+
+/* ================= wiring ================= */
+document.addEventListener("click", e=>{
+  const a = e.target.closest("[data-act]");
+  if(a && ACT[a.dataset.act]){ if(a.tagName!=="TR" && a.dataset.act!=="modal-bg") e.preventDefault(); ACT[a.dataset.act](a, e); return; }
+  const tr = e.target.closest("tr[data-href]");
+  if(tr && !e.target.closest("a,button,input,select")){ location.hash = tr.dataset.href; }
+});
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape" && $("modalRoot").innerHTML){ closeModal(); return; }
+  const tr = e.target.closest && e.target.closest("tr[data-href],tr[data-act]");
+  if(tr && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); if(tr.dataset.href) location.hash = tr.dataset.href; else ACT[tr.dataset.act](tr, e); }
+});
+document.addEventListener("submit", e=>{ const f = e.target; if(f.dataset && f.dataset.form && FORM[f.dataset.form]){ e.preventDefault(); FORM[f.dataset.form](f); } });
+document.addEventListener("change", e=>{
+  const el = e.target;
+  if(el.dataset && el.dataset.filter){ const [a,b] = el.dataset.filter.split("."); F[a][b] = el.type==="checkbox" ? el.checked : el.value; if(a==="calls") F.callsLimit = 50; schedule(); return; }
+  if(el.dataset && el.dataset.onchange && CHG[el.dataset.onchange]) CHG[el.dataset.onchange](el);
+});
+let liveT = null;
+document.addEventListener("input", e=>{
+  const el = e.target;
+  if(el.dataset && el.dataset.live){ const [a,b] = el.dataset.live.split("."); F[a][b] = el.value; clearTimeout(liveT); liveT = setTimeout(schedule, 220); }
+  if(el.dataset && el.dataset.liveTest){ CHG.test(); }
+});
+window.addEventListener("hashchange", ()=>{ if(route()!=="intake" && route()!=="log") ST._lastCmp = null; if(route()!=="add") IMPMSG = ""; schedule(); });
+
+init().catch(e=>{ console.error(e); startSandbox(sbxLoad()); });
+})();
+
+</script>
+</body></html>
