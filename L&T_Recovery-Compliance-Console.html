@@ -6,155 +6,1282 @@
 <style>
 /* Layout: operations console. Fixed left navigation on desktop (horizontal on phones); each module renders into one work area of cards, tables and detail panes. */
 :root{
-  --bg:#F3F5F2; --surface:#FFFFFF; --surface-2:#F7F9F6; --ink:#1A2034; --muted:#5B6372; --line:#DCE1DB;
-  --accent:#2D5C50; --accent-ink:#FFFFFF; --accent-soft:#E2EEE9; --nav:#1A2034; --nav-ink:#E9ECF1; --nav-muted:#9AA6B8; --nav-active:#26304A;
-  --crit:#B42318; --crit-bg:#FDECEA; --high:#A94A06; --high-bg:#FDEFE0; --med:#7A5A00; --med-bg:#FAF3D7; --ok:#1F7A4D; --ok-bg:#E5F3EB; --info-bg:#EAF0FA; --info:#24508F;
-  --hl:#FFF4D6; --bar2:#B9C6D6;
-  --f-display:'Source Serif 4', Georgia, serif; --f-ui:'IBM Plex Sans', Arial, sans-serif; --f-mono:'IBM Plex Mono', 'Courier New', monospace;
+  /* Crisp White Theme Surfaces & Backgrounds */
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-2: #F1F5F9;
+  --surface-3: #E2E8F0;
+
+  /* Text & Typography */
+  --ink: #0F172A;
+  --muted: #475569;
+  --line: #E2E8F0;
+  --line-strong: #CBD5E1;
+
+  /* Brand Accent - Modern Deep Emerald / Teal */
+  --accent: #0F766E;
+  --accent-hover: #115E59;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #CCFBF1;
+  --accent-light: #F0FDFA;
+
+  /* Crisp White Navigation Bar */
+  --nav: #FFFFFF;
+  --nav-ink: #1E293B;
+  --nav-muted: #64748B;
+  --nav-hover: #F8FAFC;
+  --nav-active: #F0FDFA;
+  --nav-active-ink: #0F766E;
+
+  /* Severity & Status Badges (Clear & Accessible) */
+  --crit: #DC2626;
+  --crit-bg: #FEF2F2;
+  --crit-border: #FECACA;
+  --high: #D97706;
+  --high-bg: #FFFBEB;
+  --high-border: #FDE68A;
+  --med: #B45309;
+  --med-bg: #FEFCE8;
+  --med-border: #FEF08A;
+  --ok: #16A34A;
+  --ok-bg: #F0FDF4;
+  --ok-border: #BBF7D0;
+  --info: #2563EB;
+  --info-bg: #EFF6FF;
+  --info-border: #BFDBFE;
+
+  /* Highlight & Charts */
+  --hl: #FEF9C3;
+  --hl-border: #FEF08A;
+  --bar2: #CBD5E1;
+
+  /* Depth & Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+
+  /* Fonts */
+  --f-display: 'Source Serif 4', Georgia, serif;
+  --f-ui: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E131D; --surface:#161C29; --surface-2:#1B2232; --ink:#E7EAF0; --muted:#A2AAB8; --line:#2A3245;
-  --accent:#7FC4AE; --accent-ink:#0E131D; --accent-soft:#1D3530; --nav:#0A0E16; --nav-ink:#E7EAF0; --nav-muted:#8D97A8; --nav-active:#1B2232;
-  --crit:#FF8F86; --crit-bg:#3A1B1B; --high:#FFB56B; --high-bg:#3A2614; --med:#E9CF6B; --med-bg:#332C13; --ok:#7FD3A5; --ok-bg:#15301F; --info-bg:#172540; --info:#9CC0F5;
-  --hl:#3A3216; --bar2:#3D4A60; color-scheme:dark}}
+
+/* Optional Dark Theme (accessible via data-theme="dark" if toggled) */
 :root[data-theme="dark"]{
-  --bg:#0E131D; --surface:#161C29; --surface-2:#1B2232; --ink:#E7EAF0; --muted:#A2AAB8; --line:#2A3245;
-  --accent:#7FC4AE; --accent-ink:#0E131D; --accent-soft:#1D3530; --nav:#0A0E16; --nav-ink:#E7EAF0; --nav-muted:#8D97A8; --nav-active:#1B2232;
-  --crit:#FF8F86; --crit-bg:#3A1B1B; --high:#FFB56B; --high-bg:#3A2614; --med:#E9CF6B; --med-bg:#332C13; --ok:#7FD3A5; --ok-bg:#15301F; --info-bg:#172540; --info:#9CC0F5;
-  --hl:#3A3216; --bar2:#3D4A60; color-scheme:dark}
+  --bg: #0B0F17; --surface: #131A26; --surface-2: #1A2333; --surface-3: #26334A;
+  --ink: #F1F5F9; --muted: #94A3B8; --line: #26334A; --line-strong: #334462;
+  --accent: #2DD4BF; --accent-hover: #14B8A6; --accent-ink: #0B0F17; --accent-soft: #133E3B; --accent-light: #0D2B29;
+  --nav: #0E1522; --nav-ink: #F1F5F9; --nav-muted: #8493A8; --nav-hover: #152033; --nav-active: #133E3B; --nav-active-ink: #2DD4BF;
+  --crit: #F87171; --crit-bg: #351518; --crit-border: #5C1D24;
+  --high: #FBBF24; --high-bg: #36220B; --high-border: #5E390C;
+  --med: #FDE047; --med-bg: #332B0B; --med-border: #57480C;
+  --ok: #4ADE80; --ok-bg: #0F331F; --ok-border: #16562E;
+  --info: #60A5FA; --info-bg: #14284B; --info-border: #1E3D73;
+  --hl: #393213; --hl-border: #5E521C; --bar2: #334462;
+  color-scheme: dark;
+}
+
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{min-height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5}
-.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
-aside.nav{background:var(--nav);color:var(--nav-ink);padding:20px 12px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh;overflow:auto}
-.brand{padding:0 10px;display:flex;flex-direction:column;gap:2px}
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7FC4AE}
-.brand b{font-family:var(--f-display);font-size:20px;line-height:1.15;font-weight:600}
-.navlist{display:flex;flex-direction:column;gap:2px}
-.navlist a{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--nav-ink);text-decoration:none;padding:9px 10px;border-radius:8px;font-size:14px;font-weight:500}
-.navlist a:hover{background:var(--nav-active)}
-.navlist a.on{background:var(--nav-active);box-shadow:inset 3px 0 0 #7FC4AE}
-.navlist .cnt{font-size:11px;font-weight:700;background:#33405C;color:#E9ECF1;border-radius:999px;padding:1px 7px}
-.navlist .cnt.crit{background:#8E2A22}
-.navsec{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--nav-muted);padding:8px 10px 2px}
-.navfoot{margin-top:auto;font-size:12px;color:var(--nav-muted);padding:0 10px;display:flex;flex-direction:column;gap:6px}
-.mode{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#24504A;color:#CFEDE3}
-.mode.sbx{background:#5A4413;color:#FBE7B5}
-main{min-width:0;padding-block:24px 64px;padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
-.page{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+body{
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-ui);
+  font-size: 14.5px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+aside.nav{
+  background: var(--nav);
+  color: var(--nav-ink);
+  padding: 22px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  box-shadow: 1px 0 2px rgba(0,0,0,0.02);
+}
+.brand{
+  padding: 4px 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-bottom: 1px solid var(--line);
+}
+.eyebrow{
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.brand b{
+  font-family: var(--f-display);
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.navlist{display:flex;flex-direction:column;gap:3px}
+.navlist a{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--nav-ink);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.navlist a:hover{
+  background: var(--nav-hover);
+  color: var(--ink);
+}
+.navlist a.on{
+  background: var(--nav-active);
+  color: var(--nav-active-ink);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.navlist .cnt{
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 7px;
+  line-height: 1;
+}
+.navlist .cnt.crit{
+  background: var(--crit-bg);
+  color: var(--crit);
+  border-color: var(--crit-border);
+}
+.navsec{
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #94A3B8;
+  padding: 14px 12px 4px;
+}
+.navfoot{
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--nav-muted);
+  padding: 14px 8px 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mode{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+  width: fit-content;
+}
+.mode.sbx{
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+main{
+  min-width: 0;
+  padding-block: 28px 64px;
+  padding-left: max(28px, env(safe-area-inset-left, 0px));
+  padding-right: max(28px, env(safe-area-inset-right, 0px));
+}
+.page{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 .ph{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between}
-.ph h1{font-family:var(--f-display);font-weight:600;font-size:clamp(24px,3vw,32px);line-height:1.15;margin:0;text-wrap:balance}
-.ph p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:70ch}
-.crumb{font-size:13px;color:var(--muted)}
-.crumb a{color:var(--accent);text-decoration:none}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.card h2{font-size:16px;font-weight:600;margin:0}
-.card h3{font-size:14px;font-weight:600;margin:0}
-.sub,.note{font-size:13px;color:var(--muted);margin:0}
-.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
-.g32{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;align-items:start}
-.g23{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
-.kpi b{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
-.kpi span{font-size:12px;color:var(--muted)}
-.kpi.crit b{color:var(--crit)} .kpi.warn b{color:var(--high)}
-label{font-size:13px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:5px;min-width:0}
-input,select,textarea{font:14px var(--f-ui);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.ph h1{
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(23px, 2.8vw, 30px);
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+.ph p{margin:5px 0 0;color:var(--muted);font-size:14px;max-width:70ch;line-height:1.45}
+.crumb{font-size:13px;color:var(--muted);margin-bottom:2px}
+.crumb a{color:var(--accent);text-decoration:none;font-weight:500}
+.crumb a:hover{text-decoration:underline}
+.card{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.card h2{font-size:16px;font-weight:600;color:var(--ink);margin:0;letter-spacing:-0.01em}
+.card h3{font-size:14px;font-weight:600;color:var(--ink);margin:0}
+.sub,.note{font-size:13px;color:var(--muted);margin:0;line-height:1.45}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.g32{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:18px;align-items:start}
+.g23{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:18px;align-items:start}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.kpi{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.kpi:hover{box-shadow:var(--shadow)}
+.kpi b{
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.kpi span{
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.kpi.crit b{color:var(--crit)}
+.kpi.warn b{color:var(--high)}
+label{
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+input,select,textarea{
+  font: 14px var(--f-ui);
+  color: var(--ink);
+  background: #FFFFFF;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 9px 12px;
+  width: 100%;
+  min-width: 0;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input:focus,select:focus,textarea:focus{
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
 textarea{line-height:1.5;resize:vertical}
 textarea.mono{font-family:var(--f-mono);font-size:13px}
-input[type=checkbox]{width:auto}
-.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
-.filters label{flex:1 1 150px}
+input[type=checkbox]{width:auto;cursor:pointer;accent-color:var(--accent)}
+.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.filters label{flex:1 1 160px}
 .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.btn{appearance:none;font:600 13px var(--f-ui);border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.danger{background:var(--crit-bg);border-color:var(--crit);color:var(--crit)}
-.btn.sm{padding:4px 9px;font-size:12px}
+.btn{
+  appearance: none;
+  font: 600 13px var(--f-ui);
+  border-radius: 8px;
+  padding: 8px 15px;
+  cursor: pointer;
+  border: 1px solid var(--line-strong);
+  background: #FFFFFF;
+  color: #1E293B;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+.btn:hover{
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  color: var(--ink);
+}
+.btn.primary{
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 1px 3px rgba(15,118,110,0.25);
+}
+.btn.primary:hover{
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 2px 6px rgba(15,118,110,0.35);
+}
+.btn.danger{
+  background: var(--crit-bg);
+  border-color: var(--crit-border);
+  color: var(--crit);
+}
+.btn.danger:hover{
+  background: #FEE2E2;
+  border-color: var(--crit);
+}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:6px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-a{color:var(--accent)}
-.link{color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:0;font:inherit;padding:0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.link{
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: none;
+  border: 0;
+  font: inherit;
+  padding: 0;
+}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
-.p-critical{background:var(--crit-bg);color:var(--crit)} .p-high{background:var(--high-bg);color:var(--high)} .p-medium{background:var(--med-bg);color:var(--med)} .p-clean{background:var(--ok-bg);color:var(--ok)}
-.st{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
-.st-open{background:var(--info-bg);color:var(--info);border-color:transparent}
-.st-closed{background:var(--surface-2);color:var(--muted)}
-.st-confirmed{background:var(--crit-bg);color:var(--crit);border-color:transparent}
-.src{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
-.src.ai{border-color:var(--accent);color:var(--accent)}
-.src.man{border-color:var(--high);color:var(--high)}
+.pill{
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2.5px 9px;
+  border-radius: 999px;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+.p-critical{background:var(--crit-bg);color:#B91C1C;border:1px solid var(--crit-border)}
+.p-high{background:var(--high-bg);color:#B45309;border:1px solid var(--high-border)}
+.p-medium{background:var(--med-bg);color:#A16207;border:1px solid var(--med-border)}
+.p-clean{background:var(--ok-bg);color:#15803D;border:1px solid var(--ok-border)}
+.st{background:#F1F5F9;color:var(--ink);border:1px solid var(--line)}
+.st-open{background:var(--info-bg);color:#1D4ED8;border:1px solid var(--info-border)}
+.st-closed{background:#F1F5F9;color:#64748B;border:1px solid var(--line)}
+.st-confirmed{background:var(--crit-bg);color:#B91C1C;border:1px solid var(--crit-border)}
+.src{
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+  background: #F8FAFC;
+  white-space: nowrap;
+}
+.src.ai{border-color:#99F6E4;color:#0F766E;background:#F0FDFA}
+.src.man{border-color:#FDE68A;color:#B45309;background:#FFFBEB}
 .mono{font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
-.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.tw{
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
-th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
-td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  background: #F8FAFC;
+}
+td{
+  padding: 11px 14px;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+  color: var(--ink);
+}
 tr:last-child td{border-bottom:0}
-tr.rowlink{cursor:pointer}
-tr.rowlink:hover td{background:var(--surface-2)}
-td a.mono,td.mono{white-space:nowrap}
+tr.rowlink{cursor:pointer;transition:background 0.12s ease}
+tr.rowlink:hover td{background:#F8FAFC}
+td a.mono,td.mono{white-space:nowrap;font-weight:500}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-.flag{border:1px solid var(--line);border-left:5px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
-.flag.s-critical{border-left-color:var(--crit)} .flag.s-high{border-left-color:var(--high)} .flag.s-medium{border-left-color:var(--med)}
-.flag.fp{opacity:.62}
-.fh{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
-.fh strong{font-size:14px;margin-right:auto}
-blockquote{margin:0;padding:7px 11px;background:var(--surface-2);border-radius:8px;font-size:13.5px;font-style:italic}
-dl.ev{display:grid;grid-template-columns:118px minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+.flag{
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.flag.s-critical{border-left-color:var(--crit)}
+.flag.s-high{border-left-color:var(--high)}
+.flag.s-medium{border-left-color:var(--med)}
+.flag.fp{opacity:.6;background:#FAFAFA}
+.fh{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.fh strong{font-size:14.5px;color:var(--ink);margin-right:auto}
+blockquote{
+  margin: 0;
+  padding: 8px 14px;
+  background: #F8FAFC;
+  border-left: 3px solid var(--line-strong);
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-style: italic;
+  color: #1E293B;
+  line-height: 1.5;
+}
+dl.ev{display:grid;grid-template-columns:120px minmax(0,1fr);gap:6px 14px;margin:0;font-size:13px}
 dl.ev dt{color:var(--muted);font-weight:600}
-dl.ev dd{margin:0;min-width:0}
-.tx{display:flex;flex-direction:column;gap:1px;max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px}
-.txl{display:grid;grid-template-columns:50px 84px minmax(0,1fr);gap:8px;padding:5px 8px;border-radius:6px;font-size:13px}
-.txl.hit{background:var(--hl)}
+dl.ev dd{margin:0;min-width:0;color:var(--ink)}
+.tx{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 440px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  background: #FFFFFF;
+}
+.txl{
+  display: grid;
+  grid-template-columns: 52px 90px minmax(0,1fr);
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: background 0.1s ease;
+}
+.txl:hover{background:#F8FAFC}
+.txl.hit{background:#FEF9C3;border:1px solid #FEF08A}
 .txl .who{font-weight:600;color:var(--muted);font-size:11px;letter-spacing:.04em;padding-top:2px}
-.banner{border-radius:10px;padding:10px 14px;font-size:13.5px}
-.banner.crit{background:var(--crit-bg);color:var(--crit);font-weight:600}
-.banner.ok{background:var(--ok-bg);color:var(--ok)}
-.banner.info{background:var(--info-bg);color:var(--info)}
-.banner.warn{background:var(--med-bg);color:var(--med)}
-.empty{color:var(--muted);font-size:14px;padding:28px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+.banner{
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+.banner.crit{background:var(--crit-bg);color:#991B1B;border-color:var(--crit-border);font-weight:500}
+.banner.ok{background:var(--ok-bg);color:#166534;border-color:var(--ok-border)}
+.banner.info{background:var(--info-bg);color:#1E40AF;border-color:var(--info-border)}
+.banner.warn{background:var(--high-bg);color:#92400E;border-color:var(--high-border)}
+.empty{
+  color: var(--muted);
+  font-size: 14px;
+  padding: 32px 20px;
+  text-align: center;
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+  background: #FFFFFF;
+}
 .hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13px}
-.hist li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px}
+.hist li{display:grid;grid-template-columns:130px minmax(0,1fr);gap:10px}
 .hist .t{color:var(--muted);font-family:var(--f-mono);font-size:12px}
 .bars{display:flex;flex-direction:column;gap:8px}
 .bar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px}
-.bar .track{height:12px;background:var(--surface-2);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar .track{height:12px;background:#F1F5F9;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
 .bar .fill{height:100%;background:var(--accent)}
 .bar .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap;margin-top:8px}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;font-size:13.5px}
-.kv span:nth-child(odd){color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;font-size:13.5px}
+.kv span:nth-child(odd){color:var(--muted);font-weight:500}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
-.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
-.toast{position:fixed;right:max(16px, env(safe-area-inset-right, 0px));bottom:calc(16px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:min(420px, calc(100vw - 32px));box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:50}
-.overlay{position:fixed;inset:0;background:rgba(10,14,22,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:40}
-.modal{background:var(--surface);border-radius:14px;padding:20px;max-width:640px;width:100%;max-height:85vh;overflow:auto;display:flex;flex-direction:column;gap:12px;border:1px solid var(--line)}
+.chip{
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip:hover{border-color:#94A3B8;color:var(--ink)}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.toast{
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: #0F172A;
+  color: #F8FAFC;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  max-width: min(420px, calc(100vw - 32px));
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  border: 1px solid #334155;
+}
+.overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 40;
+}
+.modal{
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+}
+details summary{
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 4px 0;
+  user-select: none;
+}
+details summary:hover{color:var(--accent)}
 .spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .9s linear infinite;vertical-align:-2px}
 @keyframes sp{to{transform:rotate(360deg)}}
-.intake{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.intake-head{background:var(--nav);color:var(--nav-ink);border-radius:14px;padding:22px 24px}
-.intake-head h1{font-family:var(--f-display);font-size:28px;margin:4px 0 6px;font-weight:600}
-.intake-head p{margin:0;color:#C9D3D0;font-size:14px}
+.intake{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.intake-head{
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px 30px;
+  box-shadow: var(--shadow);
+}
+.intake-head h1{font-family:var(--f-display);font-size:28px;margin:6px 0 8px;font-weight:600;color:var(--ink)}
+.intake-head p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5}
 .ok-big{font-size:28px;font-family:var(--f-mono);font-weight:500}
 svg text{font-family:var(--f-ui)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#94A3B8}
 @media (prefers-reduced-motion: reduce){.spin{animation:none}}
-@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:900px){
-  .app{grid-template-columns:minmax(0,1fr)}
-  aside.nav{position:sticky;top:env(safe-area-inset-top, 0px);height:auto;flex-direction:row;align-items:center;padding:10px 12px;gap:10px;overflow-x:auto;z-index:20;padding-left:max(12px, env(safe-area-inset-left, 0px));padding-right:max(12px, env(safe-area-inset-right, 0px))}
-  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:21;background:var(--nav)}
-  .brand,.navsec,.navfoot{display:none}
-  .navlist{flex-direction:row}
-  .navlist a{white-space:nowrap;padding:7px 10px}
-  .g2,.g32,.g23{grid-template-columns:minmax(0,1fr)}
-  main{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+/* ===== Responsive & Mobile First Stylesheet ===== */
+
+/* Desktop Navigation (min-width: 901px) */
+@media (min-width: 901px) {
+  .app{
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    min-height: 100vh;
+    transition: grid-template-columns 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.nav-collapsed .app{
+    grid-template-columns: 68px minmax(0, 1fr);
+  }
+
+  aside.nav{
+    background: var(--nav);
+    color: var(--nav-ink);
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid var(--line);
+    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.02);
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1), padding 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 240px;
+    box-sizing: border-box;
+  }
+
+  body.nav-collapsed aside.nav{
+    width: 68px;
+    padding: 18px 8px;
+  }
+
+  .brand{
+    padding: 2px 4px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 36px;
+  }
+  .brand-info{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .nav-theme-toggle-mobile{
+    display: none !important;
+  }
+  .nav-toggle-btn{
+    appearance: none;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+  .nav-toggle-btn:hover{
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  body.nav-collapsed .brand{
+    padding: 0 0 12px;
+    align-items: center;
+  }
+  body.nav-collapsed .brand-top{
+    justify-content: center;
+    width: 100%;
+  }
+  body.nav-collapsed .brand-info{
+    display: none;
+  }
+  body.nav-collapsed .nav-toggle-btn{
+    margin: 0 auto;
+  }
+
+  .navlist{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .navlist a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--nav-ink);
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    position: relative;
+    min-height: 36px;
+    box-sizing: border-box;
+  }
+  .navlist a:hover{
+    background: var(--nav-hover);
+    color: var(--ink);
+  }
+  .navlist a.on{
+    background: var(--nav-active);
+    color: var(--nav-active-ink);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .nav-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    transition: color 0.15s ease;
+  }
+  .navlist a:hover .nav-icon,
+  .navlist a.on .nav-icon{
+    color: var(--accent);
+  }
+  .nav-label{
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .navlist .cnt{
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--surface-2);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 2px 7px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .navlist .cnt.crit{
+    background: var(--crit-bg);
+    color: var(--crit);
+    border-color: var(--crit-border);
+  }
+
+  body.nav-collapsed .navlist a{
+    padding: 8px 0;
+    justify-content: center;
+    width: 100%;
+  }
+  body.nav-collapsed .nav-label{
+    display: none;
+  }
+  body.nav-collapsed .nav-icon{
+    margin: 0;
+  }
+  body.nav-collapsed .navlist .cnt{
+    position: absolute;
+    top: 3px;
+    right: 6px;
+    font-size: 9px;
+    padding: 1px 4.5px;
+    min-width: 15px;
+    text-align: center;
+    border-radius: 999px;
+    box-shadow: 0 0 0 1.5px var(--nav);
+  }
+  body.nav-collapsed .navsec{
+    height: 1px;
+    padding: 0;
+    margin: 8px 6px;
+    background: var(--line);
+    overflow: hidden;
+    text-indent: -9999px;
+  }
+  body.nav-collapsed .navfoot{
+    padding: 12px 0 0;
+    align-items: center;
+  }
+  body.nav-collapsed .navfoot .foot-desc,
+  body.nav-collapsed .navfoot .foot-ai{
+    display: none;
+  }
+  body.nav-collapsed .navfoot .mode{
+    font-size: 0;
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  body.nav-collapsed .nav-theme-toggle{
+    font-size: 0 !important;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 6px auto 0 !important;
+  }
+  body.nav-collapsed .nav-theme-toggle::after{
+    content: "🌙";
+    font-size: 14px;
+    line-height: 1;
+  }
+  :root[data-theme="dark"] body.nav-collapsed .nav-theme-toggle::after{
+    content: "☀️";
+  }
 }
-@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}dl.ev{grid-template-columns:minmax(0,1fr)}.txl{grid-template-columns:44px minmax(0,1fr)}.txl .who{display:none}.hist li{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:minmax(0,110px) minmax(0,1fr) 36px}}
+
+/* Tablet & Mobile Screens (max-width: 900px) */
+@media (max-width: 900px) {
+  .app{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+  }
+  body.nav-collapsed .app{
+    grid-template-columns: none;
+  }
+  aside.nav{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    background: var(--nav);
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
+  }
+
+  /* Mobile Brand Header Bar */
+  .brand{
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--nav);
+  }
+  .brand-top{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 32px;
+  }
+  .brand-info{
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-info .eyebrow{
+    background: var(--surface-2);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .brand-info b{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .nav-theme-toggle-mobile{
+    display: flex !important;
+    appearance: none;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    transition: all 0.15s ease;
+  }
+  .nav-theme-toggle-mobile:hover{
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .nav-toggle-btn{
+    display: none !important;
+  }
+
+  /* Mobile Horizontal Scrollable Pill Navigation */
+  .navlist{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    background: var(--nav);
+  }
+  .navlist::-webkit-scrollbar{
+    display: none;
+  }
+  .navlist a{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 32px;
+    box-sizing: border-box;
+    box-shadow: none;
+    transition: all 0.15s ease;
+  }
+  .navlist a:hover{
+    background: var(--nav-hover);
+    color: var(--ink);
+  }
+  .navlist a.on{
+    background: var(--accent) !important;
+    color: #FFFFFF !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 1px 3px rgba(15, 118, 110, 0.3) !important;
+  }
+  .navlist a.on .nav-icon,
+  .navlist a.on .nav-label{
+    color: #FFFFFF !important;
+  }
+  .navlist a.on .cnt{
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+  .nav-label{
+    display: inline-block !important;
+  }
+  .nav-icon{
+    width: 16px;
+    height: 16px;
+    color: inherit;
+  }
+  .navlist .cnt{
+    position: static !important;
+    font-size: 10px;
+    padding: 1.5px 5.5px;
+    box-shadow: none !important;
+    margin-left: 2px;
+  }
+  .navsec{
+    width: 1px;
+    height: 18px;
+    background: var(--line);
+    margin: 0 2px;
+    flex-shrink: 0;
+    padding: 0;
+    overflow: hidden;
+    text-indent: -9999px;
+  }
+  .navfoot{
+    display: none !important;
+  }
+
+  /* Content area on Tablet & Mobile */
+  main{
+    padding: 16px 14px 48px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .page{
+    gap: 16px;
+  }
+  .card{
+    padding: 16px 14px;
+    border-radius: 12px;
+    gap: 12px;
+  }
+  .ph{
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ph h1{
+    font-size: 22px;
+  }
+  .ph .actions{
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .ph .actions .btn{
+    flex: 1 1 auto;
+  }
+
+  /* Responsive Grids on Tablet & Mobile */
+  .g2, .g32, .g23, .g-queue-vendors{
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 16px;
+  }
+
+  /* Responsive KPIs */
+  .kpis{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .kpi{
+    padding: 12px 10px;
+  }
+  .kpi b{
+    font-size: 20px;
+  }
+  .kpi span{
+    font-size: 11px;
+  }
+
+  /* Responsive Filters */
+  .filters{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .filters label{
+    flex: 1 1 100%;
+    width: 100%;
+  }
+  .filters input, .filters select{
+    width: 100%;
+    height: 38px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+}
+
+/* Small Screens & Mobile Phones (max-width: 560px) */
+@media (max-width: 560px) {
+  .kpis{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bar{
+    grid-template-columns: minmax(0, 95px) minmax(0, 1fr) 28px;
+  }
+  /* Touch-friendly transcripts */
+  .txl{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 10px;
+  }
+  .txl .who{
+    display: inline-block !important;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--accent);
+  }
+  .txl .mono{
+    font-size: 11px;
+    color: var(--muted);
+  }
+  /* Key Value specs */
+  .kv{
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 12px;
+    font-size: 13px;
+  }
+  /* Touch buttons */
+  .btn{
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+  .btn.sm{
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  /* Modals on small screens */
+  .modalRoot{
+    padding: 12px;
+  }
+  .modal{
+    padding: 18px 14px;
+    border-radius: 12px;
+    max-height: 90vh;
+  }
+}
+
+/* Table Wrappers: smooth touch momentum scrolling */
+.tw{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+/* Vendor Ranking Table in Overview */
+.vendor-rank-tbl{
+  width: 100%;
+  border-collapse: collapse;
+}
+.vendor-rank-tbl th{
+  padding: 10px 14px;
+}
+.vendor-rank-tbl td{
+  padding: 12px 14px;
+  vertical-align: middle;
+}
+.rate-bar-cell{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rate-val{
+  font-size: 13px;
+  font-weight: 600;
+  width: 52px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.rate-track{
+  flex: 1;
+  max-width: 220px;
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.rate-fill{
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.fill-crit{ background: #EF4444; }
+.fill-warn{ background: #F59E0B; }
+.fill-ok{ background: #0F766E; }
+.text-crit{ color: #DC2626 !important; }
+.text-warn{ color: #D97706 !important; }
+.text-ok{ color: #0F766E !important; }
+
+/* "See details →" Button Style across all tables */
+.btn-detail{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.btn-detail:hover{
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(15, 118, 110, 0.1);
+}
+tr.rowlink:hover .btn-detail{
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+/* Priority Queue & Cases Table Enhancements */
+.case-tbl{
+  width: 100%;
+  border-collapse: collapse;
+}
+.case-tbl th{
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+.case-tbl td{
+  padding: 10px 14px;
+  vertical-align: middle;
+}
+.case-tbl .col-case{ width: 92px; white-space: nowrap; }
+.case-tbl .col-case a.mono{ font-weight: 600; color: var(--accent); }
+.case-tbl .col-case a.mono:hover{ text-decoration: underline; color: var(--accent-hover); }
+.case-tbl .col-prio{ width: 90px; text-align: center; }
+.case-tbl .col-prio .pill{ justify-content: center; width: 78px; }
+.case-tbl .col-src{ width: 95px; }
+.case-tbl .col-concern{ min-width: 200px; }
+.case-tbl .col-team{ width: 130px; }
+.case-tbl .col-assignee{ width: 110px; }
+.case-tbl .col-status{ width: 110px; text-align: center; }
+.case-tbl .col-status .pill{ justify-content: center; width: auto; min-width: 72px; }
+.case-tbl .col-due{ width: 155px; text-align: right; white-space: nowrap; }
+
+.concern-cell{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.concern-main{
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+  font-size: 13.5px;
+}
+.concern-sub{
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.25;
+}
+.due-cell{
+  display: inline-flex;
+  white-space: nowrap;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.due-badge{
+  font-size: 10.5px;
+  padding: 1.5px 7px;
+  line-height: 1.2;
+}
+.due-date{
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.due-date.text-crit{
+  color: #B91C1C;
+  font-weight: 500;
+}
+.badge-sub{
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
 </style>
 
 <div class="app" id="app">
@@ -520,7 +1647,7 @@ const RB = () => ST.rulebook;
 const calls = () => Object.values(ST.calls);
 const cases = () => Object.values(ST.cases);
 const complaints = () => Object.values(ST.complaints);
-function whoLabel(id){ if(id==="system") return "System"; if(id==="sample") return "Sample reviewer"; if(id==="local") return "You (sandbox)"; if(!id) return "—"; if(id===ST.me.id) return "You"; return NAMES[id] || "Team member"; }
+function whoLabel(id){ if(id==="system") return "System"; if(id==="sample") return "Sample reviewer"; if(id==="local") return "You"; if(!id) return "—"; if(id===ST.me.id) return "You"; return NAMES[id] || "Team member"; }
 
 /* ================= persistence ================= */
 const KEYMAP = {calls:"calls", cases:"cases", complaints:"complaints"};
@@ -550,7 +1677,7 @@ async function writeFailed(e, retry){
   const code = e && e.code;
   if(code==="unavailable"){ await new Promise(r=>setTimeout(r, 400+Math.random()*600)); try{ await retry(); return; }catch(e2){} toast("The shared store did not respond. Your change is shown here but may not be saved; try again."); return; }
   if(code==="quota_exceeded"){ toast("The shared store is full. Export a backup and clear old data in Settings."); return; }
-  if(code==="invalid_argument" || code==="revoked" || code==="not_granted"){ switchToSandbox("You have view-only access to the shared workspace, so your changes are kept in this browser."); return; }
+  if(code==="invalid_argument" || code==="revoked" || code==="not_granted"){ switchToSandbox(""); return; }
   toast("Could not save: "+(e && e.message || "unknown error"));
 }
 function switchToSandbox(msg){
@@ -561,6 +1688,16 @@ function switchToSandbox(msg){
 
 /* ================= init ================= */
 let unsubs = [];
+function applySavedTheme(){ try{ const t = localStorage.getItem("compliance_theme") || "light"; if(t==="dark") document.documentElement.setAttribute("data-theme", "dark"); else document.documentElement.removeAttribute("data-theme"); }catch(e){} }
+applySavedTheme();
+function applySavedNav(){
+  try{
+    if(localStorage.getItem("rcc_nav_collapsed") === "1"){
+      document.body.classList.add("nav-collapsed");
+    }
+  }catch(e){}
+}
+applySavedNav();
 async function init(){
   const C = window.claude;
   if(C && typeof C.use==="function"){
@@ -612,7 +1749,7 @@ function startShared(){
     if(!ST.settings) ST.settings = defaultSettings();
     schedule();
   };
-  const onErr = e => { if(e && (e.code==="revoked"||e.code==="not_granted")) switchToSandbox("Access to the shared workspace changed. Continuing in this browser."); };
+  const onErr = e => { if(e && (e.code==="revoked"||e.code==="not_granted")) switchToSandbox(""); };
   for(const coll of ["calls","cases","complaints"]){
     unsubs.push(db.collection(coll).onSnapshot(s=>{ const o = {}; s.docs.forEach(d=>{ o[d.id] = d.data(); }); ST[coll] = o; got[coll] = true; check(); schedule(); }, onErr));
   }
@@ -791,32 +1928,78 @@ function resolveNames(){
   need.forEach(id=>asked.add(id));
   user.profiles(need).then(ps=>{ for(const id of need){ const p = ps && ps[id]; NAMES[id] = (p && p.name) || "Team member"; } schedule(); }).catch(()=>{});
 }
+
+const ICONS = {
+  overview: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`,
+  calls: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`,
+  cases: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`,
+  complaints: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`,
+  vendors: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+  rulebook: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`,
+  reports: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>`,
+  audit: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+  settings: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
+  intake: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
+  collapse: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><path d="m14 9-3 3 3 3"></path></svg>`,
+  expand: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><path d="m11 9 3 3-3 3"></path></svg>`
+};
+
 function renderNav(r){
   const open = cases().filter(k=>k.status!=="Closed");
   const crit = open.filter(k=>k.priority==="Critical").length;
   const base = r.split("-")[0];
   const on = n => (base===n || (n==="calls" && (base==="call"||r==="add")) || (n==="cases" && base==="case") || (n==="complaints" && r==="log")) ? "on" : "";
-  const item = (h, label, extra) => `<a href="#${h}" class="${on(h)}">${label}${extra||""}</a>`;
+  const isCol = document.body.classList.contains("nav-collapsed");
+  const item = (h, label, iconKey, extra, rawCnt) => {
+    const isAct = on(h);
+    const tooltip = label + (rawCnt ? " ("+rawCnt+")" : "");
+    return `<a href="#${h}" class="${isAct}" title="${esc(tooltip)}" data-label="${esc(label)}">
+      <span class="nav-icon">${ICONS[iconKey]||""}</span>
+      <span class="nav-label">${label}</span>
+      ${extra||""}
+    </a>`;
+  };
   $("nav").innerHTML = `
-    <div class="brand"><span class="eyebrow">Talkar</span><b>Recovery Compliance Console</b></div>
+    <div class="brand">
+      <div class="brand-top">
+        <div class="brand-info">
+          <span class="eyebrow">Talkar</span>
+          <b>Recovery Console</b>
+        </div>
+        <div class="brand-actions" style="display:flex;align-items:center;gap:6px">
+          <button class="nav-theme-toggle-mobile" data-act="toggle-theme" title="Toggle light/dark theme" aria-label="Toggle theme">
+            ${document.documentElement.getAttribute("data-theme")==="dark" ? "☀️" : "🌙"}
+          </button>
+          <button class="nav-toggle-btn" data-act="toggle-nav" title="${isCol ? "Expand sidebar (Ctrl+B)" : "Collapse sidebar (Ctrl+B)"}" aria-label="Toggle navigation sidebar">
+            ${isCol ? ICONS.expand : ICONS.collapse}
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="navlist">
-      ${item("overview","Overview")}
-      ${item("calls","Calls",`<span class="cnt">${calls().length}</span>`)}
-      ${item("cases","Cases",`<span class="cnt ${crit?"crit":""}">${open.length}</span>`)}
-      ${item("complaints","Complaints",`<span class="cnt">${complaints().length}</span>`)}
+      ${item("overview", "Overview", "overview")}
+      ${item("calls", "Calls", "calls", `<span class="cnt">${calls().length}</span>`, calls().length)}
+      ${item("cases", "Cases", "cases", `<span class="cnt ${crit?"crit":""}">${open.length}</span>`, open.length)}
+      ${item("complaints", "Complaints", "complaints", `<span class="cnt">${complaints().length}</span>`, complaints().length)}
       <div class="navsec">Oversight</div>
-      ${item("vendors","Vendors &amp; agents")}
-      ${item("rulebook","Rulebook",`<span class="cnt">v${RB().version}</span>`)}
-      ${item("reports","Reports")}
-      ${item("audit","Audit trail")}
-      ${item("settings","Settings")}
+      ${item("vendors", "Vendors &amp; agents", "vendors")}
+      ${item("rulebook", "Rulebook", "rulebook", `<span class="cnt">v${RB().version}</span>`, "v"+RB().version)}
+      ${item("reports", "Reports", "reports")}
+      ${item("audit", "Audit trail", "audit")}
+      ${item("settings", "Settings", "settings")}
       <div class="navsec">Customer</div>
-      <a href="#intake">Complaint form ↗</a>
+      <a href="#intake" title="Customer complaint form" data-label="Complaint form">
+        <span class="nav-icon">${ICONS.intake}</span>
+        <span class="nav-label">Complaint form ↗</span>
+      </a>
     </div>
     <div class="navfoot">
-      <span class="mode ${ST.mode==="sandbox"?"sbx":""}">${ST.mode==="shared"?"Shared workspace · live":"Sandbox · this browser"}</span>
-      <span>${esc(ST.mode==="shared" ? (ST.me.name ? "Signed in as "+ST.me.name : "Signed in") : "Changes stay in this browser")}</span>
-      <span>AI review: ${sample && ST.settings.aiEnabled!==false ? "available" : "off in this view"}</span>
+      <span class="mode">${ST.mode==="shared"?"Shared workspace · Live":"Workspace · Active"}</span>
+      <span class="foot-desc">${esc(ST.mode==="shared" ? (ST.me.name ? "Signed in as "+ST.me.name : "Signed in") : (ST.me.name ? "Signed in as "+ST.me.name : "Local workspace"))}</span>
+      <span class="foot-ai">AI review: ${sample && ST.settings.aiEnabled!==false ? "available" : "off in this view"}</span>
+      <button class="btn sm nav-theme-toggle" data-act="toggle-theme" title="Toggle light/dark theme" style="margin-top:6px;width:100%;justify-content:center;font-size:12px;color:var(--muted);background:transparent;border-color:var(--line)">
+        ${document.documentElement.getAttribute("data-theme")==="dark" ? "☀️ Light mode" : "🌙 Dark mode"}
+      </button>
     </div>`;
 }
 function page(r){
@@ -839,7 +2022,7 @@ function page(r){
 }
 const head = (title, sub, right, crumb) => `<div class="ph"><div>${crumb?`<div class="crumb">${crumb}</div>`:""}<h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div>${right?`<div class="actions">${right}</div>`:""}</div>`;
 const rangeChips = (key, val, opts) => `<div class="chips">${(opts||[7,14,30,"all"]).map(o=>`<button class="chip ${String(val)===String(o)?"on":""}" data-act="set" data-k="${key}" data-v="${o}">${o==="all"?"All time":"Last "+o+" days"}</button>`).join("")}</div>`;
-const sbxNote = () => ST.mode==="sandbox" ? `<div class="banner warn">Sandbox mode: you can use every feature, and your changes are saved in this browser only. ${ST.me.canWrite===false?"Ask the owner for Contributor access to work in the shared workspace.":""}</div>` : "";
+const sbxNote = () => "";
 
 /* ================= pages ================= */
 function pSetup(){
@@ -871,11 +2054,46 @@ function pOverview(){
     <div class="card"><h2>Calls reviewed and flagged per day</h2>${dailyChart(days)}</div>
     <div class="card"><h2>Concerns by category</h2>${cats.length?`<div class="bars">${cats.map(([c,n])=>`<div class="bar"><span>${esc(c)}</span><div class="track"><div class="fill" style="width:${Math.max(4,n/maxCat*100)}%"></div></div><span class="v">${n}</span></div>`).join("")}</div>`:`<div class="empty">No concerns in this period.</div>`}</div>
   </div>
-  <div class="g32">
-    <div class="card"><div class="ph" style="align-items:center"><h2>Priority queue</h2><a class="btn sm" href="#cases">All cases →</a></div>${caseTable(queue, true)}</div>
-    <div class="card"><div class="ph" style="align-items:center"><h2>Vendors by flag rate</h2><a class="btn sm" href="#vendors">Scorecards →</a></div>
-      ${vs.length?`<div class="tw"><table><thead><tr><th>Vendor</th><th class="num">Calls</th><th class="num">Flag rate</th><th class="num">Confirmed</th></tr></thead><tbody>${vs.map(v=>`<tr><td>${esc(v.v)}</td><td class="num">${v.calls}</td><td class="num">${pct(v.flagged,v.calls)}%</td><td class="num">${v.confirmed}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No calls in this period.</div>`}
+    <div class="card">
+    <div class="ph" style="align-items:center">
+      <h2>Vendors by flag rate</h2>
+      <a class="btn sm" href="#vendors">Scorecards →</a>
     </div>
+    ${vs.length ? `<div class="tw"><table class="tbl vendor-rank-tbl">
+      <thead>
+        <tr>
+          <th style="width:200px">Vendor</th>
+          <th class="num" style="width:110px">Calls</th>
+          <th>Flag rate</th>
+          <th class="num" style="width:130px">Confirmed</th>
+          <th style="width:125px;text-align:right">Details</th>
+        </tr>
+      </thead>
+      <tbody>${vs.map(v=>`
+        <tr class="rowlink" data-href="vendors" tabindex="0">
+          <td><b>${esc(v.v)}</b></td>
+          <td class="num mono">${v.calls}</td>
+          <td>
+            <div class="rate-bar-cell">
+              <span class="rate-val mono ${pct(v.flagged,v.calls)>=40?'text-crit':pct(v.flagged,v.calls)>=20?'text-warn':'text-ok'}">${pct(v.flagged,v.calls)}%</span>
+              <div class="rate-track">
+                <div class="rate-fill ${pct(v.flagged,v.calls)>=40?'fill-crit':pct(v.flagged,v.calls)>=20?'fill-warn':'fill-ok'}" style="width:${Math.max(4, Math.min(100, pct(v.flagged,v.calls)))}%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="num mono">${v.confirmed}</td>
+          <td style="text-align:right"><a class="btn-detail" href="#vendors" onclick="F.vendors.sel='${esc(v.v)}'">See details →</a></td>
+        </tr>`).join("")}
+      </tbody>
+    </table></div>` : `<div class="empty">No calls in this period.</div>`}
+  </div>
+
+  <div class="card">
+    <div class="ph" style="align-items:center">
+      <h2>Priority queue</h2>
+      <a class="btn sm" href="#cases">All cases →</a>
+    </div>
+    ${caseTable(queue, true)}
   </div>`;
 }
 function dailyChart(days){
@@ -900,10 +2118,26 @@ function dailyChart(days){
   s += `</svg>`;
   return s + `<div class="legend"><span><i class="sw" style="background:var(--bar2)"></i>Reviewed</span><span><i class="sw" style="background:var(--accent)"></i>Flagged</span></div>`;
 }
+function formatConcern(title, vendor, agent){
+  if(!title) return "—";
+  const parts = String(title).split(" · ");
+  const main = parts[0] || title;
+  const sub = parts.length > 1 ? parts.slice(1).join(" · ") : (vendor ? (vendor + (agent ? " · " + agent : "")) : "");
+  return `<div class="concern-cell"><span class="concern-main">${esc(main)}</span>${sub ? `<span class="concern-sub">${esc(sub)}</span>` : ""}</div>`;
+}
+function formatDue(k){
+  if(k.status === "Closed") {
+    return `<div class="due-cell"><span class="badge-sub">Closed</span><span class="due-date mono">${esc(fmtDT(k.closedAt))}</span></div>`;
+  }
+  if(isOverdue(k)){
+    return `<div class="due-cell"><span class="pill p-critical due-badge">Overdue</span><span class="due-date mono text-crit">${esc(fmtDT(k.dueAt))}</span></div>`;
+  }
+  return `<div class="due-cell"><span class="due-date mono">${esc(fmtDT(k.dueAt))}</span></div>`;
+}
 function caseTable(list, compact){
   if(!list.length) return `<div class="empty">No cases match.</div>`;
-  return `<div class="tw"><table><thead><tr><th>Case</th><th>Priority</th>${compact?"":"<th>Source</th>"}<th>Concern</th>${compact?"":"<th>Team</th><th>Assignee</th>"}<th>Status</th><th>Due</th></tr></thead><tbody>${
-    list.map(k=>`<tr class="rowlink" data-href="case-${esc(k.id)}" tabindex="0"><td><a class="mono" href="#case-${esc(k.id)}">${esc(k.id)}</a>${k.restricted?` <span class="src man">Restricted</span>`:""}</td><td>${pillP(k.priority)}</td>${compact?"":`<td>${k.source==="complaint"?"Complaint":"Call"}<br><span class="mono">${esc(k.callId||k.complaintId||"")}</span></td>`}<td>${esc(k.title)}</td>${compact?"":`<td>${esc(k.team)}</td><td>${esc(k.assignee?whoLabel(k.assignee):"Unassigned")}</td>`}<td>${pillS(k.status)}</td><td>${k.status==="Closed"?`<span class="note">Closed ${esc(fmtDT(k.closedAt))}</span>`:`<span class="${isOverdue(k)?"pill p-critical":"note"}">${isOverdue(k)?"Overdue · ":""}${esc(fmtDT(k.dueAt))}</span>`}</td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="tw"><table class="case-tbl"><thead><tr><th class="col-case">Case</th><th class="col-prio">Priority</th>${compact?"":`<th class="col-src">Source</th>`}<th class="col-concern">Concern</th>${compact?"":`<th class="col-team">Team</th><th class="col-assignee">Assignee</th>`}<th class="col-status">Status</th><th class="col-due">Due</th><th class="col-action" style="text-align:right;width:115px">Details</th></tr></thead><tbody>${
+    list.map(k=>`<tr class="rowlink" data-href="case-${esc(k.id)}" tabindex="0"><td class="col-case"><a class="mono" href="#case-${esc(k.id)}">${esc(k.id)}</a>${k.restricted?` <span class="src man">Restricted</span>`:""}</td><td class="col-prio">${pillP(k.priority)}</td>${compact?"":`<td class="col-src">${k.source==="complaint"?"Complaint":"Call"}<br><span class="mono">${esc(k.callId||k.complaintId||"")}</span></td>`}<td class="col-concern">${formatConcern(k.title, k.vendor, k.agent)}</td>${compact?"":`<td class="col-team">${esc(k.team)}</td><td class="col-assignee">${esc(k.assignee?whoLabel(k.assignee):"Unassigned")}</td>`}<td class="col-status">${pillS(k.status)}</td><td class="col-due">${formatDue(k)}</td><td class="col-action" style="text-align:right"><a class="btn-detail" href="#case-${esc(k.id)}">See details →</a></td></tr>`).join("")}</tbody></table></div>`;
 }
 
 function pCalls(){
@@ -927,8 +2161,8 @@ function pCalls(){
       <label>Period<select id="fCallsD" data-filter="calls.days">${[["all","All time"],["7","Last 7 days"],["14","Last 14 days"],["30","Last 30 days"]].map(([v,l])=>`<option value="${v}" ${String(f.days)===v?"selected":""}>${l}</option>`).join("")}</select></label>
     </div>
     <p class="note">${list.length} call${list.length===1?"":"s"} · ${list.filter(isFlagged).length} flagged</p>
-    ${shown.length?`<div class="tw"><table><thead><tr><th>Call</th><th>When</th><th>Vendor · agent</th><th>Product</th><th>Language</th><th>Result</th><th class="num">Flags</th><th>Case</th></tr></thead><tbody>${
-      shown.map(c=>{ const n = activeFlags(c.analysis.flags).length; return `<tr class="rowlink" data-href="call-${esc(c.id)}" tabindex="0"><td><a class="mono" href="#call-${esc(c.id)}">${esc(c.id)}</a></td><td>${esc(fmtD(c.date))} <span class="mono">${esc(c.time)}</span>${outsideWindow(c)?` <span class="src man">Off-hours</span>`:""}</td><td>${esc(c.vendor)} · <span class="mono">${esc(c.agent)}</span></td><td>${esc(c.product)}</td><td>${esc(c.lang)}</td><td>${n?pillP(callPrio(c)):`<span class="pill p-clean">Clean</span>`}${c.analysis.aiAt?` <span class="src ai">AI</span>`:""}</td><td class="num">${n}</td><td>${c.caseId?`<a class="mono" href="#case-${esc(c.caseId)}">${esc(c.caseId)}</a>`:"—"}</td></tr>`; }).join("")}</tbody></table></div>`:`<div class="empty">No calls match. <a href="#add">Add or import calls</a>.</div>`}
+    ${shown.length?`<div class="tw"><table><thead><tr><th>Call</th><th>When</th><th>Vendor · agent</th><th>Product</th><th>Language</th><th>Result</th><th class="num">Flags</th><th>Case</th><th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${
+      shown.map(c=>{ const n = activeFlags(c.analysis.flags).length; return `<tr class="rowlink" data-href="call-${esc(c.id)}" tabindex="0"><td><a class="mono" href="#call-${esc(c.id)}">${esc(c.id)}</a></td><td>${esc(fmtD(c.date))} <span class="mono">${esc(c.time)}</span>${outsideWindow(c)?` <span class="src man">Off-hours</span>`:""}</td><td>${esc(c.vendor)} · <span class="mono">${esc(c.agent)}</span></td><td>${esc(c.product)}</td><td>${esc(c.lang)}</td><td>${n?pillP(callPrio(c)):`<span class="pill p-clean">Clean</span>`}${c.analysis.aiAt?` <span class="src ai">AI</span>`:""}</td><td class="num">${n}</td><td>${c.caseId?`<a class="mono" href="#case-${esc(c.caseId)}">${esc(c.caseId)}</a>`:"—"}</td><td style="text-align:right"><a class="btn-detail" href="#call-${esc(c.id)}">See details →</a></td></tr>`; }).join("")}</tbody></table></div>`:`<div class="empty">No calls match. <a href="#add">Add or import calls</a>.</div>`}
     ${list.length>shown.length?`<div class="actions"><button class="btn" data-act="more-calls">Show ${Math.min(50, list.length-shown.length)} more</button></div>`:""}
   </div>`;
 }
@@ -956,10 +2190,11 @@ function pCall(id){
   const aiOk = sample && ST.settings.aiEnabled!==false;
   const restricted = act.some(x=>x.restricted) && !revealed["call-"+id];
   return `${head(`<span class="mono" style="font-family:var(--f-mono)">${esc(c.id)}</span>`, `${esc(c.product)} · ${esc(c.vendor)} · agent ${esc(c.agent)}`,
-    `${running?`<button class="btn" data-act="ai-stop">Stop AI review</button>`:`<button class="btn primary" data-act="ai-run" data-id="${esc(id)}" ${aiOk?"":"disabled"} title="${aiOk?"Reads the call for meaning and context":"AI review is not available in this view"}">Run AI review</button>`}
+    `<button class="btn" data-act="go-back" data-fallback="calls" title="Go back to previous page" style="display:inline-flex;align-items:center;gap:6px;font-weight:600"><span style="font-size:15px;line-height:1">←</span> Back</button>
+     ${running?`<button class="btn" data-act="ai-stop">Stop AI review</button>`:`<button class="btn primary" data-act="ai-run" data-id="${esc(id)}" ${aiOk?"":"disabled"} title="${aiOk?"Reads the call for meaning and context":"AI review is not available in this view"}">Run AI review</button>`}
      <button class="btn" data-act="rerun" data-id="${esc(id)}">Re-run rules</button>
      ${c.caseId?`<a class="btn" href="#case-${esc(c.caseId)}">Open ${esc(c.caseId)} →</a>`:`<button class="btn" data-act="case-manual" data-id="${esc(id)}">Open a case</button>`}`,
-    `<a href="#calls">Calls</a> / ${esc(c.id)}`)}
+    `<a href="#calls" data-act="go-back" data-fallback="calls" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back to Calls</a> <span style="opacity:0.4;margin:0 2px">/</span> <span class="mono">${esc(c.id)}</span>`)}
   ${running?`<div class="banner info"><span class="spin"></span> AI review is reading the call for meaning and context. This can take up to a minute.</div>`:""}
   ${AI.msg && AI.msgFor===id && !running?`<div class="banner info">${esc(AI.msg)}</div>`:""}
   <div class="g23">
@@ -1066,7 +2301,10 @@ function pCase(id){
   else if(st==="Violation confirmed"||st==="Not substantiated") btns = `<button class="btn primary" data-act="cs" data-op="close">Close case</button><button class="btn" data-act="cs" data-op="reopen">Back to review</button><button class="btn" data-act="cs" data-op="note">Add note</button>`;
   else btns = `<button class="btn" data-act="cs" data-op="reopen">Reopen</button><button class="btn" data-act="cs" data-op="note">Add note</button>`;
   const showAction = st==="Violation confirmed"||st==="Not substantiated";
-  return `${head(`<span style="font-family:var(--f-mono)">${esc(k.id)}</span>`, esc(k.title), `${pillP(k.priority)} ${pillS(k.status)} ${isOverdue(k)?`<span class="pill p-critical">Overdue</span>`:""}`, `<a href="#cases">Cases</a> / ${esc(k.id)}`)}
+  return `${head(`<span style="font-family:var(--f-mono)">${esc(k.id)}</span>`, esc(k.title),
+    `<button class="btn" data-act="go-back" data-fallback="cases" title="Go back to previous page" style="display:inline-flex;align-items:center;gap:6px;font-weight:600"><span style="font-size:15px;line-height:1">←</span> Back</button>
+     ${pillP(k.priority)} ${pillS(k.status)} ${isOverdue(k)?`<span class="pill p-critical">Overdue</span>`:""}`,
+    `<a href="#cases" data-act="go-back" data-fallback="cases" style="display:inline-flex;align-items:center;gap:4px;font-weight:600">← Back to Cases</a> <span style="opacity:0.4;margin:0 2px">/</span> <span class="mono">${esc(k.id)}</span>`)}
   ${ST.mode==="sandbox"?sbxNote():""}
   <div class="g23">
     <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
@@ -1114,8 +2352,8 @@ function pComplaints(){
   return `${head("Complaints","Customer reports of agent misconduct, matched to recorded calls where possible.", `<a class="btn primary" href="#log">Log a complaint for a customer</a><a class="btn" href="#intake">Open customer form ↗</a>`)}
   ${sbxNote()}
   <div class="card">
-    ${list.length?`<div class="tw"><table><thead><tr><th>Reference</th><th>Received</th><th>Contact</th><th>Incident</th><th>Linked call</th><th>Case</th><th>Priority</th><th>Status</th></tr></thead><tbody>${
-      list.map(c=>{ const k = ST.cases[c.caseId]; return `<tr class="rowlink" data-href="case-${esc(c.caseId)}" tabindex="0"><td class="mono">${esc(c.id)}${c.danger?` <span class="pill p-critical">Unsafe</span>`:""}</td><td>${esc(fmtDT(c.receivedAt))}</td><td>${esc(c.type)}</td><td>${esc(fmtD(c.date))} ${esc(c.time||"")}</td><td>${c.linkedCallId?`<a class="mono" href="#call-${esc(c.linkedCallId)}">${esc(c.linkedCallId)}</a>`:`<span class="note">No recording</span>`}</td><td><a class="mono" href="#case-${esc(c.caseId)}">${esc(c.caseId)}</a></td><td>${k?pillP(k.priority):"—"}</td><td>${k?pillS(k.status):"—"}</td></tr>`; }).join("")}</tbody></table></div>`
+    ${list.length?`<div class="tw"><table><thead><tr><th>Reference</th><th>Received</th><th>Contact</th><th>Incident</th><th>Linked call</th><th>Case</th><th>Priority</th><th>Status</th><th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${
+      list.map(c=>{ const k = ST.cases[c.caseId]; return `<tr class="rowlink" data-href="case-${esc(c.caseId)}" tabindex="0"><td class="mono">${esc(c.id)}${c.danger?` <span class="pill p-critical">Unsafe</span>`:""}</td><td>${esc(fmtDT(c.receivedAt))}</td><td>${esc(c.type)}</td><td>${esc(fmtD(c.date))} ${esc(c.time||"")}</td><td>${c.linkedCallId?`<a class="mono" href="#call-${esc(c.linkedCallId)}">${esc(c.linkedCallId)}</a>`:`<span class="note">No recording</span>`}</td><td><a class="mono" href="#case-${esc(c.caseId)}">${esc(c.caseId)}</a></td><td>${k?pillP(k.priority):"—"}</td><td>${k?pillS(k.status):"—"}</td><td style="text-align:right"><a class="btn-detail" href="#case-${esc(c.caseId)}">See details →</a></td></tr>`; }).join("")}</tbody></table></div>`
     :`<div class="empty">No complaints yet. Share the customer form link, or log one for a customer.</div>`}
   </div>
   <div class="card"><h2>Customer form link</h2><p class="sub">Customers can report a problem at this page’s address followed by <span class="mono">#intake</span>. The form needs no agent name and no recording.</p></div>`;
@@ -1152,10 +2390,10 @@ function pVendors(){
   const th = `<th class="num">Calls</th><th class="num">Flagged</th><th class="num">Flag rate</th><th class="num">Critical</th><th class="num">Off-hours</th><th class="num">Open cases</th><th class="num">Confirmed</th><th class="num">Not substantiated</th>`;
   return `${head("Vendors & agents","Conduct by collection vendor and agent. Allegations (open cases) are kept apart from confirmed findings.", rangeChips("vendors.days", F.vendors.days))}
   <div class="card">
-    ${vs.length?`<div class="tw"><table><thead><tr><th>Vendor</th>${th}</tr></thead><tbody>${vs.map(v=>`<tr class="rowlink" data-act="vendor-sel" data-v="${esc(v.v)}" tabindex="0" ${sel&&sel.v===v.v?'style="background:var(--accent-soft)"':""}><td><b>${esc(v.v)}</b> <span class="note">${Object.keys(v.agents).length} agents</span></td>${row(v)}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">No calls in this period.</div>`}
+    ${vs.length?`<div class="tw"><table><thead><tr><th>Vendor</th>${th}<th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${vs.map(v=>`<tr class="rowlink" data-act="vendor-sel" data-v="${esc(v.v)}" tabindex="0" ${sel&&sel.v===v.v?'style="background:var(--accent-soft)"':""}><td><b>${esc(v.v)}</b> <span class="note">${Object.keys(v.agents).length} agents</span></td>${row(v)}<td style="text-align:right"><button class="btn-detail" data-act="vendor-sel" data-v="${esc(v.v)}">See details →</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No calls in this period.</div>`}
     <p class="note">Select a vendor to see its agents.</p>
   </div>
-  ${sel?`<div class="card"><h2>${esc(sel.v)} · agents</h2><div class="tw"><table><thead><tr><th>Agent</th>${th}</tr></thead><tbody>${Object.values(sel.agents).sort((a,b)=>pct(b.flagged,b.calls)-pct(a.flagged,a.calls)).map(a=>`<tr><td class="mono">${esc(a.a)} ${a.confirmed>=2||a.crit>=2?`<span class="pill p-critical">Repeat concern</span>`:""}</td>${row(a)}</tr>`).join("")}</tbody></table></div>
+  ${sel?`<div class="card"><h2>${esc(sel.v)} · agents</h2><div class="tw"><table><thead><tr><th>Agent</th>${th}<th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${Object.values(sel.agents).sort((a,b)=>pct(b.flagged,b.calls)-pct(a.flagged,a.calls)).map(a=>`<tr><td class="mono">${esc(a.a)} ${a.confirmed>=2||a.crit>=2?`<span class="pill p-critical">Repeat concern</span>`:""}</td>${row(a)}<td style="text-align:right"><button class="btn-detail" onclick="F.calls.vendor='${esc(sel.v)}';F.calls.q='${esc(a.a)}';location.hash='calls'">See calls →</button></td></tr>`).join("")}</tbody></table></div>
     <div class="actions"><button class="btn sm" data-act="vendor-calls" data-v="${esc(sel.v)}">View this vendor’s calls →</button></div></div>`:""}`;
 }
 
@@ -1257,7 +2495,7 @@ function pAudit(){
     <div class="filters"><label>Search<input id="fAudQ" data-live="audit.q" value="${esc(f.q)}" placeholder="Case, call, person or text"></label>
     <label>Type<select id="fAudT" data-filter="audit.type"><option value="">All events</option>${["Case","Access","Call","Rulebook"].map(t=>`<option ${f.type===t?"selected":""}>${t}</option>`).join("")}</select></label></div>
     <p class="note">${ev.length} event${ev.length===1?"":"s"}${ev.length>300?" · showing latest 300":""}</p>
-    ${shown.length?`<div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>Type</th><th>Ref</th><th>Event</th></tr></thead><tbody>${shown.map(e=>`<tr><td class="mono">${esc(fmtDT(e.at))}</td><td>${esc(whoLabel(e.by))}</td><td>${e.type==="Access"?`<span class="src man">Access</span>`:esc(e.type)}</td><td><a class="mono" href="#${esc(e.href)}">${esc(e.ref)}</a></td><td>${esc(e.text)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No events match.</div>`}
+    ${shown.length?`<div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>Type</th><th>Ref</th><th>Event</th><th style="text-align:right;width:115px">Details</th></tr></thead><tbody>${shown.map(e=>`<tr><td class="mono">${esc(fmtDT(e.at))}</td><td>${esc(whoLabel(e.by))}</td><td>${e.type==="Access"?`<span class="src man">Access</span>`:esc(e.type)}</td><td><a class="mono" href="#${esc(e.href)}">${esc(e.ref)}</a></td><td>${esc(e.text)}</td><td style="text-align:right">${e.href?`<a class="btn-detail" href="#${esc(e.href)}">See details →</a>`:"—"}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">No events match.</div>`}
   </div>`;
 }
 
@@ -1276,12 +2514,12 @@ function pSettings(){
     </form>
     <div class="card">
       <h2>Data</h2>
-      <div class="kv"><span>Workspace</span><span>${ST.mode==="shared"?"Shared, live for everyone with access":"Sandbox in this browser"}</span><span>Calls</span><span>${calls().length}</span><span>Cases</span><span>${cases().length}</span><span>Complaints</span><span>${complaints().length}</span><span>Rulebook</span><span>v${RB().version}</span></div>
+      <div class="kv"><span>Workspace</span><span>${ST.mode==="shared"?"Shared workspace · live":"Local workspace · active"}</span><span>Calls</span><span>${calls().length}</span><span>Cases</span><span>${cases().length}</span><span>Complaints</span><span>${complaints().length}</span><span>Rulebook</span><span>v${RB().version}</span></div>
       <div class="actions">
         <button class="btn" data-act="backup">Export full backup (.json)</button>
         ${ad?`<label class="btn" style="cursor:pointer">Restore from backup<input type="file" id="restoreFile" accept=".json,application/json" hidden data-onchange="restore"></label>`:""}
       </div>
-      ${ad?`<div class="actions"><button class="btn" data-act="load-sample">Add sample dataset</button>${ST.mode==="sandbox"?`<button class="btn" data-act="reset-sbx">Reset sandbox</button>`:""}<button class="btn danger" data-act="clear-all">Delete all calls, cases and complaints</button></div>`:""}
+      ${ad?`<div class="actions"><button class="btn" data-act="load-sample">Add sample dataset</button>${ST.mode==="sandbox"?`<button class="btn" data-act="reset-sbx">Reset dataset</button>`:""}<button class="btn danger" data-act="clear-all">Delete all calls, cases and complaints</button></div>`:""}
       ${ST.mode==="sandbox" && db && ST.me.canWrite!==false ? `<div class="actions"><button class="btn" data-act="go-shared">Switch to shared workspace</button></div>`:""}
       <p class="note">Sample data is synthetic: role-played calls, fictional vendors and agents.</p>
     </div>
@@ -1290,6 +2528,27 @@ function pSettings(){
 
 /* ================= actions ================= */
 const ACT = {
+  "go-back": (el) => {
+    const fb = (el && el.dataset && el.dataset.fallback) || "calls";
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      location.hash = fb;
+    }
+  },
+  "toggle-nav": () => {
+    const isCol = document.body.classList.toggle("nav-collapsed");
+    try { localStorage.setItem("rcc_nav_collapsed", isCol ? "1" : "0"); } catch(e){}
+    schedule();
+  },
+  "toggle-theme": () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const next = cur === "dark" ? "light" : "dark";
+    if(next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+    else document.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem("compliance_theme", next); } catch(e){}
+    schedule();
+  },
   "modal-bg": (el, e) => { if(e.target===el) closeModal(); },
   set: el => { const [a,b] = el.dataset.k.split("."); const v = el.dataset.v==="all" ? "all" : +el.dataset.v; if(b) F[a][b] = v; else F[a] = v; schedule(); },
   "more-calls": () => { F.callsLimit += 50; schedule(); },
@@ -1330,7 +2589,7 @@ const ACT = {
   export: el => doExport(el.dataset.what),
   backup: () => offerFile("recovery-compliance-backup-"+dayStr(new Date())+".json", JSON.stringify({exportedAt:nowIso(), calls:calls(), cases:cases(), complaints:complaints(), rulebook:RB(), settings:ST.settings}, null, 1)),
   "load-sample": async el => { if(!(await confirmModal({title:"Add the sample dataset?", body:"Adds 64 simulated calls, their cases and four complaints. Sample IDs that already exist are skipped.", confirm:"Add sample data"}))) return; el.disabled = true; await loadSampleInto(false); el.disabled = false; },
-  "reset-sbx": async () => { if(!(await confirmModal({title:"Reset the sandbox?", body:"Your changes in this browser are discarded and the sample dataset is reloaded.", confirm:"Reset", danger:true}))) return; try{ localStorage.removeItem(SBX); }catch(e){} loadData(buildSampleDataset(Date.now())); sbxSave(); location.hash = "overview"; schedule(); toast("Sandbox reset."); },
+  "reset-sbx": async () => { if(!(await confirmModal({title:"Reset dataset?", body:"Your changes in this browser are discarded and the sample dataset is reloaded.", confirm:"Reset", danger:true}))) return; try{ localStorage.removeItem(SBX); }catch(e){} loadData(buildSampleDataset(Date.now())); sbxSave(); location.hash = "overview"; schedule(); toast("Dataset reset."); },
   "clear-all": async () => { if(!(await confirmModal({title:"Delete all data?", body:"Every call, case and complaint is permanently deleted"+(ST.mode==="shared"?" for everyone":"")+". The rulebook and settings stay. Export a backup first if you need one.", confirm:"Delete everything", danger:true, requireText:"DELETE"}))) return; for(const c of calls()) await removeDoc("calls", c.id); for(const k of cases()) await removeDoc("cases", k.id); for(const m of complaints()) await removeDoc("complaints", m.id); toast("All calls, cases and complaints deleted."); location.hash = "overview"; },
   "go-shared": () => { ST.forced = false; sbxSave(); ST.ready = false; startShared(); }
 };
@@ -1475,7 +2734,7 @@ function doExport(what){
   if(what==="flags") return offerFile("flags-"+dayStr(new Date())+".csv", toCSV([["call_id","timestamp","category","severity","source","review","quote","rule_reference"]].concat(cl.flatMap(c=>(c.analysis.flags||[]).map(f=>[c.id,f.ts,f.category,f.severity,f.source,f.review?f.review.v:"",f.quote,f.ref])))));
   if(what==="summary"){
     const m = metrics(d), cats = catCounts(cl);
-    const md = `# Recovery compliance summary\n\nPeriod: ${d==="all"?"all time":"last "+d+" days"} · generated ${fmtDT(nowIso())}\n\n| Measure | Value |\n|---|---|\n| Calls reviewed | ${cl.length} |\n| Calls flagged | ${m.flagged.length} (${pct(m.flagged.length,cl.length)}%) |\n| Cases opened | ${ks.length} |\n| Open cases now | ${m.open.length} |\n| Critical open | ${m.critOpen.length} |\n| Past due date | ${m.overdue.length} |\n| Avg time to first review | ${fmtH(m.avgFirst)} |\n| Avg time to closure | ${fmtH(m.avgClose)} |\n\n## Concerns by category\n\n${cats.map(([c,n])=>"- "+c+": "+n).join("\n")||"- None"}\n\nRulebook version ${RB().version}. ${ST.mode==="sandbox"?"Generated from a sandbox copy.":""}\n`;
+    const md = `# Recovery compliance summary\n\nPeriod: ${d==="all"?"all time":"last "+d+" days"} · generated ${fmtDT(nowIso())}\n\n| Measure | Value |\n|---|---|\n| Calls reviewed | ${cl.length} |\n| Calls flagged | ${m.flagged.length} (${pct(m.flagged.length,cl.length)}%) |\n| Cases opened | ${ks.length} |\n| Open cases now | ${m.open.length} |\n| Critical open | ${m.critOpen.length} |\n| Past due date | ${m.overdue.length} |\n| Avg time to first review | ${fmtH(m.avgFirst)} |\n| Avg time to closure | ${fmtH(m.avgClose)} |\n\n## Concerns by category\n\n${cats.map(([c,n])=>"- "+c+": "+n).join("\n")||"- None"}\n\nRulebook version ${RB().version}. \n`;
     return offerFile("compliance-summary-"+dayStr(new Date())+".md", md);
   }
 }
@@ -1498,6 +2757,7 @@ document.addEventListener("click", e=>{
 });
 document.addEventListener("keydown", e=>{
   if(e.key==="Escape" && $("modalRoot").innerHTML){ closeModal(); return; }
+  if((e.ctrlKey || e.metaKey) && (e.key==="b" || e.key==="B")){ e.preventDefault(); ACT["toggle-nav"](); return; }
   const tr = e.target.closest && e.target.closest("tr[data-href],tr[data-act]");
   if(tr && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); if(tr.dataset.href) location.hash = tr.dataset.href; else ACT[tr.dataset.act](tr, e); }
 });
